@@ -236,6 +236,16 @@ function handleEcho(messageId, appId, metadata) {
 function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
     switch (action) {
         default:
+        case "unsubscribe":
+           user.newsletterSettings(function(updated) {
+               if (updated) {
+                   fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
+               } else {
+                   fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
+                       "Try again later!");
+               }
+           }, 0, sender);
+           break;
             //unhandled action, just send back the text
             handleMessages(messages, sender);
     }
