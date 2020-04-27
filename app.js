@@ -10,7 +10,8 @@ const pg = require('pg');
 const app = express();
 const uuid = require('uuid');
 
-pg.defaults.ssl = true; 
+pg.defaults.ssl = true;
+const userService = require('./user')
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -194,6 +195,33 @@ function handleMessageAttachments(messageAttachments, senderID){
 
 function handleQuickReply(senderID, quickReply, messageId) {
     var quickReplyPayload = quickReply.payload;
+    switch (quickReplyPayload) {
+       case 'NEWS_PER_WEEK':
+           user.newsletterSettings(function (updated) {
+               if (updated) {
+                   fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
+                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+               } else {
+                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                       "Try again later!");
+               }
+           }, 1, senderID);
+           break;
+       case 'NEWS_PER_MONTH':
+           user.newsletterSettings(function (updated) {
+               if (updated) {
+                   fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
+                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+               } else {
+                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                       "Try again later!");
+               }
+           }, 2, senderID);
+           break;
+       default:
+           dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
+           break;
+   }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
     sendToDialogFlow(senderID, quickReplyPayload);
@@ -705,7 +733,24 @@ function callSendAPI(messageData) {
         }
     });
 }
+function sendBizNewsSubscribe(userId) {
+    let responseText = "You can subscribe to our business growth newsletter here for all the latest hints and tips on improving your business ";
 
+    let replies = [
+        {
+            "content_type": "text",
+            "title": "Once per week",
+            "payload": "NEWS_PER_WEEK"
+        },
+        {
+            "content_type": "text",
+            "title": "Once per month",
+            "payload": "NEWS_PER_MONTH"
+        }
+    ];
+
+    fbService.sendQuickReply(userId, responceText, replies);
+}
 
 
 /*
@@ -732,7 +777,7 @@ function receivedPostback(event) {
       break;
       case 'BIZ_NEWSLETTER':
       //get information from user before they subscribe
-      greetUserText(senderID);
+      sendBizNewsSubscribe(senderID);
       break;
       case 'BIZ_ADVICE':
       sendTextMessage(senderID, "Great! What would you like advice on?");
