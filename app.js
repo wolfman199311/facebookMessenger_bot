@@ -773,7 +773,7 @@ function sendBizNewsSubscribe(userId) {
         }
     ];
 
-    fbService.sendQuickReply(userId, responceText, replies);
+    fbService.sendQuickReply(userId, responseText, replies);
 }
 
 
