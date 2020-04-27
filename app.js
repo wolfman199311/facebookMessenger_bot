@@ -715,9 +715,21 @@ function receivedPostback(event) {
     var payload = event.postback.payload;
 
     switch (payload) {
+
+      case 'BIZ_ANALYTICS':
+      //ask user to send a .csv
+      sendTextMessage(senderID, "Awesome, to help you with that. I just need some data from you");
+      break;
+      case 'BIZ_NEWSLETTER':
+      //get information from user before they subscribe
+      greetUserText(senderID);
+      break;
+      case 'BIZ_ADVICE':
+      sendTextMessage(senderID, "Great! What would you like advice on?");
+      break;
         default:
             //unindentified payload
-            sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
+            sendTextMessage(senderID, "I'm sorry, I didn't understand your last message. I'm new and just a bot so it will take some time to train me. Can you repeat that again?");
             break;
 
     }
@@ -726,7 +738,34 @@ function receivedPostback(event) {
         "at %d", senderID, recipientID, payload, timeOfPostback);
 
 }
+function greetUserText(userId) {
+    //first read user firstname
+    request({
+        uri: 'https://graph.facebook.com/v2.7/' + userId,
+        qs: {
+            access_token: config.FB_PAGE_TOKEN
+        }
 
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+
+            var user = JSON.parse(body);
+
+            if (user.first_name) {
+                console.log("FB user: %s %s, %s",
+                    user.first_name, user.last_name, user.gender);
+
+                sendTextMessage(userId, "Would you like to subscribe to our newsletter " + user.first_name + '?');
+            } else {
+                console.log("Cannot get data for fb user with id",
+                    userId);
+            }
+        } else {
+            console.error(response.error);
+        }
+
+    });
+}
 
 /*
  * Message Read Event
