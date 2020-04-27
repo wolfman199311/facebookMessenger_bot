@@ -11,7 +11,7 @@ const app = express();
 const uuid = require('uuid');
 
 pg.defaults.ssl = true;
-const userService = require('./user')
+const user = require('./user')
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
