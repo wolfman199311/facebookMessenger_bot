@@ -166,7 +166,7 @@ function receivedMessage(event) {
     var timeOfMessage = event.timestamp;
     var message = event.message;
 
-  function setSessionAndUser(senderID);
+function setSessionAndUser(senderID);
     //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
     //console.log(JSON.stringify(message));
 
@@ -677,6 +677,13 @@ function sendAccountLinking(recipientId) {
 
     callSendAPI(messageData);
 }
+async function resolveAfterXSeconds(x) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(x);
+        }, x * 1000);
+    });
+}
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll
@@ -754,21 +761,17 @@ function receivedPostback(event) {
         "at %d", senderID, recipientID, payload, timeOfPostback);
 
 }
-function greetUserText(userId) {
-    //first read user firstname
-  let user = userMap.get(userId)
-
-                sendTextMessage(userId, "Would you like to subscribe to our newsletter " + user.first_name + '?');
-            } else {
-                console.log("Cannot get data for fb user with id",
-                    userId);
-            }
-        } else {
-            console.error(response.error);
-        }
-
-    });
-}
+async function greetUserText(userId) {
+    let user = usersMap.get(userId);
+    if (!user) {
+        await resolveAfterXSeconds(2);
+        user = usersMap.get(userId);
+    }
+    if (user) {
+        sendTextMessage(userId, "Hey" + user.first_name + '! ' + 'would you like to subscribe to our newsletter?')
+    } else {
+        sendTextMessage(userId,  "would you like to subscribe to our newsletter?");
+    }
 
 /*
  * Message Read Event
