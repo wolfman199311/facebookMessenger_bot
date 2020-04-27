@@ -825,6 +825,7 @@ async function greetUserText(userId) {
             'I can answer frequently asked questions for you ' +
              'What can I help you with?');
     }
+  }
 /*
  * Message Read Event
  *
