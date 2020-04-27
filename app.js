@@ -756,7 +756,7 @@ function receivedPostback(event) {
 }
 function greetUserText(userId) {
     //first read user firstname
-  let user = userMap.get(userId);
+  let user = userMap.get(userId)
 
                 sendTextMessage(userId, "Would you like to subscribe to our newsletter " + user.first_name + '?');
             } else {
