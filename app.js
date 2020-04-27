@@ -6,13 +6,10 @@ const express = require('express');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const request = require('request');
-const pg = require('pg');
 const app = express();
 const uuid = require('uuid');
 
-pg.defaults.ssl = true;
 
-const userService = require('./user');
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -37,9 +34,6 @@ if (!config.FB_APP_SECRET) {
 }
 if (!config.SERVER_URL) { //used for ink to static files
     throw new Error('missing SERVER_URL');
-}
-if (!config.PG_CONFIG) { //pg config
-    throw new Error('missing PG_CONFIG');
 }
 
 
@@ -81,7 +75,6 @@ const sessionClient = new dialogflow.SessionsClient(
 
 
 const sessionIds = new Map();
-const usersMap = new Map();
 
 // Index route
 app.get('/', function (req, res) {
@@ -146,16 +139,7 @@ app.post('/webhook/', function (req, res) {
     }
 });
 
-function setSessionAndUser(senderID) {
-    if (!sessionIds.has(senderID)) {
-        sessionIds.set(senderID, uuid.v1());
-    }
-}
-if (!usersMap.has(senderID)) {
-    userService.addUser(function(user){
-        usersMap.set(senderID, user);
-    }, senderID);
-}
+
 
 
 
@@ -169,7 +153,7 @@ function receivedMessage(event) {
     if (!sessionIds.has(senderID)) {
     		sessionIds.set(senderID, uuid.v1());
     	}
-function setSessionAndUser(senderID)
+
 
     //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
     //console.log(JSON.stringify(message));
@@ -735,8 +719,6 @@ function receivedPostback(event) {
     var recipientID = event.recipient.id;
     var timeOfPostback = event.timestamp;
 
-    function setSessionAndUser(senderID);
-
     // The 'payload' param is a developer-defined field which is set in a postback
     // button for Structured Messages.
     var payload = event.postback.payload;
@@ -765,17 +747,34 @@ function receivedPostback(event) {
         "at %d", senderID, recipientID, payload, timeOfPostback);
 
 }
-async function greetUserText(userId) {
-    let user = usersMap.get(userId);
-    if (!user) {
-        await resolveAfterXSeconds(2);
-        user = usersMap.get(userId);
-    }
-    if (user) {
-        sendTextMessage(userId, "Hey" + user.first_name + '! ' + 'would you like to subscribe to our newsletter?')
-    } else {
-        sendTextMessage(userId,  "would you like to subscribe to our newsletter?");
-    }
+function greetUserText(userId) {
+    //first read user firstname
+    request({
+        uri: 'https://graph.facebook.com/v2.7/' + userId,
+        qs: {
+            access_token: config.FB_PAGE_TOKEN
+        }
+
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+
+            var user = JSON.parse(body);
+
+            if (user.first_name) {
+                console.log("FB user: %s %s, %s",
+                    user.first_name, user.last_name, user.gender);
+
+                sendTextMessage(userId, "Would you like to subscribe to our newsletter " + user.first_name + '?');
+            } else {
+                console.log("Cannot get data for fb user with id",
+                    userId);
+            }
+        } else {
+            console.error(response.error);
+        }
+
+    });
+}
 
 /*
  * Message Read Event
