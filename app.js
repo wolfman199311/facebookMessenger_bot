@@ -37,6 +37,10 @@ if (!config.FB_APP_SECRET) {
 if (!config.SERVER_URL) { //used for ink to static files
     throw new Error('missing SERVER_URL');
 }
+if (!config.PG_CONFIG) { //pg config
+    throw new Error('missing PG_CONFIG');
+}
+
 
 
 
@@ -145,12 +149,13 @@ function setSessionAndUser(senderID) {
     if (!sessionIds.has(senderID)) {
         sessionIds.set(senderID, uuid.v1());
     }
+
+    if (!usersMap.has(senderID)) {
+        userService.addUser(function(user){
+            usersMap.set(senderID, user);
+        }, senderID);
+    }
 }
-if (!usersMap.has(senderID)) {
-       userService.addUser(function(user){
-           usersMap.set(senderID, user);
-       }, senderID);
-   }
 
 
 
