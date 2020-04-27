@@ -11,7 +11,7 @@ const app = express();
 const uuid = require('uuid');
 
 pg.defaults.ssl = true;
-const user = require('./user')
+const userService = require('./user')
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -197,7 +197,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
     var quickReplyPayload = quickReply.payload;
     switch (quickReplyPayload) {
        case 'NEWS_PER_WEEK':
-           user.newsletterSettings(function (updated) {
+           userService.newsletterSettings(function (updated) {
                if (updated) {
                    fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
@@ -208,7 +208,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
            }, 1, senderID);
            break;
        case 'NEWS_PER_MONTH':
-           user.newsletterSettings(function (updated) {
+           userService.newsletterSettings(function (updated) {
                if (updated) {
                    fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
@@ -237,7 +237,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
     switch (action) {
         default:
         case "unsubscribe":
-           user.newsletterSettings(function(updated) {
+           userService.newsletterSettings(function(updated) {
                if (updated) {
                    fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
                } else {
