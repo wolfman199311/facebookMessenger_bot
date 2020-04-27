@@ -165,11 +165,11 @@ function receivedMessage(event) {
     var recipientID = event.recipient.id;
     var timeOfMessage = event.timestamp;
     var message = event.message;
-    
+
     if (!sessionIds.has(senderID)) {
     		sessionIds.set(senderID, uuid.v1());
     	}
-function setSessionAndUser(senderID);
+function setSessionAndUser(senderID)
 
     //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
     //console.log(JSON.stringify(message));
