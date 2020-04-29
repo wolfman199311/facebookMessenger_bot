@@ -2,7 +2,7 @@
 const request = require('request');
 const config = require('./config');
 const pg = require('pg');
-const client = new Client({
+var client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: false,
 });
