@@ -812,6 +812,10 @@ setSessionAndUser(senderID);
       case 'BIZ_ADVICE':
       sendTextMessage(senderID, "Great! What would you like advice on?");
       break;
+      case 'GET_STARTED_PAYLOAD':
+      greetUserText(senderID);
+      break;
+
         default:
             //unindentified payload
             sendTextMessage(senderID, "I'm sorry, I didn't understand your last message. I'm new and just a bot so it will take some time to train me. Can you repeat that again?");
