@@ -4,13 +4,19 @@ const dialogflow = require('dialogflow');
 const config = require('./config');
 const express = require('express');
 const crypto = require('crypto');
+const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
-const pg = require('pg');
+
 const app = express();
 const uuid = require('uuid');
 
-pg.defaults.ssl = true;
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
 const userService = require('./user');
 let dialogflowService = require ('./dialogflow-service');
 const fbService = require('./fb-service');

@@ -1,8 +1,13 @@
 'use strict';
 const request = require('request');
 const config = require('./config');
-const pg = require('pg');
-pg.defaults.ssl = true;
+const { Client } = require('pg');
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
 
 module.exports = {
 
