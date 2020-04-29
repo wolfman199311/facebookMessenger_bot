@@ -834,7 +834,7 @@ async function greetUserText(userId) {
         user = usersMap.get(userId);
     }
     if (user) {
-        sendTextMessage(userId, Hey + user.first_name + '! ' +
+        sendTextMessage(userId, 'Hey' + user.first_name + '! ' +
             'I can answer frequently asked questions for you ' +
             'What can I help you with?');
     } else {
