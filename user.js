@@ -22,8 +22,8 @@ module.exports = {
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
 
-                var users = JSON.parse(body);
-                if (users.first_name.length > 0) {
+                var user = JSON.parse(body);
+                if (user.first_name.length > 0) {
                     var pool = new pg.Pool(config.PG_CONFIG);
                     pool.connect(function(err, client, done) {
                         if (err) {
