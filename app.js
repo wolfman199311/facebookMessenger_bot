@@ -812,7 +812,7 @@ setSessionAndUser(senderID);
       case 'BIZ_ADVICE':
       sendTextMessage(senderID, "Great! What would you like advice on?");
       break;
-      case 'GET_STARTED_PAYLOAD':
+      case '<GET_STARTED_PAYLOAD>':
       greetUserText(senderID);
       break;
 
