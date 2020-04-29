@@ -23,7 +23,7 @@ module.exports = {
 
                 var user = JSON.parse(body);
                 if (user.first_name.length > 0) {
-                    var pool = new client.Pool(config.PG_CONFIG);
+                    var pool = new Pool(config.PG_CONFIG);
                     pool.connect(function(err, client, done) {
                         if (err) {
                             return console.error('Error acquiring client', err.stack);
@@ -62,7 +62,7 @@ module.exports = {
         });
     },
     readAllUsers: function(callback, newstype) {
-        var pool = new client.Pool(config.PG_CONFIG);
+        var pool = new Pool(config.PG_CONFIG);
         pool.connect(function(err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
@@ -84,7 +84,7 @@ module.exports = {
     },
 
     newsletterSettings: function(callback, setting, userId) {
-        var pool = new client.Pool(config.PG_CONFIG);
+        var pool = new Pool(config.PG_CONFIG);
         pool.connect(function(err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
