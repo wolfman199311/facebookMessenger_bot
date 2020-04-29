@@ -36,7 +36,7 @@ module.exports = {
                                     console.log('Query error: ' + err);
                                 } else {
                                     if (result.rows.length === 0) {
-                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name) ' +
+                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_picture) ' +
                                             'VALUES ($1, $2, $3, $4)';
                                         client.query(sql,
                                             [
