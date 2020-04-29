@@ -4,10 +4,17 @@ const config = require('./config');
 const { Client } = require('pg');
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  ssl: false,
+  ssl: true,
 });
 
 client.connect();
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
 
 module.exports = {
 
@@ -23,7 +30,7 @@ module.exports = {
 
                 var user = JSON.parse(body);
                 if (user.first_name.length > 0) {
-                    var pool = new Pool(config.PG_CONFIG);
+                    var pool = new pg.Pool(config.PG_CONFIG);
                     pool.connect(function(err, client, done) {
                         if (err) {
                             return console.error('Error acquiring client', err.stack);
@@ -62,7 +69,7 @@ module.exports = {
         });
     },
     readAllUsers: function(callback, newstype) {
-        var pool = new Pool(config.PG_CONFIG);
+        var pool = new pg.Pool(config.PG_CONFIG);
         pool.connect(function(err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
@@ -84,7 +91,7 @@ module.exports = {
     },
 
     newsletterSettings: function(callback, setting, userId) {
-        var pool = new Pool(config.PG_CONFIG);
+        var pool = new pg.Pool(config.PG_CONFIG);
         pool.connect(function(err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
