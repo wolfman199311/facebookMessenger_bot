@@ -2,7 +2,7 @@
 const request = require('request');
 const config = require('./config');
 const pg= require('pg');
-const {Client} = pg; 
+const {Client} = pg;
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: false,
@@ -36,7 +36,7 @@ module.exports = {
                                     console.log('Query error: ' + err);
                                 } else {
                                     if (result.rows.length === 0) {
-                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_pic) ' +
+                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name,) ' +
                                             'VALUES ($1, $2, $3, $4)';
                                         client.query(sql,
                                             [
