@@ -21,7 +21,7 @@ module.exports = {
 
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-client.query('SELECT first_name FROM users WHERE first_name'${first_name}' LIMIT 1', = first_name)
+
                 var user = JSON.parse(body);
                 if (user.first_name.length > 0) {
                     var pool = new pg.Pool(config.PG_CONFIG);
@@ -36,7 +36,7 @@ client.query('SELECT first_name FROM users WHERE first_name'${first_name}' LIMIT
                                     console.log('Query error: ' + err);
                                 } else {
                                     if (result.rows.length === 0) {
-                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_picture) ' +
+                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name, pro) ' +
                                             'VALUES ($1, $2, $3, $4)';
                                         client.query(sql,
                                             [
