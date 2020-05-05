@@ -230,7 +230,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
        case 'NEWS_PER_MONTH':
            userService.newsletterSettings(function (updated) {
                if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
+                   fbService.sendTextMessage(senderID, "Thank you fore subscribing!" +
                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
                } else {
                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
@@ -259,7 +259,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
         case "unsubscribe":
            userService.newsletterSettings(function(updated) {
                if (updated) {
-                   fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
+                   fbService.sendTextMessage(sender, "You are unsubscribed. You can always subscribe back!");
                } else {
                    fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
                        "Try again later!");
