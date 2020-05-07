@@ -291,7 +291,7 @@ module.exports = {
      * Send a message with Quick Reply buttons.
      *
      */
-    sendQuickReply: function(recipientId, text, replies, metadata) {
+    sendQuickReply: function(recipientId, text, replies) {
         let self = module.exports;
         var messageData = {
             recipient: {
@@ -299,7 +299,7 @@ module.exports = {
             },
             message: {
                 text: text,
-                metadata: self.isDefined(metadata)?metadata:'',
+                //metadata: self.isDefined(metadata)?metadata:'',
                 quick_replies: replies
             }
         };
