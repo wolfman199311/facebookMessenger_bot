@@ -254,26 +254,17 @@ function handleQuickReply(senderID, quickReply, messageId) {
                }
            }, 2, senderID);
            break;
+           
            case 'Yes':
-            userService.newsletterSettings(function (updated) {
-                if (updated) {
-                    fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
-                } else {
-                    fbService.sendTextMessage(senderID, "You can't receive any message at this moment." +
-                        "Try again later!");
-                }
-            }, 2, senderID);
+           
+                fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
+                
             break;   
         
             case 'No':
-                userService.newsletterSettings(function (updated) {
-                    if (updated) {
-                        fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
-                    } else {
-                        fbService.sendTextMessage(senderID, "You can't receive any message at this moment." +
-                            "Try again later!");
-                    }
-                }, 2, senderID);
+               
+                fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
+               
                 break;    
             
        default:
