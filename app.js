@@ -116,6 +116,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     var data = req.body;
     console.log(JSON.stringify(data));
+    console.log("webhook");
 
 
 
@@ -135,8 +136,10 @@ app.post('/webhook/', function (req, res) {
                     receivedMessage(messagingEvent);
                 } else if (messagingEvent.delivery) {
                     receivedDeliveryConfirmation(messagingEvent);
+
                 } else if (messagingEvent.postback) {
                     receivedPostback(messagingEvent);
+
                 } else if (messagingEvent.read) {
                     receivedMessageRead(messagingEvent);
                 } else if (messagingEvent.account_linking) {
@@ -835,7 +838,7 @@ async function greetUserText(userId) {
     }
     console.log("get____________started");
     if (user) {
-        sendTextMessage(userId, 'Hey' + user.first_name + '! ' +
+        sendTextMessage(userId, 'Hey, ' + user.first_name + '! ' +
             'I can answer frequently asked questions for you ' +
             'What can I help you with?');
     } else {
