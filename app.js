@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
+
 const app = express();
 const uuid = require('uuid');
 
@@ -209,23 +210,7 @@ function receivedMessage(event) {
 
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
-    let responseText = "Your average customer lifetime value is xxx. Would you like to improve this?";
-    let replies = [
-        {
-            "content_type": "text",
-            "title": "Yes",
-            "payload": "Yes"
-        },
-        {
-            "content_type": "text",
-            "title": "No",
-            "payload": "No"
-        }
-    ];
-
-    fbService.sendQuickReply(userId, responseText, replies);
-    //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
-
+    sendTextMessage(senderID, "Attachment received. Thank you.");
 }
 
 function handleQuickReply(senderID, quickReply, messageId) {
@@ -234,7 +219,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
        case 'NEWS_PER_WEEK':
            userService.newsletterSettings(function (updated) {
                if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you for subscribing! " +
+                   fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
                } else {
                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
@@ -253,19 +238,6 @@ function handleQuickReply(senderID, quickReply, messageId) {
                }
            }, 2, senderID);
            break;
-           
-           case 'Yes':
-           
-                fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
-                
-            break;   
-        
-            case 'No':
-               
-                fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
-               
-                break;    
-            
        default:
            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
            break;

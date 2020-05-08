@@ -14,8 +14,6 @@
     "dialogflow": "^1.2.0",
     "express": "^4.17.1",
     "node": "^14.0.0",
-    "passport": "^0.4.1",
-    "passport-facebook": "^3.0.0",
     "pg": "^8.0.3",
     "request": "^2.88.2",
     "uuid": "^7.0.3"
