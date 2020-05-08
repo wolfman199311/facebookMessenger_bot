@@ -86,6 +86,7 @@ module.exports = {
     },
 
     newsletterSettings: function(callback, setting, userId) {
+        console.log("__________________database integration___________________");
         var pool = new pg.Pool(config.PG_CONFIG);
         pool.connect(function(err, client, done) {
             if (err) {

@@ -793,8 +793,8 @@ function sendBizNewsSubscribe(userId) {
 function receivedPostback(event) {
     var senderID = event.sender.id;
     var recipientID = event.recipient.id;
-    var timeOfPostback = event.timestamp;
-setSessionAndUser(senderID);
+    var timeOf = event.timestamp;
+    setSessionAndUser(senderID);
     // The 'payload' param is a developer-defined field which is set in a postback
     // button for Structured Messages.
     var payload = event.postback.payload;
@@ -833,6 +833,7 @@ async function greetUserText(userId) {
         await resolveAfterXSeconds(2);
         user = usersMap.get(userId);
     }
+    console.log("get____________started");
     if (user) {
         sendTextMessage(userId, 'Hey' + user.first_name + '! ' +
             'I can answer frequently asked questions for you ' +
