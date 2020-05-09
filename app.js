@@ -139,6 +139,7 @@ app.post('/webhook/', function (req, res) {
 
                 } else if (messagingEvent.postback) {
                     receivedPostback(messagingEvent);
+                    console.log("postback event");
 
                 } else if (messagingEvent.read) {
                     receivedMessageRead(messagingEvent);
@@ -819,15 +820,15 @@ function receivedPostback(event) {
       greetUserText(senderID);
       break;
 
-        default:
-            //unindentified payload
+      default:
+         //unindentified payload
             sendTextMessage(senderID, "I'm sorry, I didn't understand your last message. I'm new and just a bot so it will take some time to train me. Can you repeat that again?");
-            break;
+         break;
 
     }
 
-    console.log("Received postback for user %d and page %d with payload '%s' " +
-        "at %d", senderID, recipientID, payload, timeOfPostback);
+    // console.log("Received postback for user %d and page %d with payload '%s' " +
+    //     "at %d", senderID, recipientID, payload, timeOfPostback);
 
 }
 async function greetUserText(userId) {
