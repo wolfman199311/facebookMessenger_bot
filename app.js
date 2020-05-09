@@ -403,11 +403,14 @@ function handleDialogFlowResponse(sender, response) {
     sendTypingOff(sender);
 
     if (isDefined(action)) {
+        console.log("existing action");
         handleDialogFlowAction(sender, action, messages, contexts, parameters);
     } else if (isDefined(messages)) {
+        console.log("existing message");
         handleMessages(messages, sender);
     } else if (responseText == '' && !isDefined(action)) {
         //dialogflow could not evaluate input.
+        console.log("no existing action");
         sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
     } else if (isDefined(responseText)) {
         sendTextMessage(sender, responseText);
