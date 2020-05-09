@@ -204,8 +204,16 @@ function receivedMessage(event) {
 
 
     if (messageText) {
-        //send message to api.ai
-        sendToDialogFlow(senderID, messageText);
+        if(messageText=="Thank you fore subscribing!If you want to unsubscribe just write 'unsubscribe from newsletter'")
+        {
+            console.log("subscribe");      
+        }
+        else{
+            //send message to api.ai
+            sendToDialogFlow(senderID, messageText);
+        }
+            
+        
     } else if (messageAttachments) {
         handleMessageAttachments(messageAttachments, senderID);
     }
