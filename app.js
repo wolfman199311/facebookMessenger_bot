@@ -204,7 +204,7 @@ function receivedMessage(event) {
 
 
     if (messageText) {
-        var str = messageText.includes("If you want to unsubscribe");
+        var str = messageText.includes("You can subscribe to our business growth newsletter here");
         if(str)
         {
             console.log(str);      
