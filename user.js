@@ -1,18 +1,18 @@
 'use strict';
 const request = require('request');
 const config = require('./config');
-const pg= require('pg');
-const {Client} = pg;
+const pg = require('pg');
+const { Client } = pg;
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
+    connectionString: process.env.DATABASE_URL,
+    ssl: false,
 });
 
 client.connect();
 
 module.exports = {
 
-    addUser: function(callback, userId) {
+    addUser: function (callback, userId) {
         request({
             uri: 'https://graph.facebook.com/v3.2/' + userId,
             qs: {
@@ -20,55 +20,52 @@ module.exports = {
             }
 
         },
-         function (error, response, body) {
-            if (!error && response.statusCode == 200) {
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
 
-                var user = JSON.parse(body);
-                console.log(user.first_name);
-                console.log(user);
-                if (user.first_name!="undefined") {
-                    console.log("username undefined");
-                    var pool = new pg.Pool(config.PG_CONFIG);
-                    pool.connect(function(err, client, done) {
-                        if (err) {
-                            return console.error('Error acquiring client', err.stack);
-                        }
-                        var rows = [];
-                        client.query(`SELECT fb_id FROM users WHERE fb_id='${userId}' LIMIT 1`,
-                            function(err, result) {
-                                if (err) {
-                                    console.log('Query error: ' + err);
-                                } else {
-                                    if (result.rows.length === 0) {
-                                        let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_picture) ' +
-                                            'VALUES ($1, $2, $3, $4)';
-                                        client.query(sql,
-                                            [
-                                                userId,
-                                                user.first_name,
-                                                user.last_name,
-                                                user.profile_pic
-                                            ]);
+                    var user = JSON.parse(body);
+                    if (user.first_name != "undefined") {
+                        var pool = new pg.Pool(config.PG_CONFIG);
+                        pool.connect(function (err, client, done) {
+                            if (err) {
+                                return console.error('Error acquiring client', err.stack);
+                            }
+                            var rows = [];
+                            client.query(`SELECT fb_id FROM users WHERE fb_id='${userId}' LIMIT 1`,
+                                function (err, result) {
+                                    if (err) {
+                                        console.log('Query error: ' + err);
+                                    } else {
+                                        if (result.rows.length === 0) {
+                                            let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_picture) ' +
+                                                'VALUES ($1, $2, $3, $4)';
+                                            client.query(sql,
+                                                [
+                                                    userId,
+                                                    user.first_name,
+                                                    user.last_name,
+                                                    user.profile_pic
+                                                ]);
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                        callback(user);
-                    });
-                    pool.end();
+                            callback(user);
+                        });
+                        pool.end();
+                    } else {
+                        console.log("Cannot get data for fb user with id",
+                            userId);
+                    }
                 } else {
-                    console.log("Cannot get data for fb user with id",
-                        userId);
+                    console.error(response.error);
                 }
-            } else {
-                console.error(response.error);
-            }
 
-        });
+            });
     },
-    readAllUsers: function(callback, newstype) {
+    readAllUsers: function (callback, newstype) {
         var pool = new pg.Pool(config.PG_CONFIG);
-        pool.connect(function(err, client, done) {
+        pool.connect(function (err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
             }
@@ -76,7 +73,7 @@ module.exports = {
                 .query(
                     'SELECT fb_id, first_name, last_name FROM users WHERE newsletter=$1',
                     [newstype],
-                    function(err, result) {
+                    function (err, result) {
                         if (err) {
                             console.log(err);
                             callback([]);
@@ -88,10 +85,9 @@ module.exports = {
         pool.end();
     },
 
-    newsletterSettings: function(callback, setting, userId) {
-        console.log("__________________database integration___________________");
+    newsletterSettings: function (callback, setting, userId) {
         var pool = new pg.Pool(config.PG_CONFIG);
-        pool.connect(function(err, client, done) {
+        pool.connect(function (err, client, done) {
             if (err) {
                 return console.error('Error acquiring client', err.stack);
             }
@@ -100,7 +96,7 @@ module.exports = {
                 .query(
                     'UPDATE users SET newsletter=$1 WHERE fb_id=$2',
                     [setting, userId],
-                    function(err, result) {
+                    function (err, result) {
                         if (err) {
                             console.log(err);
                             callback(false);
