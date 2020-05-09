@@ -205,16 +205,16 @@ function receivedMessage(event) {
 
     if (messageText) {
         var str = messageText.includes("You can subscribe to our business growth newsletter here");
-        if(str)
-        {
-            console.log(str);      
-        }
-        else{
-            console.log(str);
+        // if(str)
+        // {
+        //     console.log(str);      
+        // }
+        // else{
+        //     console.log(str);
             console.log("Go to dialogflow");
             //send message to api.ai
             sendToDialogFlow(senderID, messageText);
-        }
+        // }
             
         
     } else if (messageAttachments) {
@@ -392,7 +392,7 @@ function handleDialogFlowResponse(sender, response) {
     console.log("unsubscribeunsubscribe");
     console.log(response.action);
     console.log("unsubscribeunsubscribe");
-    console.log(response.action);
+    console.log(response);
 
 
     let messages = response.fulfillmentMessages;
@@ -989,6 +989,8 @@ function verifyRequestSignature(req, res, buf) {
 }
 
 function isDefined(obj) {
+    console.log("_________isDefined");
+    console.log(obj);
     if (typeof obj == 'input.unknown') {
         return false;
     }
