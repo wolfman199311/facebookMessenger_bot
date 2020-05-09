@@ -204,13 +204,7 @@ function receivedMessage(event) {
 
 
     if (messageText) {
-        // var str = messageText.includes("You can subscribe to our business growth newsletter here");
-        // if(str)
-        // {
-        //     console.log(str);      
-        // }
-        // else{
-        //     console.log(str);
+        
             console.log("Go to dialogflow");
             //send message to api.ai
             sendToDialogFlow(senderID, messageText);
@@ -262,7 +256,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
     }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
-    sendToDialogFlow(senderID, quickReplyPayload);
+    // sendToDialogFlow(senderID, quickReplyPayload);
 }
 
 //https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-echo
