@@ -254,6 +254,9 @@ function handleQuickReply(senderID, quickReply, messageId) {
            }, 2, senderID);
            break;
        default:
+
+           console.log("_____________sendTextQueryToDialogFlow");
+           console.log(textString);
            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
            break;
    }
@@ -386,6 +389,11 @@ function handleMessages(messages, sender) {
 
 function handleDialogFlowResponse(sender, response) {
     let responseText = response.fulfillmentMessages.fulfillmentText;
+    console.log("unsubscribeunsubscribe");
+    console.log(response.action);
+    console.log("unsubscribeunsubscribe");
+    console.log(response.action);
+
 
     let messages = response.fulfillmentMessages;
     let action = response.action;
@@ -407,7 +415,8 @@ function handleDialogFlowResponse(sender, response) {
 }
 
 async function sendToDialogFlow(sender, textString, params) {
-
+    console.log("sendToDialogFlow_________");
+    console.log(textString);
     sendTypingOn(sender);
 
     try {
