@@ -259,7 +259,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
            console.log(textString);
            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
            break;
-   }
+    }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
     sendToDialogFlow(senderID, quickReplyPayload);
@@ -989,7 +989,7 @@ function verifyRequestSignature(req, res, buf) {
 }
 
 function isDefined(obj) {
-    if (typeof obj == 'undefined') {
+    if (typeof obj == 'input.unknown') {
         return false;
     }
 
