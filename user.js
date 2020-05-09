@@ -27,6 +27,7 @@ module.exports = {
                 console.log(user.first_name);
                 console.log(user);
                 if (user.first_name!="undefined") {
+                    console.log("username undefined");
                     var pool = new pg.Pool(config.PG_CONFIG);
                     pool.connect(function(err, client, done) {
                         if (err) {
