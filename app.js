@@ -379,15 +379,22 @@ function handleDialogFlowResponse(sender, response) {
     let parameters = response.parameters;
 
     sendTypingOff(sender);
+    console.log(action);
+    console.log(response);
 
     if (isDefined(action)) {
+        console.log("response Action");
+
         handleDialogFlowAction(sender, action, messages, contexts, parameters);
     } else if (isDefined(messages)) {
+        console.log("response Message");
         handleMessages(messages, sender);
     } else if (responseText == '' && !isDefined(action)) {
         //dialogflow could not evaluate input.
+        console.log("response Default");
         sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
     } else if (isDefined(responseText)) {
+        console.log("response Text");
         sendTextMessage(sender, responseText);
     }
 }
