@@ -382,9 +382,8 @@ function handleDialogFlowResponse(sender, response) {
     console.log(action);
     console.log(response);
 
-    if (isDefined(action)) {
+    if (isDefined(action) && !action.includes('unknown')) {
         console.log("response Action");
-
         handleDialogFlowAction(sender, action, messages, contexts, parameters);
     } else if (isDefined(messages)) {
         console.log("response Message");
