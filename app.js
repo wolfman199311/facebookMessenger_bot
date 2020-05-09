@@ -204,7 +204,7 @@ function receivedMessage(event) {
 
 
     if (messageText) {
-        var str = messageText.includes("You can subscribe to our business growth newsletter here");
+        // var str = messageText.includes("You can subscribe to our business growth newsletter here");
         // if(str)
         // {
         //     console.log(str);      
@@ -401,10 +401,12 @@ function handleDialogFlowResponse(sender, response) {
     let parameters = response.parameters;
 
     sendTypingOff(sender);
-
-    if (isDefined(action)) {
-        console.log("existing action");
-        handleDialogFlowAction(sender, action, messages, contexts, parameters);
+    var str = action.includes("unknown");
+    if (isDefined(action) && !str) {
+       
+            console.log("existing action");
+            handleDialogFlowAction(sender, action, messages, contexts, parameters);
+       
     } else if (isDefined(messages)) {
         console.log("existing message");
         handleMessages(messages, sender);
@@ -994,7 +996,7 @@ function verifyRequestSignature(req, res, buf) {
 function isDefined(obj) {
     console.log("_________isDefined");
     console.log(obj);
-    if (typeof obj == 'input.unknown') {
+    if (typeof obj == 'undefined') {
         return false;
     }
 
