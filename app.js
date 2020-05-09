@@ -204,11 +204,14 @@ function receivedMessage(event) {
 
 
     if (messageText) {
-        if(messageText=="Thank you fore subscribing!If you want to unsubscribe just write 'unsubscribe from newsletter'")
+        var str = messageText.includes("If you want to unsubscribe");
+        if(str)
         {
-            console.log("subscribe");      
+            console.log(str);      
         }
         else{
+            console.log(str);
+            console.log("Go to dialogflow");
             //send message to api.ai
             sendToDialogFlow(senderID, messageText);
         }
