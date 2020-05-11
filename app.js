@@ -258,21 +258,9 @@ function receivedMessage(event) {
 
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
-    let responseText = "Your average customer lifetime value is xxx. Would you like to improve this?";
-    let replies = [
-        {
-            "content_type": "text",
-            "title": "Yes",
-            "payload": "Yes"
-        },
-        {
-            "content_type": "text",
-            "title": "No",
-            "payload": "No"
-        }
-    ];
-
-    fbService.sendQuickReply(userId, responseText, replies);
+    console.log("messageAttachments");
+    console.log(messageAttachments);
+    sendTextMessage(senderID, "Attachment received. Thank you.");
     //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
 
 }
