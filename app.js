@@ -15,7 +15,7 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: false,
 });
-
+const broadcast = require('./routes/broadcast');
 client.connect();
 const userService = require('./user');
 let dialogflowService = require ('./dialogflow-service');
@@ -113,6 +113,7 @@ app.get('/webhook/', function (req, res) {
         res.sendStatus(403);
     }
 })
+
 app.use(session(
     {
         secret: 'keyboard cat',
