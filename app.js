@@ -162,6 +162,7 @@ app.get('/auth/facebook/callback',
  */
 app.post('/webhook/', function (req, res) {
     var data = req.body;
+    console.log("JSON.stringify(data)");
     console.log(JSON.stringify(data));
 
 
