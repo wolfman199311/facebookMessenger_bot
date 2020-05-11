@@ -66,7 +66,7 @@ app.use(bodyParser.json({
 }));
 
 //serve static files in the public directory
-app.use(express.static('public'));
+app.use(express.static('assets'));
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -78,7 +78,7 @@ app.use(bodyParser.json());
 
 
 app.set('view engine', 'ejs');
-app.use(express.static('assets');
+
 
 
 const credentials = {
