@@ -20,6 +20,10 @@ client.connect();
 const userService = require('./user');
 let dialogflowService = require ('./dialogflow-service');
 const fbService = require('./fb-service');
+
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const session = require('express-session');
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -48,7 +52,9 @@ if (!config.SERVER_URL) { //used for ink to static files
 if (!config.PG_CONFIG) { //pg config
     throw new Error('missing PG_CONFIG');
 }
-
+if (!config.FB_APP_ID) { //app id
+    throw new Error('missing FB_APP_ID');
+}
 
 
 
@@ -71,7 +77,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
-
+app.set('view engine', 'ejs');
 
 
 
@@ -95,6 +101,8 @@ app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
 
+app.get('/broadcast', broadcast);
+
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     console.log("request");
@@ -105,7 +113,43 @@ app.get('/webhook/', function (req, res) {
         res.sendStatus(403);
     }
 })
+app.use(session(
+    {
+        secret: 'keyboard cat',
+        resave: true,
+        saveUninitilized: true
+    }
+));
 
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(profile, cb) {
+    cb(null, profile);
+});
+
+passport.deserializeUser(function(profile, cb) {
+    cb(null, profile);
+});
+
+passport.use(new FacebookStrategy({
+        clientID: config.FB_APP_ID,
+        clientSecret: config.FB_APP_SECRET,
+        callbackURL: config.SERVER_URL + "auth/facebook/callback"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        process.nextTick(function() {
+            return cb(null, profile);
+        });
+    }
+));
+
+app.get('/auth/facebook', passport.authenticate('facebook',{scope:'public_profile'}));
+
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
  * webhook. Be sure to subscribe your app to your page to receive callbacks
@@ -254,19 +298,19 @@ function handleQuickReply(senderID, quickReply, messageId) {
                }
            }, 2, senderID);
            break;
-           
+
            case 'Yes':
-           
+
                 fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
-                
-            break;   
-        
+
+            break;
+
             case 'No':
-               
+
                 fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
-               
-                break;    
-            
+
+                break;
+
        default:
            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
            break;
