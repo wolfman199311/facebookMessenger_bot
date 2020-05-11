@@ -119,7 +119,7 @@ app.post('/webhook/', function (req, res) {
     // Make sure this is a page subscription
     if (data.object == 'page') {
         console.log("data");
-        console.log(data);
+        console.log(JSON.stringify(data));
         // Iterate over each entry
         // There may be multiple if batched
         data.entry.forEach(function (pageEntry) {
@@ -132,8 +132,6 @@ app.post('/webhook/', function (req, res) {
                 if (messagingEvent.optin) {
                     receivedAuthentication(messagingEvent);
                 } else if (messagingEvent.message) {
-                    console.log("___________messagingEvent.message________");
-                    console.log(messagingEvent.message);
                     receivedMessage(messagingEvent);
                 } else if (messagingEvent.delivery) {
                     receivedDeliveryConfirmation(messagingEvent);
