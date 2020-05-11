@@ -118,6 +118,8 @@ app.post('/webhook/', function (req, res) {
 
     // Make sure this is a page subscription
     if (data.object == 'page') {
+        console.log("data");
+        console.log(data);
         // Iterate over each entry
         // There may be multiple if batched
         data.entry.forEach(function (pageEntry) {
@@ -207,6 +209,8 @@ function receivedMessage(event) {
 
 function handleMessageAttachments(messageAttachments, senderID) {
     //for now just reply
+    console.log("messageAttachments");
+    console.log(messageAttachments);
     sendTextMessage(senderID, "Attachment received. Thank you.");
 }
 
