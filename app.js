@@ -66,7 +66,7 @@ app.use(bodyParser.json({
 }));
 
 //serve static files in the public directory
-app.use("/asset",express.static("asset"));
+app.use(express.static('assets'));
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
