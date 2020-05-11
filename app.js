@@ -12,13 +12,13 @@ const app = express();
 const uuid = require('uuid');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
+    connectionString: process.env.DATABASE_URL,
+    ssl: false,
 });
 
 client.connect();
 const userService = require('./user');
-let dialogflowService = require ('./dialogflow-service');
+let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -115,15 +115,14 @@ app.get('/webhook/', function (req, res) {
  */
 app.post('/webhook/', function (req, res) {
     var data = req.body;
+    console.log("data");
     console.log(JSON.stringify(data));
-
-
-
     // Make sure this is a page subscription
     if (data.object == 'page') {
         // Iterate over each entry
         // There may be multiple if batched
         data.entry.forEach(function (pageEntry) {
+            
             var pageID = pageEntry.id;
             var timeOfEvent = pageEntry.time;
 
@@ -159,7 +158,7 @@ function setSessionAndUser(senderID) {
     }
 
     if (!usersMap.has(senderID)) {
-        userService.addUser(function(user){
+        userService.addUser(function (user) {
             usersMap.set(senderID, user);
         }, senderID);
     }
@@ -174,7 +173,7 @@ function receivedMessage(event) {
     var timeOfMessage = event.timestamp;
     var message = event.message;
 
-   setSessionAndUser(senderID);
+    setSessionAndUser(senderID);
 
 
     //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
@@ -208,72 +207,45 @@ function receivedMessage(event) {
 }
 
 
-function handleMessageAttachments(messageAttachments, senderID){
+function handleMessageAttachments(messageAttachments, senderID) {
     //for now just reply
-    let responseText = "Your average customer lifetime value is xxx. Would you like to improve this?";
-    let replies = [
-        {
-            "content_type": "text",
-            "title": "Yes",
-            "payload": "Yes"
-        },
-        {
-            "content_type": "text",
-            "title": "No",
-            "payload": "No"
-        }
-    ];
-
-    fbService.sendQuickReply(userId, responseText, replies);
-    //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
-
+    console.log("messageAttachments");
+    console.log(messageAttachments);
+    sendTextMessage(senderID, "Attachment received. Thank you.");
 }
 
 function handleQuickReply(senderID, quickReply, messageId) {
     var quickReplyPayload = quickReply.payload;
     switch (quickReplyPayload) {
-       case 'NEWS_PER_WEEK':
-           userService.newsletterSettings(function (updated) {
-               if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you for subscribing! " +
-                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
-               } else {
-                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 1, senderID);
-           break;
-       case 'NEWS_PER_MONTH':
-           userService.newsletterSettings(function (updated) {
-               if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you fore subscribing!" +
-                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
-               } else {
-                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 2, senderID);
-           break;
-           
-           case 'Yes':
-           
-                fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
-                
-            break;   
-        
-            case 'No':
-               
-                fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
-               
-                break;    
-            
-       default:
-           dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
-           break;
-   }
+        case 'NEWS_PER_WEEK':
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(senderID, "Thank you for subscribing! " +
+                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+                } else {
+                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 1, senderID);
+            break;
+        case 'NEWS_PER_MONTH':
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
+                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+                } else {
+                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 2, senderID);
+            break;
+        default:
+            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
+            break;
+    }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
-    sendToDialogFlow(senderID, quickReplyPayload);
+    // sendToDialogFlow(senderID, quickReplyPayload);
 }
 
 //https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-echo
@@ -286,17 +258,15 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
     switch (action) {
         default:
         case "unsubscribe":
-           userService.newsletterSettings(function(updated) {
-               if (updated) {
-                   fbService.sendTextMessage(sender, "You are unsubscribed. You can always subscribe back!");
-               } else {
-                   fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 0, sender);
-           break;
-            //unhandled action, just send back the text
-            handleMessages(messages, sender);
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
+                } else {
+                    fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 0, sender);
+            break;
     }
 }
 
@@ -313,11 +283,11 @@ function handleMessage(message, sender) {
             let replies = [];
             message.quickReplies.quickReplies.forEach((text) => {
                 let reply =
-                    {
-                        "content_type": "text",
-                        "title": text,
-                        "payload": text
-                    }
+                {
+                    "content_type": "text",
+                    "title": text,
+                    "payload": text
+                }
                 replies.push(reply);
             });
             sendQuickReply(sender, message.quickReplies.title, replies);
@@ -357,7 +327,7 @@ function handleCardMessages(messages, sender) {
 
         let element = {
             "title": message.card.title,
-            "image_url":message.card.imageUri,
+            "image_url": message.card.imageUri,
             "subtitle": message.card.subtitle,
             "buttons": buttons
         };
@@ -369,25 +339,25 @@ function handleCardMessages(messages, sender) {
 
 function handleMessages(messages, sender) {
     let timeoutInterval = 1100;
-    let previousType ;
+    let previousType;
     let cardTypes = [];
     let timeout = 0;
     for (var i = 0; i < messages.length; i++) {
 
-        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+        if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-        } else if ( messages[i].message == "card" && i == messages.length - 1) {
+        } else if (messages[i].message == "card" && i == messages.length - 1) {
             cardTypes.push(messages[i]);
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
-        } else if ( messages[i].message == "card") {
+        } else if (messages[i].message == "card") {
             cardTypes.push(messages[i]);
-        } else  {
+        } else {
 
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
@@ -400,28 +370,32 @@ function handleMessages(messages, sender) {
 
 function handleDialogFlowResponse(sender, response) {
     let responseText = response.fulfillmentMessages.fulfillmentText;
-
     let messages = response.fulfillmentMessages;
     let action = response.action;
     let contexts = response.outputContexts;
     let parameters = response.parameters;
 
     sendTypingOff(sender);
+    console.log(action);
+    console.log(response);
 
-    if (isDefined(action)) {
+    if (isDefined(action) && !action.includes('unknown')) {
+        console.log("response Action");
         handleDialogFlowAction(sender, action, messages, contexts, parameters);
     } else if (isDefined(messages)) {
+        console.log("response Message");
         handleMessages(messages, sender);
     } else if (responseText == '' && !isDefined(action)) {
         //dialogflow could not evaluate input.
+        console.log("response Default");
         sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
     } else if (isDefined(responseText)) {
+        console.log("response Text");
         sendTextMessage(sender, responseText);
     }
 }
 
 async function sendToDialogFlow(sender, textString, params) {
-
     sendTypingOn(sender);
 
     try {
@@ -628,7 +602,7 @@ function sendGenericMessage(recipientId, elements) {
 
 
 function sendReceiptMessage(recipientId, recipient_name, currency, payment_method,
-                            timestamp, elements, address, summary, adjustments) {
+    timestamp, elements, address, summary, adjustments) {
     // Generate a random receipt ID as the API requires a unique ID
     var receiptId = "order" + Math.floor(Math.random() * 1000);
 
@@ -669,7 +643,7 @@ function sendQuickReply(recipientId, text, replies, metadata) {
         },
         message: {
             text: text,
-            metadata: isDefined(metadata)?metadata:'',
+            metadata: isDefined(metadata) ? metadata : '',
             quick_replies: replies
         }
     };
@@ -822,28 +796,28 @@ function sendBizNewsSubscribe(userId) {
 function receivedPostback(event) {
     var senderID = event.sender.id;
     var recipientID = event.recipient.id;
-    var timeOfPostback = event.timestamp;
-setSessionAndUser(senderID);
+    var timeOf = event.timestamp;
+    setSessionAndUser(senderID);
     // The 'payload' param is a developer-defined field which is set in a postback
     // button for Structured Messages.
     var payload = event.postback.payload;
 
     switch (payload) {
 
-      case 'BIZ_ANALYTICS':
-      //ask user to send a .csv
-      sendTextMessage(senderID, "Awesome, to help you with that. I just need some data from you");
-      break;
-      case 'BIZ_NEWSLETTER':
-      //get information from user before they subscribe
-      sendBizNewsSubscribe(senderID);
-      break;
-      case 'BIZ_ADVICE':
-      sendTextMessage(senderID, "Great! What would you like advice on?");
-      break;
-      case 'FACEBOOK_WELCOME':
-      greetUserText(senderID);
-      break;
+        case 'BIZ_ANALYTICS':
+            //ask user to send a .csv
+            sendTextMessage(senderID, "Awesome, to help you with that. I just need some data from you");
+            break;
+        case 'BIZ_NEWSLETTER':
+            //get information from user before they subscribe
+            sendBizNewsSubscribe(senderID);
+            break;
+        case 'BIZ_ADVICE':
+            sendTextMessage(senderID, "Great! What would you like advice on?");
+            break;
+        case 'FACEBOOK_WELCOME':
+            greetUserText(senderID);
+            break;
 
         default:
             //unindentified payload
@@ -852,8 +826,8 @@ setSessionAndUser(senderID);
 
     }
 
-    console.log("Received postback for user %d and page %d with payload '%s' " +
-        "at %d", senderID, recipientID, payload, timeOfPostback);
+    // console.log("Received postback for user %d and page %d with payload '%s' " +
+    //     "at %d", senderID, recipientID, payload, timeOfPostback);
 
 }
 async function greetUserText(userId) {
@@ -862,16 +836,17 @@ async function greetUserText(userId) {
         await resolveAfterXSeconds(2);
         user = usersMap.get(userId);
     }
+
     if (user) {
-        sendTextMessage(userId, 'Hey' + user.first_name + '! ' +
+        sendTextMessage(userId, 'Hey, ' + user.first_name + '! ' +
             'I can answer frequently asked questions for you ' +
             'What can I help you with?');
     } else {
         sendTextMessage(userId, 'Welcome! ' +
             'I can answer frequently asked questions for you ' +
-             'What can I help you with?');
+            'What can I help you with?');
     }
-  }
+}
 /*
  * Message Read Event
  *
@@ -993,6 +968,7 @@ function verifyRequestSignature(req, res, buf) {
 }
 
 function isDefined(obj) {
+
     if (typeof obj == 'undefined') {
         return false;
     }

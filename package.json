@@ -14,11 +14,16 @@
     "dialogflow": "^1.2.0",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
+<<<<<<< HEAD
     "express-session": "^1.17.1",
     "node": "^14.0.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "pg": "^8.0.3",
+=======
+    "node": "^14.2.0",
+    "pg": "^8.1.0",
+>>>>>>> b924f718bdb0520d98ab8cd18393e5ced0607b3b
     "request": "^2.88.2",
     "uuid": "^7.0.3"
   },
