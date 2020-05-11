@@ -123,8 +123,7 @@ app.post('/webhook/', function (req, res) {
         // Iterate over each entry
         // There may be multiple if batched
         data.entry.forEach(function (pageEntry) {
-            console.log("___________pageEntry_________");
-            console.log(pageEntry);
+            
             var pageID = pageEntry.id;
             var timeOfEvent = pageEntry.time;
 
@@ -133,6 +132,8 @@ app.post('/webhook/', function (req, res) {
                 if (messagingEvent.optin) {
                     receivedAuthentication(messagingEvent);
                 } else if (messagingEvent.message) {
+                    console.log("___________pageEntry.messageing.message_________");
+                    console.log(pageEntry.messageing.message);
                     receivedMessage(messagingEvent);
                 } else if (messagingEvent.delivery) {
                     receivedDeliveryConfirmation(messagingEvent);
