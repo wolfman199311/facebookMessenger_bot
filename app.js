@@ -309,7 +309,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
    }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
-    sendToDialogFlow(senderID, quickReplyPayload);
+    //sendToDialogFlow(senderID, quickReplyPayload);
 }
 
 //https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-echo
