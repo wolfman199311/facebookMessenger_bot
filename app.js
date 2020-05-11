@@ -66,8 +66,8 @@ app.use(bodyParser.json({
 }));
 
 //serve static files in the public directory
-app.use(express.static('assets'));
-app.use(express.favicon());
+app.use("/asset",express.static("asset"));
+
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
