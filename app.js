@@ -101,7 +101,7 @@ app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
 
-app.get('/broadcast', broadcast);
+app.use('/broadcast', broadcast);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
