@@ -8,7 +8,7 @@ const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
 
-const app = express();
+var app = express();
 const uuid = require('uuid');
 
 const client = new Client({
