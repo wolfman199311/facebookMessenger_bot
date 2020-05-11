@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <% include ('partials/head') %>
+    <%- include ('partials/head') -%>
 </head>
 <body class="container">
 
 <header>
-    <% include ('partials/header') %>
+    <%- include ('partials/header') -%>
 </header>
 
 <main>
     <div class="container">
         <h2>Hello, <%= user.displayName %></h2>
         <p><%= user.id %></p>
-        <p><%- JSON.stringify(user) %></p>
+        <p><%- JSON.stringify(user) -%></p>
     </div>
 </main>
 
 <footer>
-    <% include ('partials/footer') %>
+    <%- include ('partials/footer') -%>
 </footer>
 
 </body>
