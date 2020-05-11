@@ -132,8 +132,8 @@ app.post('/webhook/', function (req, res) {
                 if (messagingEvent.optin) {
                     receivedAuthentication(messagingEvent);
                 } else if (messagingEvent.message) {
-                    console.log("___________pageEntry.messageing.message_________");
-                    console.log(pageEntry.messageing.message);
+                    console.log("___________messagingEvent.message________");
+                    console.log(messagingEvent.message);
                     receivedMessage(messagingEvent);
                 } else if (messagingEvent.delivery) {
                     receivedDeliveryConfirmation(messagingEvent);
