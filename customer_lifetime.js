@@ -112,7 +112,7 @@ module.exports = {
             });
 
             const queryCreat =
-                'CREATE TABLE csvData' + userId + '(id SERIAL PRIMARY KEY, firstName VARCHAR(40) NOT NULL, lastName VARCHAR(40) NOT NULL)';
+                'CREATE TABLE csvData' + userId + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
             console.log(queryCreat);
             const query =
                 'INSERT INTO csvData' + userId + '(InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
@@ -129,9 +129,6 @@ module.exports = {
                     }
                 })
 
-                //console.log(csvData);
-
-                //const createquery = "CREATE TABLE IF NOT EXISTS category (username Text(45) NOT NULL, password varchar(450) NOT NULL, enabled integer NOT NULL DEFAULT '1',PRIMARY KEY (username))";
                 pool.connect((err, client, done) => {
                     if (err) throw err;
 
