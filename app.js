@@ -124,7 +124,7 @@ app.get('/webhook/', function (req, res) {
  */
 app.post('/webhook/', function (req, res) {
     var data = req.body;
-    console.log("JSON.stringify(data)a");
+    console.log("JSON.stringify(data)");
     console.log(JSON.stringify(data));
 
 
@@ -221,8 +221,17 @@ function receivedMessage(event) {
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
     console.log("messageAttachments");
-    console.log(messageAttachments);
-    sendTextMessage(senderID, "Attachment received. Thank you.");
+    console.log(messageAttachments.payload.url);
+    csv_url = messageAttachments.payload.url;
+
+    customer_lifetime.saveData(function (result){
+        if(result){
+            fbService.sendTextMessage(senderID, "Successfully saved your data.");
+        }else{
+            fbService.sendTextMessage(senderID, "Your Execel file is not correct. Please try other one.");
+        }
+    }, csv_url, senderID);
+    //sendTextMessage(senderID, "Attachment received. Thank you.");
     //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
 
 }
