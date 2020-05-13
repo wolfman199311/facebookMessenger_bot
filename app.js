@@ -224,10 +224,14 @@ function receivedMessage(event) {
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
     console.log(JSON.stringify(messageAttachments));
+    var csv_url = JSON.stringify(messageAttachments)
+    Uurl = csv_url.payload;
+    console.log(Uurl);
+    console.log(JSON.stringify(Uurl).url);
     console.log("messageAttachments");
     console.log(messageAttachments.payload);
     var attachment_payload = messageAttachments.payload;
-    var csv_url = attachment_payload;
+    //var csv_url = attachment_payload;
     var uri = "https://cdn.fbsbx.com/v/t59.2708-21/97269798_268455104293348_9172572718455848960_n.csv/test.csv?_nc_cat=108&_nc_sid=0cab14&_nc_ohc=o3tzWXmghasAX_9K7vA&_nc_ht=cdn.fbsbx.com&oh=0693971577037451dff112f8e80cce2b&oe=5EBE0231";
 
     customer_lifetime.saveData(function (result){

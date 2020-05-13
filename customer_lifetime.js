@@ -136,15 +136,16 @@ module.exports = {
                         csvData.forEach(row => {
                             client.query(query, row, (err, res) => {
                                 if (err) {
-                                    callback(false);
+                                    // callback(false);
                                     console.log(err.stack);
                                 } else {
-                                    callback(true);
+                                    // callback(true);
                                     console.log("inserted " + res.rowCount + " row:", row);
                                 }
                             });
                         });
                     } finally {
+                        callback(true);
                         done();
                     }
                 });
@@ -156,6 +157,7 @@ module.exports = {
         req.on("error", function (err) {
             // handle error
             console.log(error);
+            callback(false);
         });
         // var pool = new pg.Pool(config.PG_CONFIG);
         // pool.connect(function(err, client, done) {
