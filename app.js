@@ -16,6 +16,7 @@ const client = new Client({
   ssl: false,
 });
 const broadcast = require('./routes/broadcast');
+const webviews = require('./routes/webviews');
 client.connect();
 const userService = require('./user');
 let dialogflowService = require ('./dialogflow-service');
@@ -102,6 +103,7 @@ app.get('/', function (req, res) {
 })
 
 app.use('/broadcast', broadcast);
+app.use('/webviews', webviews);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -146,11 +148,10 @@ passport.use(new FacebookStrategy({
     }
 ));
 
-app.get('/auth/facebook', passport.authenticate('facebook',{scope:['public_profile']}));
 
 
 app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
+    passport.authenticate('facebook', {scope:['public_profile'] ,successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
 /*
