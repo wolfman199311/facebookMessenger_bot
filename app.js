@@ -12,8 +12,8 @@ var app = express();
 const uuid = require('uuid');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
+    connectionString: process.env.DATABASE_URL,
+    ssl: false,
 });
 
 
@@ -21,7 +21,7 @@ client.connect();
 const userService = require('./user');
 const customer_lifetime = require('./customer_lifetime');
 
-let dialogflowService = require ('./dialogflow-service');
+let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
 
 const passport = require('passport');
@@ -171,7 +171,7 @@ function setSessionAndUser(senderID) {
     }
 
     if (!usersMap.has(senderID)) {
-        userService.addUser(function(user){
+        userService.addUser(function (user) {
             usersMap.set(senderID, user);
         }, senderID);
     }
@@ -185,13 +185,7 @@ function receivedMessage(event) {
     var recipientID = event.recipient.id;
     var timeOfMessage = event.timestamp;
     var message = event.message;
-
-   setSessionAndUser(senderID);
-
-
-    //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
-    console.log(JSON.stringify(message));
-
+    setSessionAndUser(senderID);
     var isEcho = message.is_echo;
     var messageId = message.mid;
     var appId = message.app_id;
@@ -200,7 +194,6 @@ function receivedMessage(event) {
     // You may get a text or attachment but not both
     var messageText = message.text;
     var messageAttachments = message.attachments;
-    console.log(messageAttachments);
     var quickReply = message.quick_reply;
 
     if (isEcho) {
@@ -221,31 +214,22 @@ function receivedMessage(event) {
 }
 
 
-function handleMessageAttachments(messageAttachments, senderID){
+function handleMessageAttachments(messageAttachments, senderID) {
     var csv_url;
     messageAttachments.forEach(item => {
-            csv_url = item.payload.url;
+        csv_url = item.payload.url;
     });
     console.log(csv_url);
-    //for now just reply
-    // console.log(JSON.stringify(messageAttachments));
-    // var csv_url = JSON.stringify(messageAttachments)
-    // var Uurl = csv_url.payload;
-    // console.log("messageAttachments");
-    // console.log(Uurl);
-    // console.log(JSON.stringify(Uurl).url);
-    // console.log(messageAttachments.payload);
-    // var attachment_payload = messageAttachments.payload;
-    //var csv_url = attachment_payload;
-    var uri = "https://cdn.fbsbx.com/v/t59.2708-21/97269798_268455104293348_9172572718455848960_n.csv/test.csv?_nc_cat=108&_nc_sid=0cab14&_nc_ohc=o3tzWXmghasAX_9K7vA&_nc_ht=cdn.fbsbx.com&oh=0693971577037451dff112f8e80cce2b&oe=5EBE0231";
 
-    customer_lifetime.saveData(function (result){
-        if(result){
+    //var uri = "https://cdn.fbsbx.com/v/t59.2708-21/97269798_268455104293348_9172572718455848960_n.csv/test.csv?_nc_cat=108&_nc_sid=0cab14&_nc_ohc=o3tzWXmghasAX_9K7vA&_nc_ht=cdn.fbsbx.com&oh=0693971577037451dff112f8e80cce2b&oe=5EBE0231";
+
+    customer_lifetime.saveData(function (result) {
+        if (result) {
             fbService.sendTextMessage(senderID, "Successfully saved your data.");
-        }else{
+        } else {
             fbService.sendTextMessage(senderID, "Your Execel file is not correct. Please try other one.");
         }
-    }, uri, senderID);
+    }, csv_url, senderID);
     //sendTextMessage(senderID, "Attachment received. Thank you.");
     //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
 
@@ -254,45 +238,45 @@ function handleMessageAttachments(messageAttachments, senderID){
 function handleQuickReply(senderID, quickReply, messageId) {
     var quickReplyPayload = quickReply.payload;
     switch (quickReplyPayload) {
-       case 'NEWS_PER_WEEK':
-           userService.newsletterSettings(function (updated) {
-               if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you for subscribing! " +
-                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
-               } else {
-                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 1, senderID);
-           break;
-       case 'NEWS_PER_MONTH':
-           userService.newsletterSettings(function (updated) {
-               if (updated) {
-                   fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
-                       "If you want to unsubscribe just write 'unsubscribe from newsletter'");
-               } else {
-                   fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 2, senderID);
-           break;
+        case 'NEWS_PER_WEEK':
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(senderID, "Thank you for subscribing! " +
+                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+                } else {
+                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 1, senderID);
+            break;
+        case 'NEWS_PER_MONTH':
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(senderID, "Thank you for subscribing!" +
+                        "If you want to unsubscribe just write 'unsubscribe from newsletter'");
+                } else {
+                    fbService.sendTextMessage(senderID, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 2, senderID);
+            break;
 
-           case 'Yes':
+        case 'Yes':
 
-                fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
+            fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
 
             break;
 
-            case 'No':
+        case 'No':
 
-                fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
+            fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
 
-                break;
+            break;
 
-       default:
-           dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
-           break;
-   }
+        default:
+            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
+            break;
+    }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
     //send payload to api.ai
     //sendToDialogFlow(senderID, quickReplyPayload);
@@ -308,15 +292,15 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
     switch (action) {
         default:
         case "unsubscribe":
-           userService.newsletterSettings(function(updated) {
-               if (updated) {
-                   fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
-               } else {
-                   fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
-                       "Try again later!");
-               }
-           }, 0, sender);
-           break;
+            userService.newsletterSettings(function (updated) {
+                if (updated) {
+                    fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
+                } else {
+                    fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
+                        "Try again later!");
+                }
+            }, 0, sender);
+            break;
             //unhandled action, just send back the text
             handleMessages(messages, sender);
     }
@@ -335,11 +319,11 @@ function handleMessage(message, sender) {
             let replies = [];
             message.quickReplies.quickReplies.forEach((text) => {
                 let reply =
-                    {
-                        "content_type": "text",
-                        "title": text,
-                        "payload": text
-                    }
+                {
+                    "content_type": "text",
+                    "title": text,
+                    "payload": text
+                }
                 replies.push(reply);
             });
             sendQuickReply(sender, message.quickReplies.title, replies);
@@ -379,7 +363,7 @@ function handleCardMessages(messages, sender) {
 
         let element = {
             "title": message.card.title,
-            "image_url":message.card.imageUri,
+            "image_url": message.card.imageUri,
             "subtitle": message.card.subtitle,
             "buttons": buttons
         };
@@ -391,25 +375,25 @@ function handleCardMessages(messages, sender) {
 
 function handleMessages(messages, sender) {
     let timeoutInterval = 1100;
-    let previousType ;
+    let previousType;
     let cardTypes = [];
     let timeout = 0;
     for (var i = 0; i < messages.length; i++) {
 
-        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+        if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-        } else if ( messages[i].message == "card" && i == messages.length - 1) {
+        } else if (messages[i].message == "card" && i == messages.length - 1) {
             cardTypes.push(messages[i]);
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
-        } else if ( messages[i].message == "card") {
+        } else if (messages[i].message == "card") {
             cardTypes.push(messages[i]);
-        } else  {
+        } else {
 
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
@@ -654,7 +638,7 @@ function sendGenericMessage(recipientId, elements) {
 
 
 function sendReceiptMessage(recipientId, recipient_name, currency, payment_method,
-                            timestamp, elements, address, summary, adjustments) {
+    timestamp, elements, address, summary, adjustments) {
     // Generate a random receipt ID as the API requires a unique ID
     var receiptId = "order" + Math.floor(Math.random() * 1000);
 
@@ -695,7 +679,7 @@ function sendQuickReply(recipientId, text, replies, metadata) {
         },
         message: {
             text: text,
-            metadata: isDefined(metadata)?metadata:'',
+            metadata: isDefined(metadata) ? metadata : '',
             quick_replies: replies
         }
     };
@@ -849,27 +833,27 @@ function receivedPostback(event) {
     var senderID = event.sender.id;
     var recipientID = event.recipient.id;
     var timeOfPostback = event.timestamp;
-setSessionAndUser(senderID);
+    setSessionAndUser(senderID);
     // The 'payload' param is a developer-defined field which is set in a postback
     // button for Structured Messages.
     var payload = event.postback.payload;
 
     switch (payload) {
 
-      case 'BIZ_ANALYTICS':
-      //ask user to send a .csv
-      sendTextMessage(senderID, "Awesome, to help you with that. I just need some data from you");
-      break;
-      case 'BIZ_NEWSLETTER':
-      //get information from user before they subscribe
-      sendBizNewsSubscribe(senderID);
-      break;
-      case 'BIZ_ADVICE':
-      sendTextMessage(senderID, "Great! What would you like advice on?");
-      break;
-      case 'FACEBOOK_WELCOME':
-      greetUserText(senderID);
-      break;
+        case 'BIZ_ANALYTICS':
+            //ask user to send a .csv
+            sendTextMessage(senderID, "Awesome, to help you with that. I just need some data from you");
+            break;
+        case 'BIZ_NEWSLETTER':
+            //get information from user before they subscribe
+            sendBizNewsSubscribe(senderID);
+            break;
+        case 'BIZ_ADVICE':
+            sendTextMessage(senderID, "Great! What would you like advice on?");
+            break;
+        case 'FACEBOOK_WELCOME':
+            greetUserText(senderID);
+            break;
 
         default:
             //unindentified payload
@@ -895,9 +879,9 @@ async function greetUserText(userId) {
     } else {
         sendTextMessage(userId, 'Welcome! ' +
             'I can answer frequently asked questions for you ' +
-             'What can I help you with?');
+            'What can I help you with?');
     }
-  }
+}
 /*
  * Message Read Event
  *
