@@ -222,8 +222,9 @@ function receivedMessage(event) {
 
 
 function handleMessageAttachments(messageAttachments, senderID){
+    var csv_url;
     messageAttachments.forEach(item => {
-        var csv_url = item.payload.url;
+            csv_url = item.payload.url;
     });
     console.log(csv_url);
     //for now just reply
