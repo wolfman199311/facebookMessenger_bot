@@ -222,7 +222,8 @@ function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
     console.log("messageAttachments");
     console.log(messageAttachments.payload.url);
-    csv_url = messageAttachments.payload.url;
+    var attachment_payload = messageAttachments.payload;
+    var csv_url = attachment_payload.url;
 
     customer_lifetime.saveData(function (result){
         if(result){
