@@ -15,8 +15,8 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: false,
 });
-const broadcast = require('./routes/broadcast');
-const webviews = require('./routes/webviews');
+
+
 client.connect();
 const userService = require('./user');
 let dialogflowService = require ('./dialogflow-service');
