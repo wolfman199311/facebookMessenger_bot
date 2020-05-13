@@ -225,7 +225,7 @@ function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
     console.log(JSON.stringify(messageAttachments));
     var csv_url = JSON.stringify(messageAttachments)
-    Uurl = csv_url.payload;
+    var Uurl = csv_url.payload;
     console.log(Uurl);
     console.log(JSON.stringify(Uurl).url);
     console.log("messageAttachments");
