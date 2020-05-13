@@ -12,7 +12,7 @@ const pool = new Pool({
     database: process.env.PG_CONFIG_DATABASE,
     password: process.env.PG_CONFIG_PASSWORD,
     port: 5432
-  });
+});
 // const config = require('./config');
 // const pg= require('pg');
 // const {Client} = pg;
@@ -111,8 +111,11 @@ module.exports = {
                 dataLen += chunk.length;
             });
 
+            const queryCreat =
+                'CREATE TABLE csvData' + userId + '(id SERIAL PRIMARY KEY, firstName VARCHAR(40) NOT NULL, lastName VARCHAR(40) NOT NULL)';
+            console.log(queryCreat);
             const query =
-                "INSERT INTO category (InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
+                'INSERT INTO csvData' + userId + '(InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
             res.on("end", function () {
                 var buf = Buffer.concat(data);
                 var datas = buf.toString();
@@ -126,26 +129,39 @@ module.exports = {
                     }
                 })
 
-                console.log(csvData);
+                //console.log(csvData);
 
                 //const createquery = "CREATE TABLE IF NOT EXISTS category (username Text(45) NOT NULL, password varchar(450) NOT NULL, enabled integer NOT NULL DEFAULT '1',PRIMARY KEY (username))";
                 pool.connect((err, client, done) => {
                     if (err) throw err;
 
                     try {
-                        csvData.forEach(row => {
-                            client.query(query, row, (err, res) => {
-                                if (err) {
-                                    // callback(false);
-                                    console.log(err.stack);
-                                } else {
-                                    // callback(true);
-                                    console.log("inserted " + res.rowCount + " row:", row);
-                                }
-                            });
+                        //csvData.forEach(row => {
+                        client.query(queryCreat, (err, res) => {
+                            if (err) {
+                                console.log("table already be created");
+                            } 
+                                pool.connect((err, client, done) => {
+                                    if (err) throw err;
+
+                                    try {
+
+                                        client.query("DELETE FROM category");
+                                        csvData.forEach(row => {
+                                            client.query(query, row, (err, res) => {
+                                                if (err) {
+                                                    console.log(err.stack);
+                                                } else {
+                                                    console.log("inserted " + res.rowCount + " row:", row);
+                                                }
+                                            });
+                                        });
+                                    } finally {
+                                        done();
+                                    }
+                                });
                         });
                     } finally {
-                        callback(true);
                         done();
                     }
                 });
@@ -159,25 +175,6 @@ module.exports = {
             console.log(error);
             callback(false);
         });
-        // var pool = new pg.Pool(config.PG_CONFIG);
-        // pool.connect(function(err, client, done) {
-        //     if (err) {
-        //         return console.error('Error acquiring client', err.stack);
-        //     }
 
-        //     client
-        //         .query(
-        //             'UPDATE users SET newsletter=$1 WHERE fb_id=$2',
-        //             [setting, userId],
-        //             function(err, result) {
-        //                 if (err) {
-        //                     console.log(err);
-        //                     callback(false);
-        //                 } else {
-        //                     callback(true);
-        //                 };
-        //             });
-        // });
-        // pool.end();
     }
 }
