@@ -1,25 +1,25 @@
 'use strict';
 const fs = require("fs");
 const Pool = require("pg").Pool;
+const request = require('request');
 const fastcsv = require("fast-csv");
 var https = require("https");
 var url = require("url");
 
-// const pool = new Pool({
-//     host: "localhost",
-//     user: "postgres",
-//     database: "testdb",
-//     password: "admin",
-//     port: 5432
-//   });
-// const request = require('request');
+const pool = new Pool({
+    host: process.env.PG_CONFIG_HOST,
+    user: process.env.PG_CONFIG_USER,
+    database: process.env.PG_CONFIG_DATABASE,
+    password: process.env.PG_CONFIG_PASSWORD,
+    port: 5432
+  });
 // const config = require('./config');
 // const pg= require('pg');
 // const {Client} = pg;
-const pool = new pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: false,
-});
+// const pool = new pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: false,
+// });
 
 // client.connect();
 
