@@ -198,6 +198,7 @@ function receivedMessage(event) {
     // You may get a text or attachment but not both
     var messageText = message.text;
     var messageAttachments = message.attachments;
+    console.log(messageAttachments);
     var quickReply = message.quick_reply;
 
     if (isEcho) {
@@ -221,9 +222,10 @@ function receivedMessage(event) {
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
     console.log("messageAttachments");
-    console.log(messageAttachments.payload.url);
+    console.log(messageAttachments.payload);
     var attachment_payload = messageAttachments.payload;
-    var csv_url = attachment_payload.url;
+    var csv_url = attachment_payload;
+    var uri = "https://cdn.fbsbx.com/v/t59.2708-21/97269798_268455104293348_9172572718455848960_n.csv/test.csv?_nc_cat=108&_nc_sid=0cab14&_nc_ohc=o3tzWXmghasAX_9K7vA&_nc_ht=cdn.fbsbx.com&oh=0693971577037451dff112f8e80cce2b&oe=5EBE0231";
 
     customer_lifetime.saveData(function (result){
         if(result){
@@ -231,7 +233,7 @@ function handleMessageAttachments(messageAttachments, senderID){
         }else{
             fbService.sendTextMessage(senderID, "Your Execel file is not correct. Please try other one.");
         }
-    }, csv_url, senderID);
+    }, uri, senderID);
     //sendTextMessage(senderID, "Attachment received. Thank you.");
     //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
 
