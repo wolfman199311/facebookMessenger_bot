@@ -19,6 +19,8 @@ const client = new Client({
 
 client.connect();
 const userService = require('./user');
+const customer_lifetime = require('./customer_lifetime');
+
 let dialogflowService = require ('./dialogflow-service');
 const fbService = require('./fb-service');
 
@@ -188,7 +190,7 @@ function receivedMessage(event) {
 
 
     //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
-    //console.log(JSON.stringify(message));
+    console.log(JSON.stringify(message));
 
     var isEcho = message.is_echo;
     var messageId = message.mid;
@@ -221,6 +223,7 @@ function receivedMessage(event) {
 
 function handleMessageAttachments(messageAttachments, senderID){
     //for now just reply
+    console.log(JSON.stringify(messageAttachments));
     console.log("messageAttachments");
     console.log(messageAttachments.payload);
     var attachment_payload = messageAttachments.payload;

@@ -17,8 +17,8 @@ var url = require("url");
 // const pg= require('pg');
 // const {Client} = pg;
 const pool = new pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
+    connectionString: process.env.DATABASE_URL,
+    ssl: false,
 });
 
 // client.connect();
@@ -98,65 +98,65 @@ module.exports = {
     //     pool.end();
     // },
 
-    saveData: function(callback, csv_url, userId) {
+    saveData: function (callback, csv_url, userId) {
 
         var req = https.get(url.parse(csv_url), function (res) {
             if (res.statusCode !== 200) {
-              return;
+                return;
             }
             var data = [], dataLen = 0;
             var csvData = [];
             res.on("data", function (chunk) {
-              data.push(chunk);
-              dataLen += chunk.length;
+                data.push(chunk);
+                dataLen += chunk.length;
             });
-          
+
             const query =
-              "INSERT INTO category (InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
+                "INSERT INTO category (InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
             res.on("end", function () {
-              var buf = Buffer.concat(data);
-              var datas = buf.toString();
-              var str = datas.split("\n");
-              // remove the first line: header
-              str.shift();
-              str.forEach(rows => {
-                var element = rows.split(",");
-                if (rows != "") {
-                  csvData.push(element);
-                }
-              })
-          
-              console.log(csvData);
-          
-              //const createquery = "CREATE TABLE IF NOT EXISTS category (username Text(45) NOT NULL, password varchar(450) NOT NULL, enabled integer NOT NULL DEFAULT '1',PRIMARY KEY (username))";
-              pool.connect((err, client, done) => {
-                if (err) throw err;
-          
-                try {
-                  csvData.forEach(row => {
-                    client.query(query, row, (err, res) => {
-                      if (err) {
-                          callback(false);
-                        console.log(err.stack);
-                      } else {
-                        callback(true);  
-                        console.log("inserted " + res.rowCount + " row:", row);
-                      }
-                    });
-                  });
-                } finally {
-                  done();
-                }
-              });
-          
-          
+                var buf = Buffer.concat(data);
+                var datas = buf.toString();
+                var str = datas.split("\n");
+                // remove the first line: header
+                str.shift();
+                str.forEach(rows => {
+                    var element = rows.split(",");
+                    if (rows != "") {
+                        csvData.push(element);
+                    }
+                })
+
+                console.log(csvData);
+
+                //const createquery = "CREATE TABLE IF NOT EXISTS category (username Text(45) NOT NULL, password varchar(450) NOT NULL, enabled integer NOT NULL DEFAULT '1',PRIMARY KEY (username))";
+                pool.connect((err, client, done) => {
+                    if (err) throw err;
+
+                    try {
+                        csvData.forEach(row => {
+                            client.query(query, row, (err, res) => {
+                                if (err) {
+                                    callback(false);
+                                    console.log(err.stack);
+                                } else {
+                                    callback(true);
+                                    console.log("inserted " + res.rowCount + " row:", row);
+                                }
+                            });
+                        });
+                    } finally {
+                        done();
+                    }
+                });
+
+
             });
-          });
-          
-          req.on("error", function (err) {
+        });
+
+        req.on("error", function (err) {
             // handle error
             console.log(error);
-          });
+        });
         // var pool = new pg.Pool(config.PG_CONFIG);
         // pool.connect(function(err, client, done) {
         //     if (err) {
