@@ -102,8 +102,6 @@ app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
 
-app.use('/broadcast', broadcast);
-app.use('/webviews', webviews);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -115,43 +113,6 @@ app.get('/webhook/', function (req, res) {
         res.sendStatus(403);
     }
 })
-
-app.use(session(
-    {
-        secret: 'keyboard cat',
-        resave: true,
-        saveUninitilized: true
-    }
-));
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(profile, cb) {
-    cb(null, profile);
-});
-
-passport.deserializeUser(function(profile, cb) {
-    cb(null, profile);
-});
-
-passport.use(new FacebookStrategy({
-        clientID: config.FB_APP_ID,
-        clientSecret: config.FB_APP_SECRET,
-        callbackURL: config.SERVER_URL + "auth/facebook/callback"
-    },
-    function(accessToken, refreshToken, profile, cb) {
-        process.nextTick(function() {
-            return cb(null, profile);
-        });
-    }
-));
-
-
-
-app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', {scope:['public_profile'] ,successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
 /*
