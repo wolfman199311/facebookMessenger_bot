@@ -98,7 +98,7 @@ module.exports = {
         });
 
     },
-    csvwriter: function(IDname, filename){
+    csvwriter: function(IDname, tablename){
         console.log(IDname);
         console.log(filename);
         var filefullname = tablename + '.xlsx';
