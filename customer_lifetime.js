@@ -8,7 +8,7 @@ var url = require("url");
 const fbService = require('./fb-service');
 
 
-const {PythonShell} = require('python-shell');
+const { PythonShell } = require('python-shell');
 
 
 const pool = new Pool({
@@ -20,7 +20,7 @@ const pool = new Pool({
 });
 
 module.exports = {
-   
+
     saveData: function (callback, csv_url, userId) {
         let self = module.exports;
 
@@ -35,9 +35,9 @@ module.exports = {
                 dataLen += chunk.length;
             });
 
-            var tablename = 'csvData'+userId;
+            var tablename = 'csvData' + userId;
             const queryCreat =
-                'CREATE TABLE '  + tablename + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
+                'CREATE TABLE ' + tablename + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
             console.log(queryCreat);
             const query =
                 'INSERT INTO csvData' + userId + '(InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
@@ -62,28 +62,28 @@ module.exports = {
                         client.query(queryCreat, (err, res) => {
                             if (err) {
                                 console.log("table already be created");
-                            } 
-                                pool.connect((err, client, done) => {
-                                    if (err) callback(false);
-                                    try {
+                            }
+                            pool.connect((err, client, done) => {
+                                if (err) callback(false);
+                                try {
 
-                                        client.query("DELETE FROM category");
-                                        callback(true);
-                                        csvData.forEach(row => {
-                                            client.query(query, row, (err, res) => {
-                                                if (err) {
-                                                    console.log(err.stack);
-                                                } else {
-                                                    console.log("inserted " + res.rowCount + " row:", row);
-                                                }
-                                            });
+                                    client.query("DELETE FROM category");
+                                    callback(true);
+                                    csvData.forEach(row => {
+                                        client.query(query, row, (err, res) => {
+                                            if (err) {
+                                                console.log(err.stack);
+                                            } else {
+                                                // console.log("inserted " + res.rowCount + " row:", row);
+                                            }
                                         });
-                                        console.log("display result")
-                                    } finally {
-                                        console.log("display python script part")
-                                        done();
-                                    }
-                                });
+                                    });
+                                    console.log("display result")
+                                } finally {
+                                    console.log("display python script part")
+                                    done();
+                                }
+                            });
                         });
                     } finally {
                         done();
@@ -100,8 +100,8 @@ module.exports = {
         });
 
     },
-    csvwriter: function(IDname, tablename){
-        console.log(IDname);
+    csvwriter: function (IDname, tablename) {
+        // console.log(IDname);
         console.log(tablename);
         var filefullname = tablename + '.xlsx';
         const ws = fs.createWriteStream(filefullname);
@@ -109,52 +109,68 @@ module.exports = {
         pool.connect((err, client, done) => {
             if (err) throw err;
             var selectquery =
-            'SELECT * FROM ' + tablename;
+                'SELECT * FROM ' + tablename;
             client.query(selectquery, (err, res) => {
-              done();
-          
-              if (err) {
-                console.log(err.stack);
-              } else {
-                const jsonData = JSON.parse(JSON.stringify(res.rows));
-                console.log("jsonData", jsonData);
-          
-                fastcsv
-                  .write(jsonData, { headers: true })
-                  .on("finish", function() {
-                    console.log('Write to' + filefullname + 'successfully!');
-                    var command = '././' + filefullname;
-                    var comport = 6;
+                done();
 
-                    var options = {
-                        scriptPath: 'python/',
-                        args: [command, comport], // pass arguments to the script here
-                    };
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    const jsonData = JSON.parse(JSON.stringify(res.rows));
+                    // console.log("jsonData", jsonData);
 
-                    PythonShell.run('script.py', options, function (err, results) {
-                        if (err) {
-                            console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+                    fastcsv
+                        .write(jsonData, { headers: true })
+                        .on("finish", function () {
+                            console.log('Write to' + filefullname + 'successfully!');
+                            var command = '././' + filefullname;
+                            var comport = 6;
 
-                        };
-                        console.log('results: %j', results);
-                        
-                        // for (var i = 1; i < 6; i++){
-                        //     fbService.sendTextMessage(IDname, results[i]);
-                        // }
+                            var options = {
+                                scriptPath: 'python/',
+                                args: [command, comport], // pass arguments to the script here
+                            };
 
-                        results.forEach(item => {
-                          console.log(item);
-                          fbService.sendTextMessage(IDname, item);
-                        });
-                    });
+                            PythonShell.run('script.py', options, function (err, results) {
+                                if (err) {
+                                    console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+
+                                } else {
+                                    console.log('results: %j', results);
+                                    results.forEach(item => {
+                                        console.log(item);
+                                        var i = 0;
+                                        if (i < 10) {
+                                            fbService.sendTextMessage(IDname, item);
+                                            i++;
+                                        }
+                                        fbService.sendTextMessage(IDname, item);
+                                    });
+                                }
 
 
-                  })
-                  .pipe(ws);
-              }
+                                // for (var i = 1; i < 6; i++){
+                                //     fbService.sendTextMessage(IDname, results[i]);
+                                // }
+
+                                // results.forEach(item => {
+                                //   console.log(item);
+                                //   var i = 0;
+                                //   if (i<10){
+                                //     fbService.sendTextMessage(IDname, item);
+                                //     i++; 
+                                //   }
+                                //   fbService.sendTextMessage(IDname, item);
+                                // });
+                            });
+
+
+                        })
+                        .pipe(ws);
+                }
             });
-          });
-        
+        });
+
         // var command = '././Book1.xlsx';
         // var comport = 6;
 
