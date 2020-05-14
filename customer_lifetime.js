@@ -5,6 +5,10 @@ const request = require('request');
 const fastcsv = require("fast-csv");
 var https = require("https");
 var url = require("url");
+
+const config = require('./config');
+const writercsv = require('./csvwriter');
+
 const {PythonShell} = require('python-shell');
 
 
@@ -84,6 +88,7 @@ module.exports = {
                                         });
                                         console.log("display result")
                                     } finally {
+                                        console.log("display python script part")
                                         done();
                                     }
                                 });
@@ -92,11 +97,10 @@ module.exports = {
                         done();
                     }
                 });
-
-
+                setTimeout(callback(true), 3000);
+                setTimeout(self.csvwriter.bind(null), 3000);
             });
 
-            console.log("display python script part")
         });
 
         req.on("error", function (err) {
@@ -105,5 +109,20 @@ module.exports = {
             callback(false);
         });
 
+    }
+    csvwriter:function(){
+        console.log("name");
+        var command = '././Book1.xlsx';
+        var comport = 6;
+
+        var options = {
+            scriptPath: 'python/',
+            args: [command, comport], // pass arguments to the script here
+        };
+
+        PythonShell.run('script.py', options, function (err, results) {
+            if (err) throw err;
+            console.log('results: %j', results);
+        });
     }
 }
