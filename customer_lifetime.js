@@ -1,12 +1,10 @@
 'use strict';
 const fs = require("fs");
 const Pool = require("pg").Pool;
-const request = require('request');
+// const request = require('request');
 const fastcsv = require("fast-csv");
 var https = require("https");
 var url = require("url");
-
-const config = require('./config');
 
 const {PythonShell} = require('python-shell');
 
@@ -18,15 +16,6 @@ const pool = new Pool({
     password: process.env.PG_CONFIG_PASSWORD,
     port: 5432
 });
-// const config = require('./config');
-// const pg= require('pg');
-// const {Client} = pg;
-// const pool = new pool({
-//     connectionString: process.env.DATABASE_URL,
-//     ssl: false,
-// });
-
-// client.connect();
 
 module.exports = {
    
@@ -44,8 +33,9 @@ module.exports = {
                 dataLen += chunk.length;
             });
 
+            var tablename = 'csvData'+userId;
             const queryCreat =
-                'CREATE TABLE csvData' + userId + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
+                'CREATE TABLE '  + tablename + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
             console.log(queryCreat);
             const query =
                 'INSERT INTO csvData' + userId + '(InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
@@ -97,7 +87,7 @@ module.exports = {
                         done();
                     }
                 });
-                setTimeout(self.csvwriter.bind(null, userId), 3000);
+                setTimeout(self.csvwriter.bind(null, userId, tablename), 3000);
             });
 
         });
@@ -108,19 +98,64 @@ module.exports = {
         });
 
     },
-    csvwriter: function(IDname){
+    csvwriter: function(IDname, filename){
         console.log(IDname);
-        var command = '././Book1.xlsx';
-        var comport = 6;
+        console.log(filename);
+        var filefullname = tablename + '.xlsx';
+        const ws = fs.createWriteStream(filefullname);
 
-        var options = {
-            scriptPath: 'python/',
-            args: [command, comport], // pass arguments to the script here
-        };
-
-        PythonShell.run('script.py', options, function (err, results) {
+        pool.connect((err, client, done) => {
             if (err) throw err;
-            console.log('results: %j', results);
-        });
+            var selectquery =
+            'SELECT * FROM ' + tablename;
+            client.query(selectquery, (err, res) => {
+              done();
+          
+              if (err) {
+                console.log(err.stack);
+              } else {
+                const jsonData = JSON.parse(JSON.stringify(res.rows));
+                console.log("jsonData", jsonData);
+          
+                fastcsv
+                  .write(jsonData, { headers: true })
+                  .on("finish", function() {
+                    console.log('Write to' + filefullname + 'successfully!');
+                    var command = '././' + filefullname;
+                    var comport = 6;
+
+                    var options = {
+                        scriptPath: 'python/',
+                        args: [command, comport], // pass arguments to the script here
+                    };
+
+                    PythonShell.run('script.py', options, function (err, results) {
+                        if (err) throw err;
+                        console.log('results: %j', results);
+                        var i = 0;
+                        for (i = 0; i < 5; i++){
+                            fbService.sendTextMessage(senderID, results[i]);
+                        }
+                    });
+
+
+                  })
+                  .pipe(ws);
+              }
+            });
+          });
+        
+        // var command = '././Book1.xlsx';
+        // var comport = 6;
+
+        // var options = {
+        //     scriptPath: 'python/',
+        //     args: [command, comport], // pass arguments to the script here
+        // };
+
+        // PythonShell.run('script.py', options, function (err, results) {
+        //     if (err) throw err;
+        //     console.log('results: %j', results);
+        // });
     }
 }
