@@ -100,7 +100,7 @@ module.exports = {
     },
     csvwriter: function(IDname, tablename){
         console.log(IDname);
-        console.log(filename);
+        console.log(tablename);
         var filefullname = tablename + '.xlsx';
         const ws = fs.createWriteStream(filefullname);
 
