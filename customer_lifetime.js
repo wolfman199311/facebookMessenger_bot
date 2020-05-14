@@ -138,9 +138,14 @@ module.exports = {
                         };
                         console.log('results: %j', results);
                         
-                        for (var i = 1; i < 6; i++){
-                            fbService.sendTextMessage(IDname, results[i]);
-                        }
+                        // for (var i = 1; i < 6; i++){
+                        //     fbService.sendTextMessage(IDname, results[i]);
+                        // }
+
+                        results.forEach(item => {
+                          console.log(item);
+                          fbService.sendTextMessage(IDname, item);
+                        });
                     });
 
 
