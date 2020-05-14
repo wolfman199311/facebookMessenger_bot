@@ -73,10 +73,11 @@ module.exports = {
                             } 
                                 pool.connect((err, client, done) => {
                                     if (err) throw err;
-
+                                        callback(false);
                                     try {
 
                                         client.query("DELETE FROM category");
+                                        callback(true);
                                         csvData.forEach(row => {
                                             client.query(query, row, (err, res) => {
                                                 if (err) {
@@ -97,7 +98,6 @@ module.exports = {
                         done();
                     }
                 });
-                setTimeout(callback(true), 3000);
                 setTimeout(self.csvwriter.bind(null, userId), 3000);
             });
 
@@ -106,7 +106,6 @@ module.exports = {
         req.on("error", function (err) {
             // handle error
             console.log(error);
-            callback(false);
         });
 
     },
