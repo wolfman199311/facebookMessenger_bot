@@ -108,8 +108,8 @@ module.exports = {
         });
 
     },
-    csvwriter: function(uerid){
-        console.log(userid);
+    csvwriter: function(IDname){
+        console.log(IDname);
         var command = '././Book1.xlsx';
         var comport = 6;
 
