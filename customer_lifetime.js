@@ -139,7 +139,7 @@ module.exports = {
                         console.log('results: %j', results);
                         var i = 0;
                         for (i = 0; i < 5; i++){
-                            fbService.sendTextMessage(senderID, results[i]);
+                            fbService.sendTextMessage(IDname, results[i]);
                         }
                     });
 
