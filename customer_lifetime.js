@@ -7,7 +7,6 @@ var https = require("https");
 var url = require("url");
 
 const config = require('./config');
-const writercsv = require('./csvwriter');
 
 const {PythonShell} = require('python-shell');
 
