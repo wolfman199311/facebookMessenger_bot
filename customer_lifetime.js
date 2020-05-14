@@ -98,7 +98,7 @@ module.exports = {
                     }
                 });
                 setTimeout(callback(true), 3000);
-                setTimeout(self.csvwriter.bind(null), 3000);
+                setTimeout(self.csvwriter.bind(null, userId), 3000);
             });
 
         });
@@ -109,8 +109,8 @@ module.exports = {
             callback(false);
         });
 
-    }
-    csvwriter:function(){
+    },
+    csvwriter: function(callback){
         console.log("name");
         var command = '././Book1.xlsx';
         var comport = 6;
