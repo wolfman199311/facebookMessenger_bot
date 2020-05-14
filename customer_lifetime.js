@@ -72,8 +72,7 @@ module.exports = {
                                 console.log("table already be created");
                             } 
                                 pool.connect((err, client, done) => {
-                                    if (err) throw err;
-                                        callback(false);
+                                    if (err) callback(false);
                                     try {
 
                                         client.query("DELETE FROM category");
