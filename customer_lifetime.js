@@ -130,7 +130,10 @@ module.exports = {
                     };
 
                     PythonShell.run('script.py', options, function (err, results) {
-                        if (err) throw err;
+                        if (err) {
+                            console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+
+                        };
                         console.log('results: %j', results);
                         var i = 0;
                         for (i = 0; i < 5; i++){
