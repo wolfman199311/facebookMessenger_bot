@@ -87,7 +87,7 @@ module.exports = {
                         done();
                     }
                 });
-                setTimeout(self.csvwriter.bind(null, userId, tablename), 3000);
+                setTimeout(self.csvwriter.bind(null, userId, tablename), 5000);
             });
 
         });

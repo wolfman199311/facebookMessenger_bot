@@ -225,7 +225,7 @@ function handleMessageAttachments(messageAttachments, senderID) {
 
     customer_lifetime.saveData(function (result) {
         if (result) {
-            fbService.sendTextMessage(senderID, "Successfully saved your data.");
+            fbService.sendTextMessage(senderID, "Successfully saved your data. just a minute...");
         } else {
             fbService.sendTextMessage(senderID, "Your Execel file is not correct. Please try other one.");
         }
