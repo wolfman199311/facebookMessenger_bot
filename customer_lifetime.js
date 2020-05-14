@@ -137,8 +137,8 @@ module.exports = {
 
                         };
                         console.log('results: %j', results);
-                        var i = 0;
-                        for (i = 0; i < 5; i++){
+                        var i ;
+                        for (i = 1; i < 6; i++){
                             fbService.sendTextMessage(IDname, results[i]);
                         }
                     });
