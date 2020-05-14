@@ -32,6 +32,7 @@ const pool = new Pool({
 module.exports = {
    
     saveData: function (callback, csv_url, userId) {
+        let self = module.exports;
 
         var req = https.get(url.parse(csv_url), function (res) {
             if (res.statusCode !== 200) {
@@ -110,8 +111,8 @@ module.exports = {
         });
 
     },
-    csvwriter: function(callback){
-        console.log("name");
+    csvwriter: function(uerid){
+        console.log(userid);
         var command = '././Book1.xlsx';
         var comport = 6;
 
