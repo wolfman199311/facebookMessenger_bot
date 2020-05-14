@@ -5,6 +5,8 @@ const Pool = require("pg").Pool;
 const fastcsv = require("fast-csv");
 var https = require("https");
 var url = require("url");
+const fbService = require('./fb-service');
+
 
 const {PythonShell} = require('python-shell');
 
