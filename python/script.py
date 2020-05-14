@@ -1,6 +1,11 @@
 import sys
 import json
 import pandas as pd  # for dataframes
+import matplotlib.pyplot as plt # for plotting graphs
+import seaborn as sns # for plotting graphs
+import datetime as dt
+import numpy as np
+
 
 def main():
     lines = sys.argv[1];

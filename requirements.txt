@@ -1,2 +1,6 @@
 pandas
 xlrd
+matplotlib
+seaborn
+datetime
+numpy
