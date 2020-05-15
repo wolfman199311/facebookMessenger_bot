@@ -129,7 +129,7 @@ module.exports = {
                     fs.unlink(filefullname, (err) => {
                         if (err) {
                             console.log("failed to delete local image:" + err);
-                        } else {
+                        } 
                             console.log('successfully deleted local file');
                             fs.writeFile(filefullname, xls, function (error) {
                                 if (error) throw error;
@@ -162,7 +162,7 @@ module.exports = {
                                 });
 
                             });
-                        }
+                        
                     });
 
 
