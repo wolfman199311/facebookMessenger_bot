@@ -68,17 +68,20 @@ module.exports = {
                                 if (err) callback(false);
                                 try {
 
-                                    client.query("DELETE FROM category");
-                                    callback(true);
-                                    csvData.forEach(row => {
-                                        client.query(query, row, (err, res) => {
-                                            if (err) {
-                                                console.log(err.stack);
-                                            } else {
-                                                console.log("inserted " + res.rowCount + " row:", row);
-                                            }
+                                    client.query("DELETE FROM category", (err, res) => {
+                                        if (err) throw err;
+                                        csvData.forEach(row => {
+                                            client.query(query, row, (err, res) => {
+                                                if (err) {
+                                                    console.log(err.stack);
+                                                } else {
+                                                    console.log("inserted " + res.rowCount + " row:", row);
+                                                }
+                                            });
                                         });
                                     });
+                                    callback(true);
+                                    
                                     console.log("display result")
                                 } finally {
                                     console.log("display python script part")
