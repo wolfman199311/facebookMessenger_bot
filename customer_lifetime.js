@@ -149,15 +149,6 @@ module.exports = {
                                 });
                             }
 
-                            results.forEach(item => {
-                                console.log(item);
-                                var i = 0;
-                                if (i < 10) {
-                                    fbService.sendTextMessage(IDname, item);
-                                    i++;
-                                }
-                                fbService.sendTextMessage(IDname, item);
-                            });
                         });
 
                     });
