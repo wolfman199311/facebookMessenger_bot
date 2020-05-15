@@ -3,6 +3,7 @@ const fs = require("fs");
 const Pool = require("pg").Pool;
 // const request = require('request');
 const fastcsv = require("fast-csv");
+var json2xls = require('json2xls');
 var https = require("https");
 var url = require("url");
 const fbService = require('./fb-service');
@@ -119,69 +120,52 @@ module.exports = {
                     const jsonData = JSON.parse(JSON.stringify(res.rows));
                     // console.log("jsonData", jsonData);
 
-                    fastcsv
-                        .write(jsonData, { headers: true })
-                        .on("finish", function () {
-                            console.log('Write to' + filefullname + 'successfully!');
-                            var command = '././' + filefullname;
-                            var comport = 6;
+                    var xls = json2xls(jsonData);
+                    fs.writeFile(filefullname, xls, function (error) {
+                        if (error) throw error;
+                        console.log("Write to bezkoder_postgresql_fs.csv successfully!");
+                        var command = '././' + filefullname;
+                        var comport = 6;
 
-                            var options = {
-                                scriptPath: 'python/',
-                                args: [command, comport], // pass arguments to the script here
-                            };
+                        var options = {
+                            scriptPath: 'python/',
+                            args: [command, comport], // pass arguments to the script here
+                        };
 
-                            PythonShell.run('script.py', options, function (err, results) {
-                                if (err) {
-                                    console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+                        PythonShell.run('script.py', options, function (err, results) {
+                            if (err) {
+                                console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
 
-                                } else {
-                                    console.log('results: %j', results);
-                                    results.forEach(item => {
-                                        console.log(item);
-                                        var i = 0;
-                                        if (i < 10) {
-                                            fbService.sendTextMessage(IDname, item);
-                                            i++;
-                                        }
+                            } else {
+                                console.log('results: %j', results);
+                                results.forEach(item => {
+                                    console.log(item);
+                                    var i = 0;
+                                    if (i < 10) {
                                         fbService.sendTextMessage(IDname, item);
-                                    });
+                                        i++;
+                                    }
+                                    fbService.sendTextMessage(IDname, item);
+                                });
+                            }
+
+                            results.forEach(item => {
+                                console.log(item);
+                                var i = 0;
+                                if (i < 10) {
+                                    fbService.sendTextMessage(IDname, item);
+                                    i++;
                                 }
-
-
-                                // for (var i = 1; i < 6; i++){
-                                //     fbService.sendTextMessage(IDname, results[i]);
-                                // }
-
-                                // results.forEach(item => {
-                                //   console.log(item);
-                                //   var i = 0;
-                                //   if (i<10){
-                                //     fbService.sendTextMessage(IDname, item);
-                                //     i++; 
-                                //   }
-                                //   fbService.sendTextMessage(IDname, item);
-                                // });
+                                fbService.sendTextMessage(IDname, item);
                             });
+                        });
 
+                    });
 
-                        })
-                        .pipe(ws);
                 }
             });
         });
 
-        // var command = '././Book1.xlsx';
-        // var comport = 6;
 
-        // var options = {
-        //     scriptPath: 'python/',
-        //     args: [command, comport], // pass arguments to the script here
-        // };
-
-        // PythonShell.run('script.py', options, function (err, results) {
-        //     if (err) throw err;
-        //     console.log('results: %j', results);
-        // });
     }
 }
