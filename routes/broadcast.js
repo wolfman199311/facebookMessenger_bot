@@ -49,7 +49,7 @@ router.get('/broadcast-send', ensureAuthenticated, function (req, res) {
   req.session.users = null;
   res.render('broadcast-sent', {message: message, users: users, numUsers:users.length, newstype: newstype});
 });
-});
+
 
 router.get('/broadcast-sent', ensureAuthenticated, function (req, res) {
     res.render('broadcast-sent');
