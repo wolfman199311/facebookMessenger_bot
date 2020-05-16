@@ -68,17 +68,20 @@ module.exports = {
                                 if (err) callback(false);
                                 try {
 
-                                    client.query("DELETE FROM category");
-                                    callback(true);
-                                    csvData.forEach(row => {
-                                        client.query(query, row, (err, res) => {
-                                            if (err) {
-                                                console.log(err.stack);
-                                            } else {
-                                                console.log("inserted " + res.rowCount + " row:", row);
-                                            }
+                                    client.query("DELETE FROM category", (err, res) => {
+                                        if (err) throw err;
+                                        csvData.forEach(row => {
+                                            client.query(query, row, (err, res) => {
+                                                if (err) {
+                                                    console.log(err.stack);
+                                                } else {
+                                                    console.log("inserted " + res.rowCount + " row:", row);
+                                                }
+                                            });
                                         });
                                     });
+                                    callback(true);
+                                    
                                     console.log("display result")
                                 } finally {
                                     console.log("display python script part")
@@ -121,37 +124,52 @@ module.exports = {
                     // console.log("jsonData", jsonData);
 
                     var xls = json2xls(jsonData);
-                    fs.writeFile(filefullname, xls, function (error) {
-                        if (error) throw error;
-                        console.log("Write to bezkoder_postgresql_fs.csv successfully!");
-                        var command = '././' + filefullname;
-                        var comport = 6;
+                    // var tempFile = fs.openSync(filefullname, 'r');
+                    // // try commenting out the following line to see the different behavior
+                    // fs.closeSync(tempFile);
 
-                        var options = {
-                            scriptPath: 'python/',
-                            args: [command, comport], // pass arguments to the script here
-                        };
+                    // fs.unlinkSync(filefullname);
+                    fs.unlink(filefullname, (err) => {
+                        if (err) {
+                            console.log("failed to delete local image:" + err);
+                        } 
+                            console.log('successfully deleted local file');
+                            fs.writeFile(filefullname, xls, function (error) {
+                                if (error) throw error;
+                                console.log("Write to bezkoder_postgresql_fs.csv successfully!");
+                                var command = '././' + filefullname;
+                                var comport = 6;
 
-                        PythonShell.run('script.py', options, function (err, results) {
-                            if (err) {
-                                console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+                                var options = {
+                                    scriptPath: 'python/',
+                                    args: [command, comport], // pass arguments to the script here
+                                };
 
-                            } else {
-                                console.log('results: %j', results);
-                                results.forEach(item => {
-                                    console.log(item);
-                                    var i = 0;
-                                    if (i < 10) {
-                                        fbService.sendTextMessage(IDname, item);
-                                        i++;
+                                PythonShell.run('script.py', options, function (err, results) {
+                                    if (err) {
+                                        console.log("That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
+
+                                    } else {
+                                        console.log('results: %j', results);
+                                        results.forEach(item => {
+                                            console.log(item);
+                                            var i = 0;
+                                            if (i < 10) {
+                                                fbService.sendTextMessage(IDname, item);
+                                                i++;
+                                            }
+                                            fbService.sendTextMessage(IDname, item);
+                                        });
                                     }
-                                    fbService.sendTextMessage(IDname, item);
+
                                 });
-                            }
 
-                        });
-
+                            });
+                        
                     });
+
+
+
 
                 }
             });
