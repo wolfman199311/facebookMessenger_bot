@@ -11,6 +11,7 @@ const request = require('request');
 var app = express();
 const uuid = require('uuid');
 
+
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: false,
@@ -27,6 +28,7 @@ const fbService = require('./fb-service');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
+const broadcast = require('./routes/broadcast');
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -103,7 +105,7 @@ const usersMap = new Map();
 app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
-
+app.use('/broadcast', broadcast);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -129,6 +131,43 @@ app.post('/webhook/', function (req, res) {
     console.log("JSON.stringify(data)");
     console.log(JSON.stringify(data));
 
+    app.use(session(
+        {
+            secret: 'keyboard cat',
+            resave: true,
+            saveUninitilized: true
+        }
+    ));
+
+
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    passport.serializeUser(function(profile, cb) {
+        cb(null, profile);
+    });
+
+    passport.deserializeUser(function(profile, cb) {
+        cb(null, profile);
+    });
+
+    passport.use(new FacebookStrategy({
+            clientID: config.FB_APP_ID,
+            clientSecret: config.FB_APP_SECRET,
+            callbackURL: config.SERVER_URL + "auth/facebook/callback"
+        },
+        function(accessToken, refreshToken, profile, cb) {
+            process.nextTick(function() {
+                return cb(null, profile);
+            });
+        }
+    ));
+
+    app.get('/auth/facebook', passport.authenticate('facebook',{scope:'public_profile'}));
+
+
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', { successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
     // Make sure this is a page subscription
@@ -227,7 +266,7 @@ function handleMessageAttachments(messageAttachments, senderID) {
         if (result) {
             fbService.sendTextMessage(senderID, "Successfully saved your data. just a minute...");
         } else {
-            fbService.sendTextMessage(senderID, "Your Execel file is not correct. Please try other one.");
+            fbService.sendTextMessage(senderID, "Your Excel file is not correct. Please try other one.");
         }
     }, csv_url, senderID);
     //sendTextMessage(senderID, "Attachment received. Thank you.");
@@ -263,7 +302,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
 
         case 'Yes':
 
-            fbService.sendTextMessage(senderID, "In marketing, customer lifetimevalue, lifetime customer value, or lifetime valueis a prediction of the net profit attributedto the entire future relationship with a customer. The two thinks I would recommend is either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
+            fbService.sendTextMessage(senderID, "In marketing, customer life time value, lifetime customer value, or lifetime value is a prediction of the net profit attributed to the entire future relationship with a customer. The two things I would recommend are either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
 
             break;
 
