@@ -85,7 +85,7 @@ module.exports = {
                                     
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
-                                    await resolveAfterXSeconds(500);
+                                    await resolveAfterXSeconds(1000);
                                     i++;
                                     if (i == 10 || array.length == i) {
                                         console.log("finished");
