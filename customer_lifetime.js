@@ -83,6 +83,7 @@ module.exports = {
                                     // if (i < 10) {
                                     await resolveAfterXSeconds(500);
                                     console.log(typeof(item));
+                                    console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
                                     i++;
                                     // }
