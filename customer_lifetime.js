@@ -64,13 +64,7 @@ module.exports = {
                             args: [command, comport], // pass arguments to the script here
                         };
 
-                        async function resolveAfterXSeconds(x) {
-                            return new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve(x);
-                                }, x);
-                            });
-                        }
+                        
 
                         PythonShell.run('script.py', options, function (err, results) {
                             if (err) {
@@ -79,14 +73,23 @@ module.exports = {
                             } else {
                                 console.log('results: %j', results);
                                 var i = 0;
+                                async function delay(x) {
+                                    return new Promise(resolve => {
+                                        setTimeout(() => {
+                                            resolve(x);
+                                        }, x);
+                                    });
+                                }
                                
                                 results.forEach(async (item, index, array) => {
-
+                                    i++;
+                                    await delay(i*500);
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
-                                    await resolveAfterXSeconds(2000);
+                                    
                                     i++;
                                     if (i == 10 || array.length == i) {
+                                        await delay(1000);
                                         console.log("finished");
                                         callback(true);
                                     }
