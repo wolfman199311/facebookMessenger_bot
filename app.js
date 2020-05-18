@@ -24,11 +24,16 @@ const customer_lifetime = require('./customer_lifetime');
 
 let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
+const FM = require('./helper-function/facebook-messenger');
+const GD = require('./helper-function/google-dialogflow');
+const GC = require('./helper-function/google-calendar');
+const DT = require('./helper-function/date-time-function');
 
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const broadcast = require('./routes/broadcast');
+
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -859,10 +864,7 @@ function sendBizNewsSubscribe(userId) {
 
     fbService.sendQuickReply(userId, responseText, replies);
 }
-const FM = require('../helper-function/facebook-messenger');
-const GD = require('../helper-function/google-dialogflow');
-const GC = require('../helper-function/google-calendar');
-const DT = require('../helper-function/date-time-function');
+
 
 // This route is to get the message
 app.post('/facebook', async (req, res) => {
