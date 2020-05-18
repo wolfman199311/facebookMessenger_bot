@@ -82,10 +82,10 @@ module.exports = {
                                
                                 results.forEach(async (item, index, array) => {
 
-                                    
+                                    await resolveAfterXSeconds(1000);
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
-                                    await resolveAfterXSeconds(1000);
+                                    
                                     i++;
                                     if (i == 10 || array.length == i) {
                                         console.log("finished");
