@@ -71,23 +71,18 @@ module.exports = {
                             } else {
                                 console.log('results: %j', results);
                                 var i = 0;
-                                async function resolveAfterXSeconds(x) {
-                                    return new Promise(resolve => {
-                                        setTimeout(() => {
-                                            resolve(x);
-                                        }, x);
-                                    });
-                                }
+                               
                                 results.forEach(async (item, index, array) => {
 
                                     // if (i < 10) {
-                                    await resolveAfterXSeconds(5000);
+                                    
                                     console.log(typeof(item));
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
                                     i++;
                                     // }
                                     if (i == 10 || array.length == i) {
+                                        console.log("finished");
                                         callback(true);
                                         // fbService.sendTextMessage(userId, "item");
                                     }
