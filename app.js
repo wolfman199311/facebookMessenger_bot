@@ -243,7 +243,6 @@ function receivedMessage(event) {
         return;
     }
 
-
     if (messageText) {
         //send message to api.ai
         sendToDialogFlow(senderID, messageText);
@@ -251,7 +250,6 @@ function receivedMessage(event) {
         handleMessageAttachments(messageAttachments, senderID);
     }
 }
-
 
 function handleMessageAttachments(messageAttachments, senderID) {
     var csv_url;
@@ -269,9 +267,6 @@ function handleMessageAttachments(messageAttachments, senderID) {
             fbService.sendTextMessage(senderID, "Your Excel file is not correct. Please try other one.");
         }
     }, csv_url, senderID);
-    //sendTextMessage(senderID, "Attachment received. Thank you.");
-    //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
-
 }
 
 function handleQuickReply(senderID, quickReply, messageId) {

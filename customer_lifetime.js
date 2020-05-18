@@ -11,7 +11,6 @@ const fbService = require('./fb-service');
 
 const { PythonShell } = require('python-shell');
 
-
 const pool = new Pool({
     host: process.env.PG_CONFIG_HOST,
     user: process.env.PG_CONFIG_USER,
@@ -19,7 +18,6 @@ const pool = new Pool({
     password: process.env.PG_CONFIG_PASSWORD,
     port: 5432
 });
-
 
 module.exports = {
 
