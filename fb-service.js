@@ -590,7 +590,6 @@ module.exports = {
                         recipientId);
                 }
             } else {
-                console.log(response);
                 console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
             }
         });

@@ -846,12 +846,12 @@ function sendimproveBusiness(userId) {
 
     let replies = [
         {
-            "content_type": "Yes",
+            "content_type": "text",
             "title": "agree",
             "payload": "YES"
         },
         {
-            "content_type": "No",
+            "content_type": "text",
             "title": "disagree",
             "payload": "NO"
         }
