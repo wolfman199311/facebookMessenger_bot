@@ -85,12 +85,11 @@ module.exports = {
                                     
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
-                                    await resolveAfterXSeconds(1000);
+                                    await resolveAfterXSeconds(20000);
                                     i++;
                                     if (i == 10 || array.length == i) {
                                         console.log("finished");
                                         callback(true);
-                                        // fbService.sendTextMessage(userId, "item");
                                     }
                                 });
                             }
