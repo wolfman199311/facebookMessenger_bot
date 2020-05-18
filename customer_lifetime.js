@@ -81,7 +81,7 @@ module.exports = {
                                     var i = 0;
                                     if (i < 10) {
                                         console.log(item);
-                                        fbService.sendTextMessage(IDname, item);
+                                        fbService.sendTextMessage(userId, item);
                                         i++;
                                     }
                                 });
