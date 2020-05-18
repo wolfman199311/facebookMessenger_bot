@@ -859,6 +859,67 @@ function sendBizNewsSubscribe(userId) {
 
     fbService.sendQuickReply(userId, responseText, replies);
 }
+const FM = require('../helper-function/facebook-messenger');
+const GD = require('../helper-function/google-dialogflow');
+const GC = require('../helper-function/google-calendar');
+const DT = require('../helper-function/date-time-function');
+
+// This route is to get the message
+app.post('/facebook', async (req, res) => {
+
+    if (req.body.object === 'page') {
+
+        let incomingData = req.body.entry[0].messaging[0];
+
+        let senderId = incomingData.sender.id;
+        let message = incomingData.message.text;
+
+        console.log(`Incoming message --> ${message}`);
+        console.log(`Incoming sender id --> ${senderId}`);
+
+        let intentData = await GD.detectIntent(message, senderId);
+
+        // Check for Schedule a call
+        if (intentData.intentName === 'User Provides Time') {
+            let fields = intentData.outputContexts[0].parameters.fields;
+
+            let date = fields.date.stringValue;
+            let time = fields.time.stringValue;
+
+            // Check the event is there or not
+            let dtc = DT.dateTimeForCalander(date, time);
+            let dts = DT.dateTimeToString(date, time);
+            let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
+
+            if (eventsLength == 0) {
+                let event = {
+                    'summary': `Demo appointment.`,
+                    'description': `Sample description.`,
+                    'start': {
+                        'dateTime': dtc.start,
+                        'timeZone': 'Europe/London'
+                    },
+                    'end': {
+                        'dateTime': dtc.end,
+                        'timeZone': 'Europe/London'
+                    }
+                };
+                await GC.insertEvent(event);
+                await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                res.status(200).send('EVENT_RECEIVED');
+            } else {
+                await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                res.status(200).send('EVENT_RECEIVED');
+            }
+        } else {
+            console.log('I am at else');
+            await FM.sendMessage(intentData.text, senderId);
+            res.status(200).send('EVENT_RECEIVED');
+        }
+    } else {
+        res.sendStatus(404);
+    }
+});
 
 
 /*
