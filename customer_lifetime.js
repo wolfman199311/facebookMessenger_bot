@@ -81,7 +81,7 @@ module.exports = {
                                 results.forEach(async (item, index, array) => {
 
                                     // if (i < 10) {
-                                    await resolveAfterXSeconds(500);
+                                    await resolveAfterXSeconds(5000);
                                     console.log(typeof(item));
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
