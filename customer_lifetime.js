@@ -73,8 +73,8 @@ module.exports = {
 
                         PythonShell.run('script.py', options, function (err, results) {
                             if (err) {
-                                console.log(err + "That is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
-
+                                console.log(err);
+                                fbService.sendTextMessage(userId, "cannot calculate customer lifetime value, because that is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
                             } else {
                                 console.log('results: %j', results);
                                 results.forEach(item => {
