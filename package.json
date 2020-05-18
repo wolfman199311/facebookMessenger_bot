@@ -20,6 +20,7 @@
     "https": "^1.0.0",
     "json2xls": "^0.1.2",
     "node": "^14.0.0",
+    "node-xlsx": "^0.15.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "pg": "^8.0.3",
