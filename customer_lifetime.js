@@ -20,9 +20,6 @@ const pool = new Pool({
     port: 5432
 });
 
-// var tablename = 'csvData' + userId;
-
-// var url = "https://cdn.fbsbx.com/v/t59.2708-21/97244361_173244120675140_9216578399319883776_n.xlsx/Book1-3.xlsx?_nc_cat=111&_nc_sid=0cab14&_nc_ohc=2nu_VI6RsZoAX928D3A&_nc_ht=cdn.fbsbx.com&oh=8683367f97c0f3ad13768cac98d764d1&oe=5EC2B467";
 
 module.exports = {
 
@@ -59,9 +56,7 @@ module.exports = {
                     fs.writeFile(xlsxfilename, rawData, 'binary', async (err) => {
                         if (err) throw err;
                         console.log("Successfully saved XLSX file.");
-                        // const parsedData = await xlsxToCSVFunction(rawData);
-                        var setting = self.saveData.bind(null, tablename);
-                        callback(setting);
+                        const result = await self.saveData.bind(null, tablename, userId);
                         console.log("Write to bezkoder_postgresql_fs.csv successfully!");
                         var command = '././' + xlsxfilename;
                         var comport = 6;
@@ -77,12 +72,17 @@ module.exports = {
                                 fbService.sendTextMessage(userId, "cannot calculate customer lifetime value, because that is definitely not Excel .xls format. Open it with a text editor (e.g. Notepad) that won't take any notice of the (incorrect) .xls extension and see for yourself.");
                             } else {
                                 console.log('results: %j', results);
-                                results.forEach(item => {
-                                    var i = 0;
-                                    if (i < 10) {
-                                        console.log(item);
-                                        fbService.sendTextMessage(userId, item);
-                                        i++;
+                                var i = 0;
+                                results.forEach((item, index, array) => {
+
+                                    // if (i < 10) {
+                                    console.log(item);
+                                    fbService.sendTextMessage(userId, item);
+                                    i++;
+                                    // }
+                                    if (i == 10 || array.length == i) {
+                                        callback(true);
+                                        // fbService.sendTextMessage(userId, "item");
                                     }
                                 });
                             }
@@ -90,20 +90,18 @@ module.exports = {
                         });
 
                     });
-                    // console.log(parsedData);
                 } catch (e) {
                     callback(false);
                     console.error(e.message);
                 }
             });
         }).on('error', (e) => {
-            callback(false);
             console.error(`Got error: ${e.message}`);
         });
 
     },
 
-    saveData: function (rawData, tablename) {
+    saveData: function (tablename, userId) {
         const queryDelete = 'DELETE FROM ' + tablename;
         const queryCreat =
             'CREATE TABLE ' + tablename + '(id SERIAL PRIMARY KEY, invoiceno varchar(450) NOT NULL, stockcode varchar(450) NOT NULL, description varchar(450) NOT NULL, quantity varchar(450) NOT NULL, invoicedate varchar(450) NOT NULL, unitprice varchar(450) NOT NULL, customerid varchar(450) NOT NULL, country varchar(450) NOT NULL)';
@@ -169,11 +167,16 @@ module.exports = {
                                         .then((err, res) => {
                                             console.log("delete database");
                                             //insert record.
-                                            csvData.forEach(row => {
+                                            var count  = 0;
+                                            csvData.forEach((row, index, array) => {
                                                 client.query(query, row, (err, res) => {
                                                     if (err) throw err;
                                                     else {
+                                                        count++;
                                                         console.log("inserted ${res.rowCount} row , ${row}");
+                                                        if (array.length == count){
+                                                            fbService.sendTextMessage(userId, "saved csvfile successfully.");
+                                                        }
 
                                                     }
                                                 });
@@ -193,3 +196,7 @@ module.exports = {
 
     },
 }
+
+
+
+

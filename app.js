@@ -143,31 +143,31 @@ app.post('/webhook/', function (req, res) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    passport.serializeUser(function(profile, cb) {
+    passport.serializeUser(function (profile, cb) {
         cb(null, profile);
     });
 
-    passport.deserializeUser(function(profile, cb) {
+    passport.deserializeUser(function (profile, cb) {
         cb(null, profile);
     });
 
     passport.use(new FacebookStrategy({
-            clientID: config.FB_APP_ID,
-            clientSecret: config.FB_APP_SECRET,
-            callbackURL: config.SERVER_URL + "auth/facebook/callback"
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            process.nextTick(function() {
+        clientID: config.FB_APP_ID,
+        clientSecret: config.FB_APP_SECRET,
+        callbackURL: config.SERVER_URL + "auth/facebook/callback"
+    },
+        function (accessToken, refreshToken, profile, cb) {
+            process.nextTick(function () {
                 return cb(null, profile);
             });
         }
     ));
 
-    app.get('/auth/facebook', passport.authenticate('facebook',{scope:'public_profile'}));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'public_profile' }));
 
 
     app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', { successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
+        passport.authenticate('facebook', { successRedirect: '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
     // Make sure this is a page subscription
@@ -264,7 +264,7 @@ function handleMessageAttachments(messageAttachments, senderID) {
 
     customer_lifetime.pythonpy(function (result) {
         if (result) {
-            fbService.sendTextMessage(senderID, "Successfully saved your data. just a minute...");
+            sendimproveBusiness(senderID);
         } else {
             fbService.sendTextMessage(senderID, "Your Excel file is not correct. Please try other one.");
         }
@@ -841,6 +841,26 @@ function callSendAPI(messageData) {
         }
     });
 }
+
+function sendimproveBusiness(userId) {
+    let responseText = "Would you like to improve this?";
+
+    let replies = [
+        {
+            "content_type": "Yes",
+            "title": "agree",
+            "payload": "YES"
+        },
+        {
+            "content_type": "No",
+            "title": "disagree",
+            "payload": "NO"
+        }
+    ];
+
+    fbService.sendQuickReply(userId, responseText, replies);
+}
+
 function sendBizNewsSubscribe(userId) {
     let responseText = "You can subscribe to our business growth newsletter here for all the latest hints and tips on improving your business ";
 
