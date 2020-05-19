@@ -39,8 +39,7 @@ let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczM
 let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
-const calendarId = config.CALENDAR_ID;
-const calendar = google.calendar({version : "v3"});
+
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -110,6 +109,8 @@ const sessionClient = new dialogflow.SessionsClient(
         credentials
     }
 );
+const calendarId = config.CALENDAR_ID;
+const calendar = google.calendar({version : "v3"});
 
 const auth = new google.auth.JWT(
     credentials.GOOGLE_CLIENT_EMAIL,
