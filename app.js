@@ -1,6 +1,6 @@
 'use strict';
 
-const dialogflow = require('dialogflow').v2beta1;
+const dialogflow = require('dialogflow');
 const config = require('./config');
 const express = require('express');
 const crypto = require('crypto');
@@ -16,7 +16,7 @@ const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: false,
 });
-console.log(config)
+
 
 client.connect();
 const userService = require('./user');
@@ -24,223 +24,10 @@ const customer_lifetime = require('./customer_lifetime');
 
 let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
-//started adding some lines here
-const TIMEOFFSET = '±00:00';
-
-// Converts the date and time from Dialogflow into
-// January 18, 9:30 AM
-const dateTimeToString = (date, time) => {
-
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
-    return event.toLocaleDateString('en-US', options);
-};
-
-// Get date-time string for calender
-const dateTimeForCalander = (date, time) => {
-
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}:00.000${TIMEOFFSET}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let startDate = event;
-    let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
-
-    return {
-        'start': startDate,
-        'end': endDate
-    }
-};
-const axios = require('axios');
-
-
-const TOKEN = config.FB_VERIFY_TOKEN;
-
-const sendMessage = async (message, senderId) => {
-
-    let url = `https://graph.facebook.com/v2.6/me/messages?access_token=${TOKEN}`;
-    let headers = {
-        'Content-Type': 'application/json'
-    }
-
-    let fields = {
-        messaging_type: "RESPONSE",
-        recipient: {
-            id: senderId
-        },
-        message: {
-            text:"hello"
-        }
-    }
-
-    try {
-        let response = await axios.post(url, fields, { headers });
-
-        if (response['status'] == 200 && response['statusText'] === 'OK') {
-            return 1;
-        } else {
-            return 0;
-        }
-    } catch (error) {
-        console.log(`Error at sendMessage Facebook --> ${error}`);
-        return 0;
-    }
-};
-const {google} = require('googleapis');
-
-
-const SCOPES = 'https://www.googleapis.com/auth/calendar';
-
-const CREDENTIALS1 = {
-    client_email: config.GOOGLE_CLIENT_EMAIL,
-    private_key: config.GOOGLE_PRIVATE_KEY,
-    projectId : config.GOOGLE_PROJECT_ID,
-};
-// Your google calendar id
-const calendarId = config.CALENDAR_ID;
-const calendar = google.calendar({version : "v3"});
-
-const auth = new google.auth.JWT(
-    CREDENTIALS1.client_email,
-    null,
-    CREDENTIALS1.private_key,
-    SCOPES
-);
-
-// let event = {
-//     'summary': `Appointment for ${name}.`,
-//     'description': `Customer mobile number ${number}.`,
-//     'start': {
-//         'dateTime': calenderDates['start'],
-//         'timeZone': TIMEZONE
-//     },
-//     'end': {
-//         'dateTime': calenderDates['end'],
-//         'timeZone': TIMEZONE
-//     }
-// };
-
-const insertEvent = async (event) => {
-
-    let response = await calendar.events.insert({
-        auth: auth,
-        calendarId: calendarId,
-        resource: event
-    });
-
-    if (response['status'] == 200 && response['statusText'] === 'OK') {
-        return 1;
-    } else {
-        return 0;
-    }
-};
-
-const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
-
-    let response = await calendar.events.list({
-        auth: auth,
-        calendarId: calendarId,
-        timeMin: dateTimeStart,
-        timeMax: dateTimeEnd,
-        timeZone: timeZone
-    });
-
-    let len = response['data']['items'].length;
-
-    return len;
-};
-
-
-// Your credentials
-
-
-const projectId = config.GOOGLE_PROJECT_ID;
-
-
-
-
-// KnowledgeBasePath
-// Sample path
-
-  let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
-  let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
-  let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
-  let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
-  let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
-
-  const config2 = {
-      credentials: {
-          private_key: config.GOOGLE_PRIVATE_KEY,
-          client_email: config.GOOGLE_CLIENT_EMAIL
-      }
-  }
-
-
-// Create a session client
-const sessionClient = new dialogflow.SessionsClient(config2)
-
-const detectIntent = async (queryText, sessionId) => {
-
-    // Create a sessionPath for the senderId
-    let sessionPath = sessionClient.sessionPath(projectId, sessionId);
-
-    let request = {
-        session: sessionPath,
-        queryInput: {
-            text: {
-                text: queryText,
-                languageCode: 'en-US',
-            }
-        },
-        queryParams: {
-            knowledgeBaseNames: [one, two, three, four, five]
-        }
-    };
-
-    try {
-        let responses = await sessionClient.detectIntent(request);
-        let result = responses[0].queryResult;
-        let outputContexts = result.outputContexts;
-        let intentName = result.intent.displayName;
-        if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-            let answers = result.knowledgeAnswers.answers;
-            return {
-                status: 200,
-                text: answers[0].answer
-            }
-        } else {
-            return {
-                status: 200,
-                text: result.fulfillmentMessages[0].text.text[0],
-                intentName: intentName,
-                outputContexts: outputContexts
-            }
-        }
-    } catch (error) {
-        return {
-            status: 401
-        };
-    }
-};
-
+const FM = require('./helper-function/facebook-messenger');
+const GD = require('./helper-function/google-dialogflow');
+const GC = require('./helper-function/google-calendar');
+const DT = require('./helper-function/date-time-function');
 
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -304,12 +91,15 @@ app.set('view engine', 'ejs');
 
 
 
+const credentials = {
+    client_email: config.GOOGLE_CLIENT_EMAIL,
+    private_key: config.GOOGLE_PRIVATE_KEY,
+};
 
-
-const sessionClient1 = new dialogflow.SessionsClient(
+const sessionClient = new dialogflow.SessionsClient(
     {
         projectId: config.GOOGLE_PROJECT_ID,
-
+        credentials
     }
 );
 
@@ -322,9 +112,8 @@ app.get('/', function (req, res) {
 })
 app.use('/broadcast', broadcast);
 
-
 // for Facebook verification
-app.get('/webhook/', async function (req, res) {
+app.get('/webhook/', function (req, res) {
     console.log("request");
     if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
         res.status(200).send(req.query['hub.challenge']);
@@ -342,11 +131,48 @@ app.get('/webhook/', async function (req, res) {
  * https://developers.facebook.com/docs/messenger-platform/product-overview/setup#subscribe_app
  *
  */
-app.post('/webhook/', async function (req, res) {
+app.post('/webhook/', function (req, res) {
     var data = req.body;
     console.log("JSON.stringify(data)");
     console.log(JSON.stringify(data));
 
+    app.use(session(
+        {
+            secret: 'keyboard cat',
+            resave: true,
+            saveUninitilized: true
+        }
+    ));
+
+
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    passport.serializeUser(function(profile, cb) {
+        cb(null, profile);
+    });
+
+    passport.deserializeUser(function(profile, cb) {
+        cb(null, profile);
+    });
+
+    passport.use(new FacebookStrategy({
+            clientID: config.FB_APP_ID,
+            clientSecret: config.FB_APP_SECRET,
+            callbackURL: config.SERVER_URL + "auth/facebook/callback"
+        },
+        function(accessToken, refreshToken, profile, cb) {
+            process.nextTick(function() {
+                return cb(null, profile);
+            });
+        }
+    ));
+
+    app.get('/auth/facebook', passport.authenticate('facebook',{scope:'public_profile'}));
+
+
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', { successRedirect : '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
     // Make sure this is a page subscription
@@ -375,55 +201,8 @@ app.post('/webhook/', async function (req, res) {
                     console.log("Webhook received unknown messagingEvent: ", messagingEvent);
                 }
             });
-
         });
-        let incomingData = req.body.entry[0].messaging[0];
 
-         let senderId = incomingData.sender.id;
-         let message = incomingData.message.text;
-
-         console.log(`Incoming message --> ${message}`);
-         console.log(`Incoming sender id --> ${senderId}`);
-
-         let intentData = await detectIntent(message, senderId);
-
-         // Check for Schedule a call
-         if (intentData.intentName === 'User Provides Time') {
-             let fields = intentData.outputContexts[0].parameters.fields;
-
-             let date = fields.date.stringValue;
-             let time = fields.time.stringValue;
-
-             // Check the event is there or not
-             let dtc = dateTimeForCalander(date, time);
-             let dts = dateTimeToString(date, time);
-             let eventsLength = await getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
-
-             if (eventsLength == 0) {
-                 let event = {
-                     'summary': `Demo appointment.`,
-                     'description': `Sample description.`,
-                     'start': {
-                         'dateTime': dtc.start,
-                         'timeZone': 'Asia/Kolkata'
-                     },
-                     'end': {
-                         'dateTime': dtc.end,
-                         'timeZone': 'Asia/Kolkata'
-                     }
-                 };
-                 await insertEvent(event);
-                 await sendMessage(`Appointment is set on ${dts}`, senderId);
-                 res.status(200).send('EVENT_RECEIVED');
-             } else {
-                 await sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-                 res.status(200).send('EVENT_RECEIVED');
-             }
-         } else {
-             console.log('I am at else');
-             await sendMessage(intentData.text, senderId);
-             res.status(200).send('EVENT_RECEIVED');
-         }
         // Assume all went well.
         // You must send back a 200, within 20 seconds
         res.sendStatus(200);
@@ -469,6 +248,7 @@ function receivedMessage(event) {
         return;
     }
 
+
     if (messageText) {
         //send message to api.ai
         sendToDialogFlow(senderID, messageText);
@@ -477,6 +257,7 @@ function receivedMessage(event) {
     }
 }
 
+
 function handleMessageAttachments(messageAttachments, senderID) {
     var csv_url;
     messageAttachments.forEach(item => {
@@ -484,14 +265,18 @@ function handleMessageAttachments(messageAttachments, senderID) {
     });
     console.log(csv_url);
 
+    //var uri = "https://cdn.fbsbx.com/v/t59.2708-21/97269798_268455104293348_9172572718455848960_n.csv/test.csv?_nc_cat=108&_nc_sid=0cab14&_nc_ohc=o3tzWXmghasAX_9K7vA&_nc_ht=cdn.fbsbx.com&oh=0693971577037451dff112f8e80cce2b&oe=5EBE0231";
 
     customer_lifetime.pythonpy(function (result) {
         if (result) {
-            sendimproveBusiness(senderID);
+            fbService.sendTextMessage(senderID, "Successfully saved your data. just a minute...");
         } else {
             fbService.sendTextMessage(senderID, "Your Excel file is not correct. Please try other one.");
         }
     }, csv_url, senderID);
+    //sendTextMessage(senderID, "Attachment received. Thank you.");
+    //sendTextMessage(senderID, "Your average customer lifetime value is xxx. Would you like to improve this?  ");
+
 }
 
 function handleQuickReply(senderID, quickReply, messageId) {
@@ -694,7 +479,7 @@ async function sendToDialogFlow(sender, textString, params) {
     sendTypingOn(sender);
 
     try {
-        const sessionPath = sessionClient1.sessionPath(
+        const sessionPath = sessionClient.sessionPath(
             config.GOOGLE_PROJECT_ID,
             sessionIds.get(sender)
         );
@@ -713,7 +498,7 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient1.detectIntent(request);
+        const responses = await sessionClient.detectIntent(request);
 
         const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
@@ -1061,26 +846,6 @@ function callSendAPI(messageData) {
         }
     });
 }
-
-function sendimproveBusiness(userId) {
-    let responseText = "Would you like to improve this?";
-
-    let replies = [
-        {
-            "content_type": "text",
-            "title": "Yes",
-            "payload": "YES"
-        },
-        {
-            "content_type": "text",
-            "title": "No",
-            "payload": "NO"
-        }
-    ];
-
-    fbService.sendQuickReply(userId, responseText, replies);
-}
-
 function sendBizNewsSubscribe(userId) {
     let responseText = "You can subscribe to our business growth newsletter here for all the latest hints and tips on improving your business ";
 
@@ -1102,7 +867,6 @@ function sendBizNewsSubscribe(userId) {
 
 
 // This route is to get the message
-
 
 
 
@@ -1297,11 +1061,6 @@ function isDefined(obj) {
 
     return obj != null;
 }
-
-
-
-
-// This route is to get the message
 
 // Spin up the server
 app.listen(app.get('port'), function () {
