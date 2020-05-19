@@ -461,8 +461,7 @@ async function sendToDialogFlow(sender, textString, params) {
             queryParams: {
                 knowledgeBaseNames: [one, two, thee, four, five]
                 }
-            }
-        };
+            };
         const responses = await sessionClient.detectIntent(request);
         console.log(`Query text: ${result.queryText}`);
         console.log(`Detected Intent: ${result.intent.displayName}`);
