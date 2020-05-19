@@ -88,10 +88,3 @@ const detectIntent = async (queryText, sessionId) => {
 module.exports = {
     detectIntent
 }
-detectIntent('What is anchor text?', 'abcdefg12345')
-.then((response) => {
-console.log(response);
-})
-.catch((error) => {
-console.log(error);
-});
