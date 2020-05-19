@@ -1,6 +1,6 @@
 'use strict';
 
-const dialogflow = require('dialogflow');
+const dialogflow = require('dialogflow').v2beta1;
 const config = require('./config');
 const express = require('express');
 const crypto = require('crypto');
@@ -24,10 +24,7 @@ const customer_lifetime = require('./customer_lifetime');
 
 let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
-const FM = require('./helper-function/facebook-messenger');
-const GD = require('./helper-function/google-dialogflow');
-const GC = require('./helper-function/google-calendar');
-const DT = require('./helper-function/date-time-function');
+
 
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -955,6 +952,48 @@ function receivedDeliveryConfirmation(event) {
     console.log("All message before %d were delivered.", watermark);
 }
 
+const sessionPath = sessionClient.projectAgentSessionPath(
+  projectId,
+  sessionId
+);
+
+let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
+let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
+let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
+let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
+let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
+
+
+
+// The audio query request
+const request = {
+  session: sessionPath,
+  queryInput: {
+    text: {
+      text: query,
+      languageCode: languageCode,
+    },
+  },
+  queryParams: {
+    knowledgeBaseNames: [one, two, thee, four, five],
+  },
+};
+
+const responses = await sessionClient.detectIntent(request);
+const result = responses[0].queryResult;
+console.log(`Query text: ${result.queryText}`);
+console.log(`Detected Intent: ${result.intent.displayName}`);
+console.log(`Confidence: ${result.intentDetectionConfidence}`);
+console.log(`Query Result: ${result.fulfillmentText}`);
+if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+  const answers = result.knowledgeAnswers.answers;
+  console.log(`There are ${answers.length} answer(s);`);
+  answers.forEach(a => {
+    console.log(`   answer: ${a.answer}`);
+    console.log(`   confidence: ${a.matchConfidence}`);
+    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
+  });
+}
 /*
  * Authorization Event
  *
@@ -1023,6 +1062,7 @@ function isDefined(obj) {
 
     return obj != null;
 }
+
 
 // Spin up the server
 app.listen(app.get('port'), function () {
