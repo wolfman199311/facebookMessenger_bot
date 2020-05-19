@@ -31,13 +31,6 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const broadcast = require('./routes/broadcast');
 
-let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
-let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
-let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
-let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
-let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
-
-
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -440,7 +433,7 @@ function handleDialogFlowResponse(sender, response) {
     }
 }
 
-async function sendToDialogFlow(sender, textString, params) {
+async function sendToDialogFlow(sender, textString, params, query) {
 
     sendTypingOn(sender);
 
@@ -454,15 +447,19 @@ async function sendToDialogFlow(sender, textString, params) {
             session: sessionPath,
             queryInput: {
                 text: {
-                    text: textString,
+                    text: textString, query,
                     languageCode: config.DF_LANGUAGE_CODE,
                 },
             },
             queryParams: {
-                knowledgeBaseNames: [one, two, three, four, five]
+
+                      knowledgeBaseNames: [one, two, three, four, five],
                 }
-            };
+
+        };
         const responses = await sessionClient.detectIntent(request);
+
+        const result = responses[0].queryResult;
         console.log(`Query text: ${result.queryText}`);
         console.log(`Detected Intent: ${result.intent.displayName}`);
         console.log(`Confidence: ${result.intentDetectionConfidence}`);
@@ -476,9 +473,6 @@ async function sendToDialogFlow(sender, textString, params) {
             console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
           });
         }
-
-
-        const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
     } catch (e) {
         console.log('error');
@@ -486,6 +480,7 @@ async function sendToDialogFlow(sender, textString, params) {
     }
 
 }
+
 
 
 
@@ -908,10 +903,27 @@ async function greetUserText(userId) {
             'What can I help you with?');
     }
 }
+async function detectIntentKnowledge(
+  projectId,
+  sessionId,
+  languageCode,
+  knowledgeBaseId,
+  query
+) {
+const sessionPath = sessionClient.projectAgentSessionPath(
+  projectId,
+  sessionId
+);
+
+let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
+let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
+let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
+let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
+let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
 
 
-
+// The audio query request
 
 
 
