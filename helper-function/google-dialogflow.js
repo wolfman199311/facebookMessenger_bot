@@ -17,7 +17,7 @@ const credentials = {
   let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
   let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
-  const config = {
+  const config2 = {
       credentials: {
           private_key: process.env.GOOGLE_PRIVATE_KEY.replace(new RegExp("\\\\n", "\g"), "\n"),
           client_email: process.env.GOOGLE_CLIENT_EMAIL
@@ -26,7 +26,7 @@ const credentials = {
 
 
 // Create a session client
-const sessionClient = new dialogflow.SessionsClient(config)
+const sessionClient = new dialogflow.SessionsClient(config2)
 
 const detectIntent = async (queryText, sessionId) => {
 
