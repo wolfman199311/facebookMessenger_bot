@@ -459,7 +459,7 @@ async function sendToDialogFlow(sender, textString, params) {
                 },
             },
             queryParams: {
-                knowledgeBaseNames: [one, two, thee, four, five]
+                knowledgeBaseNames: [one, two, three, four, five]
                 }
             };
         const responses = await sessionClient.detectIntent(request);
