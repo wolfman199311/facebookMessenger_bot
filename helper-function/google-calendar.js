@@ -4,12 +4,12 @@ const config = require('../config');
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
 const CREDENTIALS = {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(new RegExp("\\\\n", "\g"), "\n"),
-    projectId:  process.env.GOOGLE_PROJECT_ID,
+    client_email: config.GOOGLE_CLIENT_EMAIL,
+    private_key: config.GOOGLE_PRIVATE_KEY,
+    projectId : config.GOOGLE_PROJECT_ID,
 };
 // Your google calendar id
-const calendarId = process.env.CALENDAR_ID;
+const calendarId = config.CALENDAR_ID;
 const calendar = google.calendar({version : "v3"});
 
 const auth = new google.auth.JWT(

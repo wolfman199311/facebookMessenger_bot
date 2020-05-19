@@ -1,5 +1,6 @@
 const dialogflow = require('dialogflow').v2beta1;
 const config = require('../config');
+const fbService = require('../fb-service');
 
 // Your credentials
 const credentials = {

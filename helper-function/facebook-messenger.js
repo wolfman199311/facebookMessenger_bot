@@ -1,7 +1,7 @@
 const axios = require('axios');
 const config = require('../config');
 
-const TOKEN = process.env.FB_PAGE_TOKEN;
+const TOKEN = config.FB_PAGE_TOKEN;
 
 const sendMessage = async (message, senderId) => {
 
