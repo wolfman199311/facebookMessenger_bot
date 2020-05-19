@@ -115,7 +115,6 @@ const calendar = google.calendar({version : "v3"});
 const auth = new google.auth.JWT(
     credentials.GOOGLE_CLIENT_EMAIL,
     null,
-    calendarId,
     credentials.GOOGLE_PRIVATE_KEY,
     SCOPES
 );
@@ -285,7 +284,7 @@ function handleMessageAttachments(messageAttachments, senderID) {
 
     customer_lifetime.pythonpy(function (result) {
         if (result) {
-            fbService.sendTextMessage(senderID, "Successfully saved your data. just a minute...");
+            fbService.sendTextMessage(senderID, "Here's your customer liftime value. In marketing, customer life time value, lifetime customer value, or lifetime value is a prediction of the net profit attributed to the entire future relationship with a customer. The two things I would recommend are either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?");
         } else {
             fbService.sendTextMessage(senderID, "Your Excel file is not correct. Please try other one.");
         }
@@ -320,17 +319,19 @@ function handleQuickReply(senderID, quickReply, messageId) {
                 }
             }, 2, senderID);
             break;
+              customer_lifetime.pythonpy(function (updated){
+                if (updated){
 
-        case 'Yes':
+        case 'Email Marketing':
 
-            fbService.sendTextMessage(senderID, "In marketing, customer life time value, lifetime customer value, or lifetime value is a prediction of the net profit attributed to the entire future relationship with a customer. The two things I would recommend are either trying to upsell one of your products or have a solid email marketing campaign in place. Which would you like to learn about?  ");
+            fbService.sendTextMessage(senderID, "Awesome, we’ll set it up together step by step. Once you’re ready to start, say “let’s go!”  ");
 
             break;
 
-        case 'No':
+        case 'Upselling Products':
 
-            fbService.sendTextMessage(senderID, "Is there anything else you'd like help with today");
-
+            fbService.sendTextMessage(senderID, "I can give you some tips for upselling to loyal customers, pick one!");
+}
             break;
 
         default:
