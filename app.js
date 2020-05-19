@@ -476,7 +476,7 @@ async function sendToDialogFlow(sender, textString, params) {
             console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
           });
         }
-        }
+
 
         const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
