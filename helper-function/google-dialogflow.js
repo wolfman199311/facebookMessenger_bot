@@ -5,8 +5,11 @@ const config = require('../config');
 const credentials = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
     private_key: config.GOOGLE_PRIVATE_KEY,
-    projectId2: config.GOOGLE_PROJECT_ID
+
 };
+
+const projectId = config.GOOGLE_PROJECT_ID;
+
 if (!config.GOOGLE_CLIENT_EMAIL) {
     throw new Error('missing GOOGLE_CLIENT_EMAIL');
 }
@@ -41,7 +44,7 @@ const sessionClient = new dialogflow.SessionsClient(config2)
 const detectIntent = async (queryText, sessionId) => {
 
     // Create a sessionPath for the senderId
-    let sessionPath = sessionClient.sessionPath(projectId2, sessionId);
+    let sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
     let request = {
         session: sessionPath,
