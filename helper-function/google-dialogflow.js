@@ -20,7 +20,7 @@ const knowledgeBasePath = {
 
 
 // Create a session client
-const sessionClient = new dialogflow.SessionsClient(confi
+const sessionClient = new dialogflow.SessionsClient(config)
 
 const detectIntent = async (queryText, sessionId) => {
 
