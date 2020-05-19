@@ -309,7 +309,7 @@ app.set('view engine', 'ejs');
 const sessionClient1 = new dialogflow.SessionsClient(
     {
         projectId: config.GOOGLE_PROJECT_ID,
-        credentials
+
     }
 );
 
