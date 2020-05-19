@@ -319,7 +319,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
                 }
             }, 2, senderID);
             break;
-            
+
         case 'Email Marketing':
 
             fbService.sendTextMessage(senderID, "Awesome, we’ll set it up together step by step. Once you’re ready to start, say “let’s go!”  ");
@@ -329,7 +329,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
         case 'Upselling Products':
 
             fbService.sendTextMessage(senderID, "I can give you some tips for upselling to loyal customers, pick one!");
-}
+
             break;
 
         default:
