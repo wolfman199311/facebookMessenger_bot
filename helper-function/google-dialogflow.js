@@ -1,6 +1,6 @@
 const dialogflow = require('dialogflow').v2beta1;
 const config = require('../config');
-console.log(process.env.GOOGLE_PROJECT_ID);
+
 // Your credentials
 const credentials = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
