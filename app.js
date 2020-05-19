@@ -896,10 +896,7 @@ async function detectIntentKnowledge(
   knowledgeBaseId,
   query
 ) {
-const sessionPath = sessionClient.projectAgentSessionPath(
-  projectId,
-  sessionId
-);
+
 
 let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
 let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
