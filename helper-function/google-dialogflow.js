@@ -7,6 +7,16 @@ const credentials = {
     private_key: config.GOOGLE_PRIVATE_KEY,
     projectId2: config.GOOGLE_PROJECT_ID,
 };
+if (!config.GOOGLE_CLIENT_EMAIL) {
+    throw new Error('missing GOOGLE_CLIENT_EMAIL');
+}
+if (!config.GOOGLE_PRIVATE_KEY) {
+    throw new Error('missing GOOGLE_PRIVATE_KEY');
+}
+if (!config.GOOGLE_PROJECT_ID) {
+    throw new Error('missing GOOGLE_PROJECT_ID');
+}
+
 
 // KnowledgeBasePath
 // Sample path
