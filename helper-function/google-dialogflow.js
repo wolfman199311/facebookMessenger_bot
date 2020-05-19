@@ -5,7 +5,7 @@ const config = require('../config');
 const credentials = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
     private_key: config.GOOGLE_PRIVATE_KEY,
-    projectId:  config.GOOGLE_PROJECT_ID,
+    projectId: config.GOOGLE_PROJECT_ID,
 };
 
 // KnowledgeBasePath
