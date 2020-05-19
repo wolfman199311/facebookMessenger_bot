@@ -72,7 +72,7 @@ const dateTimeForCalander = (date, time) => {
 const axios = require('axios');
 
 
-const TOKEN = config.FB_PAGE_TOKEN;
+const TOKEN = config.FB_VERIFY_TOKEN;
 
 const sendMessage = async (message, senderId) => {
 
