@@ -1,6 +1,6 @@
 'use strict';
 
-const dialogflow = require('dialogflow');
+const dialogflow = require('dialogflow').v2beta1;
 const config = require('./config');
 const express = require('express');
 const crypto = require('crypto');
@@ -109,7 +109,7 @@ const {google} = require('googleapis');
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
-const CREDENTIALS = {
+const CREDENTIALS1 = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
     private_key: config.GOOGLE_PRIVATE_KEY,
     projectId : config.GOOGLE_PROJECT_ID,
@@ -119,9 +119,9 @@ const calendarId = config.CALENDAR_ID;
 const calendar = google.calendar({version : "v3"});
 
 const auth = new google.auth.JWT(
-    CREDENTIALS.client_email,
+    CREDENTIALS1.client_email,
     null,
-    CREDENTIALS.private_key,
+    CREDENTIALS1.private_key,
     SCOPES
 );
 
@@ -167,26 +167,14 @@ const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
 
     return len;
 };
-const dialogflow = require('dialogflow').v2beta1;
+
 
 // Your credentials
-const credentials = {
-    client_email: config.GOOGLE_CLIENT_EMAIL,
-    private_key: config.GOOGLE_PRIVATE_KEY,
 
-};
 
 const projectId = config.GOOGLE_PROJECT_ID;
 
-if (!config.GOOGLE_CLIENT_EMAIL) {
-    throw new Error('missing GOOGLE_CLIENT_EMAIL');
-}
-if (!config.GOOGLE_PRIVATE_KEY) {
-    throw new Error('missing GOOGLE_PRIVATE_KEY');
-}
-if (!config.GOOGLE_PROJECT_ID) {
-    throw new Error('missing GOOGLE_PROJECT_ID');
-}
+
 
 
 // KnowledgeBasePath
@@ -316,12 +304,9 @@ app.set('view engine', 'ejs');
 
 
 
-const credentials = {
-    client_email: config.GOOGLE_CLIENT_EMAIL,
-    private_key: config.GOOGLE_PRIVATE_KEY,
-};
 
-const sessionClient = new dialogflow.SessionsClient(
+
+const sessionClient1 = new dialogflow.SessionsClient(
     {
         projectId: config.GOOGLE_PROJECT_ID,
         credentials
@@ -357,48 +342,11 @@ app.get('/webhook/', async function (req, res) {
  * https://developers.facebook.com/docs/messenger-platform/product-overview/setup#subscribe_app
  *
  */
-app.post('/webhook/', function (req, res) {
+app.post('/webhook/', async function (req, res) {
     var data = req.body;
     console.log("JSON.stringify(data)");
     console.log(JSON.stringify(data));
 
-    app.use(session(
-        {
-            secret: 'keyboard cat',
-            resave: true,
-            saveUninitilized: true
-        }
-    ));
-
-
-    app.use(passport.initialize());
-    app.use(passport.session());
-
-    passport.serializeUser(function (profile, cb) {
-        cb(null, profile);
-    });
-
-    passport.deserializeUser(function (profile, cb) {
-        cb(null, profile);
-    });
-
-    passport.use(new FacebookStrategy({
-        clientID: config.FB_APP_ID,
-        clientSecret: config.FB_APP_SECRET,
-        callbackURL: config.SERVER_URL + "auth/facebook/callback"
-    },
-        function (accessToken, refreshToken, profile, cb) {
-            process.nextTick(function () {
-                return cb(null, profile);
-            });
-        }
-    ));
-
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'public_profile' }));
-
-
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', { successRedirect: '/broadcast/broadcast', failureRedirect: '/broadcast' }));
 
 
     // Make sure this is a page subscription
@@ -431,51 +379,51 @@ app.post('/webhook/', function (req, res) {
         });
         let incomingData = req.body.entry[0].messaging[0];
 
-        let senderId = incomingData.sender.id;
-        let message = incomingData.message.text;
+         let senderId = incomingData.sender.id;
+         let message = incomingData.message.text;
 
-        console.log(`Incoming message --> ${message}`);
-        console.log(`Incoming sender id --> ${senderId}`);
+         console.log(`Incoming message --> ${message}`);
+         console.log(`Incoming sender id --> ${senderId}`);
 
-        let intentData = await detectIntent(message, senderId);
+         let intentData = await detectIntent(message, senderId);
 
-        // Check for Schedule a call
-        if (intentData.intentName === 'User Provides Time') {
-            let fields = intentData.outputContexts[0].parameters.fields;
+         // Check for Schedule a call
+         if (intentData.intentName === 'User Provides Time') {
+             let fields = intentData.outputContexts[0].parameters.fields;
 
-            let date = fields.date.stringValue;
-            let time = fields.time.stringValue;
+             let date = fields.date.stringValue;
+             let time = fields.time.stringValue;
 
-            // Check the event is there or not
-            let dtc = dateTimeForCalander(date, time);
-            let dts = dateTimeToString(date, time);
-            let eventsLength = await getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+             // Check the event is there or not
+             let dtc = dateTimeForCalander(date, time);
+             let dts = dateTimeToString(date, time);
+             let eventsLength = await getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
 
-            if (eventsLength == 0) {
-                let event = {
-                    'summary': `Demo appointment.`,
-                    'description': `Sample description.`,
-                    'start': {
-                        'dateTime': dtc.start,
-                        'timeZone': 'Asia/Kolkata'
-                    },
-                    'end': {
-                        'dateTime': dtc.end,
-                        'timeZone': 'Asia/Kolkata'
-                    }
-                };
-                await insertEvent(event);
-                await sendMessage(`Appointment is set on ${dts}`, senderId);
-                res.status(200).send('EVENT_RECEIVED');
-            } else {
-                await sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-                res.status(200).send('EVENT_RECEIVED');
-            }
-        } else {
-            console.log('I am at else');
-            await sendMessage(intentData.text, senderId);
-            res.status(200).send('EVENT_RECEIVED');
-        }
+             if (eventsLength == 0) {
+                 let event = {
+                     'summary': `Demo appointment.`,
+                     'description': `Sample description.`,
+                     'start': {
+                         'dateTime': dtc.start,
+                         'timeZone': 'Asia/Kolkata'
+                     },
+                     'end': {
+                         'dateTime': dtc.end,
+                         'timeZone': 'Asia/Kolkata'
+                     }
+                 };
+                 await insertEvent(event);
+                 await sendMessage(`Appointment is set on ${dts}`, senderId);
+                 res.status(200).send('EVENT_RECEIVED');
+             } else {
+                 await sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                 res.status(200).send('EVENT_RECEIVED');
+             }
+         } else {
+             console.log('I am at else');
+             await sendMessage(intentData.text, senderId);
+             res.status(200).send('EVENT_RECEIVED');
+         }
         // Assume all went well.
         // You must send back a 200, within 20 seconds
         res.sendStatus(200);
@@ -746,7 +694,7 @@ async function sendToDialogFlow(sender, textString, params) {
     sendTypingOn(sender);
 
     try {
-        const sessionPath = sessionClient.sessionPath(
+        const sessionPath = sessionClient1.sessionPath(
             config.GOOGLE_PROJECT_ID,
             sessionIds.get(sender)
         );
@@ -765,7 +713,7 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient.detectIntent(request);
+        const responses = await sessionClient1.detectIntent(request);
 
         const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
