@@ -3,9 +3,9 @@ const config = require('../config');
 console.log(process.env.GOOGLE_PROJECT_ID);
 // Your credentials
 const credentials = {
-    client_email: config.env.GOOGLE_CLIENT_EMAIL,
-    private_key: config.env.GOOGLE_PRIVATE_KEY,
-    projectId:  config.env.GOOGLE_PROJECT_ID,
+    client_email: config.GOOGLE_CLIENT_EMAIL,
+    private_key: config.GOOGLE_PRIVATE_KEY,
+    projectId:  config.GOOGLE_PROJECT_ID,
 };
 
 // KnowledgeBasePath
@@ -19,8 +19,8 @@ const credentials = {
 
   const config2 = {
       credentials: {
-          private_key: config.env.GOOGLE_PRIVATE_KEY,
-          client_email: config.env.GOOGLE_CLIENT_EMAIL
+          private_key: config.GOOGLE_PRIVATE_KEY,
+          client_email: config.GOOGLE_CLIENT_EMAIL
       }
   }
 
