@@ -31,6 +31,13 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const broadcast = require('./routes/broadcast');
 
+let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
+let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
+let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
+let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
+let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
+
+
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
@@ -452,12 +459,25 @@ async function sendToDialogFlow(sender, textString, params) {
                 },
             },
             queryParams: {
-                payload: {
-                    data: params
+                knowledgeBaseNames: [one, two, thee, four, five]
                 }
             }
         };
         const responses = await sessionClient.detectIntent(request);
+        console.log(`Query text: ${result.queryText}`);
+        console.log(`Detected Intent: ${result.intent.displayName}`);
+        console.log(`Confidence: ${result.intentDetectionConfidence}`);
+        console.log(`Query Result: ${result.fulfillmentText}`);
+        if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+          const answers = result.knowledgeAnswers.answers;
+          console.log(`There are ${answers.length} answer(s);`);
+          answers.forEach(a => {
+            console.log(`   answer: ${a.answer}`);
+            console.log(`   confidence: ${a.matchConfidence}`);
+            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
+          });
+        }
+        }
 
         const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
@@ -889,53 +909,13 @@ async function greetUserText(userId) {
             'What can I help you with?');
     }
 }
-async function detectIntentKnowledge(
-  projectId,
-  sessionId,
-  languageCode,
-  knowledgeBaseId,
-  query
-) {
-
-
-let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
-let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
-let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
-let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
-let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
 
 
-// The audio query request
-const request1 = {
-  session: sessionPath,
-  queryInput: {
-    text: {
-      text: query,
-      languageCode: languageCode,
-    },
-  },
-  queryParams: {
-    knowledgeBaseNames: [one, two, thee, four, five],
-  },
-};
 
-const responses = await sessionClient.detectIntent(request);
-const result = responses[0].queryResult;
-console.log(`Query text: ${result.queryText}`);
-console.log(`Detected Intent: ${result.intent.displayName}`);
-console.log(`Confidence: ${result.intentDetectionConfidence}`);
-console.log(`Query Result: ${result.fulfillmentText}`);
-if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-  const answers = result.knowledgeAnswers.answers;
-  console.log(`There are ${answers.length} answer(s);`);
-  answers.forEach(a => {
-    console.log(`   answer: ${a.answer}`);
-    console.log(`   confidence: ${a.matchConfidence}`);
-    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-  });
-}
-}
+
+
+
 /*
  * Message Read Event
  *
