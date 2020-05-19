@@ -10,7 +10,7 @@ const credentials = {
 
 // KnowledgeBasePath
 // Sample path
- knowledgeBasePath =
+ 
   let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
   let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
   let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
