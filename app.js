@@ -30,6 +30,12 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const broadcast = require('./routes/broadcast');
+let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
+let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
+let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
+let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
+let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
+
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -903,23 +909,8 @@ async function greetUserText(userId) {
             'What can I help you with?');
     }
 }
-async function detectIntentKnowledge(
-  projectId,
-  sessionId,
-  languageCode,
-  knowledgeBaseId,
-  query
-) {
-const sessionPath = sessionClient.projectAgentSessionPath(
-  projectId,
-  sessionId
-);
 
-let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
-let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
-let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
-let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
-let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
+
 
 
 
