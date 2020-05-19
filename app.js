@@ -952,6 +952,13 @@ function receivedDeliveryConfirmation(event) {
     console.log("All message before %d were delivered.", watermark);
 }
 
+async function detectIntentKnowledge(
+  projectId,
+  sessionId,
+  languageCode,
+  knowledgeBaseId,
+  query
+) {
 const sessionPath = sessionClient.projectAgentSessionPath(
   projectId,
   sessionId
@@ -966,7 +973,7 @@ let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxO
 
 
 // The audio query request
-const request = {
+const request1 = {
   session: sessionPath,
   queryInput: {
     text: {
