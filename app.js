@@ -70,7 +70,7 @@ const dateTimeForCalander = (date, time) => {
     }
 };
 const axios = require('axios');
-const config = require('../config');
+
 
 const TOKEN = config.FB_PAGE_TOKEN;
 
@@ -104,8 +104,8 @@ const sendMessage = async (message, senderId) => {
         return 0;
     }
 };
-onst {google} = require('googleapis');
-const config = require('../config');
+const {google} = require('googleapis');
+
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
@@ -168,8 +168,6 @@ const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
     return len;
 };
 const dialogflow = require('dialogflow').v2beta1;
-const config = require('../config');
-const fbService = require('../fb-service');
 
 // Your credentials
 const credentials = {
