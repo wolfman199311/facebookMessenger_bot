@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
+const {google} = require('googleapis');
+const TIMEOFFSET = '±00:00';
 
 var app = express();
 const uuid = require('uuid');
@@ -36,6 +38,9 @@ let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2
 let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
 let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
+const SCOPES = 'https://www.googleapis.com/auth/calendar';
+const calendarId = config.CALENDAR_ID;
+const calendar = google.calendar({version : "v3"});
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -106,7 +111,12 @@ const sessionClient = new dialogflow.SessionsClient(
     }
 );
 
-
+const auth = new google.auth.JWT(
+    credentials.GOOGLE_CLIENT_EMAIL,
+    null,
+    credentials.GOOGLE_PRIVATE_KEY,
+    SCOPES
+);
 const sessionIds = new Map();
 const usersMap = new Map();
 // Index route
@@ -186,7 +196,46 @@ function setSessionAndUser(senderID) {
     }
 }
 
+const dateTimeToString = (date, time) => {
 
+    let year = date.split('T')[0].split('-')[0];
+    let month = date.split('T')[0].split('-')[1];
+    let day = date.split('T')[0].split('-')[2];
+
+    let hour = time.split('T')[1].split(':')[0];
+    let minute = time.split('T')[1].split(':')[1];
+
+    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}`;
+
+    let event = new Date(Date.parse(newDateTime));
+
+    let options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+    return event.toLocaleDateString('en-US', options);
+};
+
+// Get date-time string for calender
+const dateTimeForCalander = (date, time) => {
+
+    let year = date.split('T')[0].split('-')[0];
+    let month = date.split('T')[0].split('-')[1];
+    let day = date.split('T')[0].split('-')[2];
+
+    let hour = time.split('T')[1].split(':')[0];
+    let minute = time.split('T')[1].split(':')[1];
+
+    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}:00.000${TIMEOFFSET}`;
+
+    let event = new Date(Date.parse(newDateTime));
+
+    let startDate = event;
+    let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
+
+    return {
+        'start': startDate,
+        'end': endDate
+    }
+};
 
 function receivedMessage(event) {
 
@@ -487,7 +536,49 @@ async function sendToDialogFlow(sender, textString, params, query) {
 
 }
 
+const insertEvent = async (event) => {
 
+    let response = await calendar.events.insert({
+        auth: auth,
+        calendarId: calendarId,
+        resource: event
+    });
+
+    if (response['status'] == 200 && response['statusText'] === 'OK') {
+        return 1;
+    } else {
+        return 0;
+    }
+};
+
+const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
+
+    let response = await calendar.events.list({
+        auth: auth,
+        calendarId: calendarId,
+        timeMin: dateTimeStart,
+        timeMax: dateTimeEnd,
+        timeZone: timeZone
+    });
+
+    let len = response['data']['items'].length;
+
+    return len;
+};
+
+module.exports = {
+    insertEvent,
+    getEvents
+}
+let data = { start: '2020-05-21T11:30:00.000Z', end: '2020-05-21T12:30:00.000Z' }
+
+getEvents(data.start, data.end)
+    .then((response) => {
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 
 
 
