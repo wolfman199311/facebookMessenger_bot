@@ -1,11 +1,11 @@
 const dialogflow = require('dialogflow').v2beta1;
 const config = require('../config');
-
+console.log(config.GOOGLE_PROJECT_ID);
 // Your credentials
 const credentials = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
     private_key: config.GOOGLE_PRIVATE_KEY,
-    projectId2: config.GOOGLE_PROJECT_ID,
+    projectId2: config.GOOGLE_PROJECT_ID
 };
 if (!config.GOOGLE_CLIENT_EMAIL) {
     throw new Error('missing GOOGLE_CLIENT_EMAIL');
