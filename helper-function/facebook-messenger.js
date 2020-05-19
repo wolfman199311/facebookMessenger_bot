@@ -16,7 +16,7 @@ const sendMessage = async (message, senderId) => {
             id: senderId
         },
         message: {
-            text: message
+            text:"hello"
         }
     }
 
