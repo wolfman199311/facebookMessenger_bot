@@ -115,6 +115,7 @@ const calendar = google.calendar({version : "v3"});
 const auth = new google.auth.JWT(
     credentials.GOOGLE_CLIENT_EMAIL,
     null,
+    calendarId,
     credentials.GOOGLE_PRIVATE_KEY,
     SCOPES
 );
