@@ -1001,6 +1001,7 @@ if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
     console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
   });
 }
+}
 /*
  * Authorization Event
  *
