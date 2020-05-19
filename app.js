@@ -24,10 +24,10 @@ const customer_lifetime = require('./customer_lifetime');
 
 let dialogflowService = require('./dialogflow-service');
 const fbService = require('./fb-service');
-const FM = require('../helper-function/facebook-messenger');
-const GD = require('../helper-function/google-dialogflow');
-const GC = require('../helper-function/google-calendar');
-const DT = require('../helper-function/date-time-function');
+const FM = require('./helper-function/facebook-messenger');
+const GD = require('./helper-function/google-dialogflow');
+const GC = require('./helper-function/google-calendar');
+const DT = require('./helper-function/date-time-function');
 
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
