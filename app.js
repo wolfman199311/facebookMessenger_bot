@@ -16,7 +16,7 @@ const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: false,
 });
-
+console.log(config)
 
 client.connect();
 const userService = require('./user');

@@ -19,7 +19,7 @@ const auth = new google.auth.JWT(
     SCOPES
 );
 
-// let event = {
+//let event = {
 //     'summary': `Appointment for ${name}.`,
 //     'description': `Customer mobile number ${number}.`,
 //     'start': {
@@ -66,3 +66,12 @@ module.exports = {
     insertEvent,
     getEvents
 }
+let data = { start: '2020-05-21T11:30:00.000Z', end: '2020-05-21T12:30:00.000Z' }
+
+getEvents(data.start, data.end)
+    .then((response) => {
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
