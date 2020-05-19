@@ -5,7 +5,7 @@ const config = require('../config');
 const credentials = {
     client_email: config.GOOGLE_CLIENT_EMAIL,
     private_key: config.GOOGLE_PRIVATE_KEY,
-    projectId: config.GOOGLE_PROJECT_ID,
+    projectId2: config.GOOGLE_PROJECT_ID,
 };
 
 // KnowledgeBasePath
@@ -31,7 +31,7 @@ const sessionClient = new dialogflow.SessionsClient(config2)
 const detectIntent = async (queryText, sessionId) => {
 
     // Create a sessionPath for the senderId
-    let sessionPath = sessionClient.sessionPath(projectId, sessionId);
+    let sessionPath = sessionClient.sessionPath(projectId2, sessionId);
 
     let request = {
         session: sessionPath,
@@ -75,10 +75,3 @@ const detectIntent = async (queryText, sessionId) => {
 module.exports = {
     detectIntent
 }
-detectIntent('What is anchor text?', 'abcdefg12345')
-.then((response) => {
-console.log(response);
-})
-.catch((error) => {
-console.log(error);
-});
