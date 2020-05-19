@@ -319,9 +319,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
                 }
             }, 2, senderID);
             break;
-              customer_lifetime.pythonpy(function (updated){
-                if (updated){
-
+            
         case 'Email Marketing':
 
             fbService.sendTextMessage(senderID, "Awesome, we’ll set it up together step by step. Once you’re ready to start, say “let’s go!”  ");
