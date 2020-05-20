@@ -524,6 +524,13 @@ async function sendToDialogFlow(sender, textString, params) {
 
 }
 
+async function detectIntentKnowledge(
+  projectId,
+  sessionId,
+  languageCode,
+  knowledgeBaseId,
+  query
+) {
 const sessionPath = sessionClient.projectAgentSessionPath(
   projectId,
   sessionId
@@ -558,6 +565,7 @@ if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
     console.log(`   confidence: ${a.matchConfidence}`);
     console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
   });
+}
 }
 
 const insertEvent = async (event) => {
