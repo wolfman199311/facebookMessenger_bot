@@ -196,46 +196,7 @@ function setSessionAndUser(senderID) {
     }
 }
 
-const dateTimeToString = (date, time) => {
 
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
-    return event.toLocaleDateString('en-US', options);
-};
-
-// Get date-time string for calender
-const dateTimeForCalander = (date, time) => {
-
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}:00.000${TIMEOFFSET}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let startDate = event;
-    let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
-
-    return {
-        'start': startDate,
-        'end': endDate
-    }
-};
 
 function receivedMessage(event) {
 
@@ -990,7 +951,7 @@ async function greetUserText(userId) {
 
 
 
-// The audio query request
+
 
 
 
@@ -1095,40 +1056,39 @@ function receivedAuthentication(event) {
  * https://developers.facebook.com/docs/graph-api/webhooks#setup
  *
  */
-function verifyRequestSignature(req, res, buf) {
-    var signature = req.headers["x-hub-signature"];
+ function verifyRequestSignature(req, res, buf) {
+     var signature = req.headers["x-hub-signature"];
 
-    if (!signature) {
-        throw new Error('Couldn\'t validate the signature.');
-    } else {
-        var elements = signature.split('=');
-        var method = elements[0];
-        var signatureHash = elements[1];
+     if (!signature) {
+         throw new Error('Couldn\'t validate the signature.');
+     } else {
+         var elements = signature.split('=');
+         var method = elements[0];
+         var signatureHash = elements[1];
 
-        var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
-            .update(buf)
-            .digest('hex');
+         var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
+             .update(buf)
+             .digest('hex');
 
-        if (signatureHash != expectedHash) {
-            throw new Error("Couldn't validate the request signature.");
-        }
-    }
-}
+         if (signatureHash != expectedHash) {
+             throw new Error("Couldn't validate the request signature.");
+         }
+     }
+ }
 
-function isDefined(obj) {
-    if (typeof obj == 'undefined') {
-        return false;
-    }
+ function isDefined(obj) {
+     if (typeof obj == 'undefined') {
+         return false;
+     }
 
-    if (!obj) {
-        return false;
-    }
+     if (!obj) {
+         return false;
+     }
 
-    return obj != null;
-}
+     return obj != null;
+ }
 
-
-// Spin up the server
-app.listen(app.get('port'), function () {
-    console.log('running on port', app.get('port'))
-})
+ // Spin up the server
+ app.listen(app.get('port'), function () {
+     console.log('running on port', app.get('port'))
+ })
