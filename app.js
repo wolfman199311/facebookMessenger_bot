@@ -531,7 +531,7 @@ const sessionPath = sessionClient.projectAgentSessionPath(
 
 
 // The audio query request
-const request = {
+const request1 = {
   session: sessionPath,
   queryInput: {
     text: {
@@ -544,7 +544,7 @@ const request = {
   },
 };
 
-const responses = await sessionClient.detectIntent(request);
+const responses = await sessionClient.detectIntent(request1);
 const result = responses[0].queryResult;
 console.log(`Query text: ${result.queryText}`);
 console.log(`Detected Intent: ${result.intent.displayName}`);
