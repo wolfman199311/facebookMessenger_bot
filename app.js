@@ -523,49 +523,6 @@ async function sendToDialogFlow(sender, textString, params) {
 
 }
 
-async function detectIntentKnowledge(
-  projectId,
-  sessionId,
-  languageCode,
-  knowledgeBaseId,
-  query
-) {
-const sessionPath = sessionClient.projectAgentSessionPath(
-  projectId,
-  sessionId
-);
-
-
-// The audio query request
-const request1 = {
-  session: sessionPath,
-  queryInput: {
-    text: {
-      text: query,
-      languageCode: languageCode,
-    },
-  },
-  queryParams: {
-    knowledgeBaseNames: [one, two, three, four, five],
-  },
-};
-
-const responses = await sessionClient.detectIntent(request1);
-const result = responses[0].queryResult;
-console.log(`Query text: ${result.queryText}`);
-console.log(`Detected Intent: ${result.intent.displayName}`);
-console.log(`Confidence: ${result.intentDetectionConfidence}`);
-console.log(`Query Result: ${result.fulfillmentText}`);
-if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-  const answers = result.knowledgeAnswers.answers;
-  console.log(`There are ${answers.length} answer(s);`);
-  answers.forEach(a => {
-    console.log(`   answer: ${a.answer}`);
-    console.log(`   confidence: ${a.matchConfidence}`);
-    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-  });
-}
-}
 
 const insertEvent = async (event) => {
 
