@@ -60,7 +60,7 @@ if (!config.GOOGLE_CLIENT_EMAIL) {
 if (!config.GOOGLE_PRIVATE_KEY) {
     throw new Error('missing GOOGLE_PRIVATE_KEY');
 }
-if (!config.FB_APP_SECRET) {
+if (!config.FACEBOOK_SECRET) {
     throw new Error('missing FB_APP_SECRET');
 }
 if (!config.SERVER_URL) { //used for ink to static files
@@ -69,7 +69,7 @@ if (!config.SERVER_URL) { //used for ink to static files
 if (!config.PG_CONFIG) { //pg config
     throw new Error('missing PG_CONFIG');
 }
-if (!config.FB_APP_ID) { //app id
+if (!config.FACEBOOK_APP_ID) { //app id
     throw new Error('missing FB_APP_ID');
 }
 
@@ -1148,7 +1148,7 @@ function verifyRequestSignature(req, res, buf) {
         var method = elements[0];
         var signatureHash = elements[1];
 
-        var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
+        var expectedHash = crypto.createHmac('sha1', config.FACEBOOK_SECRET)
             .update(buf)
             .digest('hex');
 
