@@ -113,9 +113,9 @@ const calendarId = config.CALENDAR_ID;
 const calendar = google.calendar({version : "v3"});
 
 const auth = new google.auth.JWT(
-    credentials.GOOGLE_CLIENT_EMAIL,
+    config.GOOGLE_CLIENT_EMAIL,
     null,
-    credentials.GOOGLE_PRIVATE_KEY,
+    config.GOOGLE_PRIVATE_KEY,
     SCOPES
 );
 const sessionIds = new Map();
@@ -567,10 +567,7 @@ const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
     return len;
 };
 
-module.exports = {
-    insertEvent,
-    getEvents
-}
+
 let data = { start: '2020-05-21T11:30:00.000Z', end: '2020-05-21T12:30:00.000Z' }
 
 getEvents(data.start, data.end)
