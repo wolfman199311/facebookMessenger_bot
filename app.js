@@ -92,7 +92,6 @@ app.use(bodyParser.urlencoded({
 
 // Process application/json
 app.use(bodyParser.json());
-app = express().use(bodyParser.json());
 
 
 
