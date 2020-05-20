@@ -489,7 +489,7 @@ function handleDialogFlowResponse(sender, response) {
     }
 }
 
-async function sendToDialogFlow(sender, textString, params, query) {
+async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
 
@@ -503,38 +503,61 @@ async function sendToDialogFlow(sender, textString, params, query) {
             session: sessionPath,
             queryInput: {
                 text: {
-                    text: textString, query,
+                    text: textString,
                     languageCode: config.DF_LANGUAGE_CODE,
                 },
             },
             queryParams: {
-
-                      knowledgeBaseNames: [one, two, three, four, five],
+                payload: {
+                    data: params
                 }
-
+            }
         };
         const responses = await sessionClient.detectIntent(request);
 
         const result = responses[0].queryResult;
-        console.log(`Query text: ${result.queryText}`);
-        console.log(`Detected Intent: ${result.intent.displayName}`);
-        console.log(`Confidence: ${result.intentDetectionConfidence}`);
-        console.log(`Query Result: ${result.fulfillmentText}`);
-        if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-          const answers = result.knowledgeAnswers.answers;
-          console.log(`There are ${answers.length} answer(s);`);
-          answers.forEach(a => {
-            console.log(`   answer: ${a.answer}`);
-            console.log(`   confidence: ${a.matchConfidence}`);
-            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-          });
-        }
         handleDialogFlowResponse(sender, result);
     } catch (e) {
         console.log('error');
         console.log(e);
     }
 
+}
+
+const sessionPath = sessionClient.projectAgentSessionPath(
+  projectId,
+  sessionId
+);
+
+
+// The audio query request
+const request = {
+  session: sessionPath,
+  queryInput: {
+    text: {
+      text: query,
+      languageCode: languageCode,
+    },
+  },
+  queryParams: {
+    knowledgeBaseNames: [one, two, three, four, five],
+  },
+};
+
+const responses = await sessionClient.detectIntent(request);
+const result = responses[0].queryResult;
+console.log(`Query text: ${result.queryText}`);
+console.log(`Detected Intent: ${result.intent.displayName}`);
+console.log(`Confidence: ${result.intentDetectionConfidence}`);
+console.log(`Query Result: ${result.fulfillmentText}`);
+if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+  const answers = result.knowledgeAnswers.answers;
+  console.log(`There are ${answers.length} answer(s);`);
+  answers.forEach(a => {
+    console.log(`   answer: ${a.answer}`);
+    console.log(`   confidence: ${a.matchConfidence}`);
+    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
+  });
 }
 
 const insertEvent = async (event) => {
