@@ -347,22 +347,61 @@ function handleEcho(messageId, appId, metadata) {
     console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
 }
 
-function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
-    switch (action) {
-        default:
-        case "unsubscribe":
-            userService.newsletterSettings(function (updated) {
-                if (updated) {
-                    fbService.sendTextMessage(sender, "You're unsubscribed. You can always subscribe back!");
-                } else {
-                    fbService.sendTextMessage(sender, "Newsletter is not available at this moment." +
-                        "Try again later!");
-                }
-            }, 0, sender);
-            break;
-            //unhandled action, just send back the text
-            handleMessages(messages, sender);
+function handleDialogFlowResponse(sender, response) {
+    let responseText = response.fulfillmentMessages.fulfillmentText;
+
+    let messages = response.fulfillmentMessages;
+    let action = response.action;
+    let contexts = response.outputContexts;
+    let parameters = response.parameters;
+
+    sendTypingOff(sender);
+
+    if (isDefined(action)) {
+        handleDialogFlowAction(sender, action, messages, contexts, parameters);
+    } else if (isDefined(messages)) {
+        handleMessages(messages, sender);
+    } else if (responseText == '' && !isDefined(action)) {
+        //dialogflow could not evaluate input.
+        sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
+    } else if (isDefined(responseText)) {
+        sendTextMessage(sender, responseText);
     }
+}
+
+async function sendToDialogFlow(sender, textString, params) {
+
+    sendTypingOn(sender);
+
+    try {
+        const sessionPath = sessionClient.sessionPath(
+            config.GOOGLE_PROJECT_ID,
+            sessionIds.get(sender)
+        );
+
+        const request = {
+            session: sessionPath,
+            queryInput: {
+                text: {
+                    text: textString,
+                    languageCode: config.DF_LANGUAGE_CODE,
+                },
+            },
+            queryParams: {
+                payload: {
+                    data: params
+                }
+            }
+        };
+        const responses = await sessionClient.detectIntent(request);
+
+        const result = responses[0].queryResult;
+        handleDialogFlowResponse(sender, result);
+    } catch (e) {
+        console.log('error');
+        console.log(e);
+    }
+
 }
 
 function handleMessage(message, sender) {
@@ -431,28 +470,27 @@ function handleCardMessages(messages, sender) {
     sendGenericMessage(sender, elements);
 }
 
-
 function handleMessages(messages, sender) {
     let timeoutInterval = 1100;
-    let previousType;
+    let previousType ;
     let cardTypes = [];
     let timeout = 0;
     for (var i = 0; i < messages.length; i++) {
 
-        if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-        } else if (messages[i].message == "card" && i == messages.length - 1) {
+        } else if ( messages[i].message == "card" && i == messages.length - 1) {
             cardTypes.push(messages[i]);
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
-        } else if (messages[i].message == "card") {
+        } else if ( messages[i].message == "card") {
             cardTypes.push(messages[i]);
-        } else {
+        } else  {
 
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
@@ -461,68 +499,10 @@ function handleMessages(messages, sender) {
         previousType = messages[i].message;
 
     }
-}
+};
 
-function handleDialogFlowResponse(sender, response) {
-    let responseText = response.fulfillmentMessages.fulfillmentText;
 
-    let messages = response.fulfillmentMessages;
-    let action = response.action;
-    let contexts = response.outputContexts;
-    let parameters = response.parameters;
 
-    sendTypingOff(sender);
-
-    if (isDefined(action) && !action.includes('unknown')) {
-        console.log("response Action");
-        handleDialogFlowAction(sender, action, messages, contexts, parameters);
-    } else if (isDefined(messages)) {
-        console.log("response Message");
-        handleMessages(messages, sender);
-    } else if (responseText == '' && !isDefined(action)) {
-        //dialogflow could not evaluate input.
-        console.log("response Default");
-        sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
-    } else if (isDefined(responseText)) {
-        console.log("response Text");
-        sendTextMessage(sender, responseText);
-    }
-}
-
-async function sendToDialogFlow(sender, textString, params) {
-
-    sendTypingOn(sender);
-
-    try {
-        const sessionPath = sessionClient.sessionPath(
-            config.GOOGLE_PROJECT_ID,
-            sessionIds.get(sender)
-        );
-
-        const request = {
-            session: sessionPath,
-            queryInput: {
-                text: {
-                    text: textString,
-                    languageCode: config.DF_LANGUAGE_CODE,
-                },
-            },
-            queryParams: {
-                payload: {
-                    data: params
-                }
-            }
-        };
-        const responses = await sessionClient.detectIntent({ session, queryInput});
-
-            const result = responses[0].queryResult;
-
-            response.send(result);
-    } catch (e) {
-        console.log('error');
-        console.log(e);
-    }
-  }
 
 async function detectIntentKnowledge(
   projectId,
