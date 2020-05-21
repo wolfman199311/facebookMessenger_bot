@@ -80,6 +80,7 @@ app.set('port', (process.env.PORT || 5000))
 //verify request came from facebook
 app.use(bodyParser.json({
     verify: verifyRequestSignature
+
 }));
 
 //serve static files in the public directory
