@@ -523,12 +523,12 @@ async function sendToDialogFlow(sender, textString, params) {
            console.log(`  Intent: ${result.intent.displayName}`);
          } else {
            console.log(`  No intent matched.`);
-         }
-       }
-     }
-   }
- }
-}
+         };
+
+     
+
+
+
 
 
 async function detectIntentKnowledge(
