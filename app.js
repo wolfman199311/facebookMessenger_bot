@@ -513,16 +513,23 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient.detectIntent(request);
-
-        const result = responses[0].queryResult;
-        handleDialogFlowResponse(sender, result);
-    } catch (e) {
-        console.log('error');
-        console.log(e);
-    }
-
+        // Send request and log result
+         const responses = await sessionClient.detectIntent(request);
+         console.log('Detected intent');
+         const result = responses[0].queryResult;
+         console.log(`  Query: ${result.queryText}`);
+         console.log(`  Response: ${result.fulfillmentText}`);
+         if (result.intent) {
+           console.log(`  Intent: ${result.intent.displayName}`);
+         } else {
+           console.log(`  No intent matched.`);
+         }
+       }
+     }
+   }
+ }
 }
+
 
 async function detectIntentKnowledge(
   projectId,
