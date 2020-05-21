@@ -514,117 +514,72 @@ if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
 }
 }
 
-const insertEvent = async (event) => {
+function makeAppointment (agent) {
+   // Use the Dialogflow's date and time parameters to create Javascript Date instances, 'dateTimeStart' and 'dateTimeEnd',
+   // which are used to specify the appointment's time.
+   const appointmentDuration = 1;// Define the length of the appointment to be one hour.
+   const dateTimeStart = convertParametersDate(agent.parameters.date, agent.parameters.time);
+   const dateTimeEnd = addHours(dateTimeStart, appointmentDuration);
+   const appointmentTimeString = getLocaleTimeString(dateTimeStart);
+   const appointmentDateString = getLocaleDateString(dateTimeStart);
+   // Check the availability of the time slot and set up an appointment if the time slot is available on the calendar
+   return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
+     agent.add(`Got it. I have your appointment scheduled on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
+   }).catch(() => {
+     agent.add(`Sorry, we're booked on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
+   });
+ }
+ let intentMap = new Map();
+ intentMap.set('Make Appointment', makeAppointment);  // It maps the intent 'Make Appointment' to the function 'makeAppointment()'
+ agent.handleRequest(intentMap);
+});
 
-    let response = await calendar.events.insert({
-        auth: auth,
-        calendarId: calendarId,
-        resource: event
-    });
+function createCalendarEvent (dateTimeStart, dateTimeEnd) {
+ return new Promise((resolve, reject) => {
+   calendar.events.list({  // List all events in the specified time period
+     auth: serviceAccountAuth,
+     calendarId: calendarId,
+     timeMin: dateTimeStart.toISOString(),
+     timeMax: dateTimeEnd.toISOString()
+   }, (err, calendarResponse) => {
+     // Check if there exists any event on the calendar given the specified the time period
+     if (err || calendarResponse.data.items.length > 0) {
+       reject(err || new Error('Requested time conflicts with another appointment'));
+     } else {
+       // Create an event for the requested time period
+       calendar.events.insert({ auth: serviceAccountAuth,
+         calendarId: calendarId,
+         resource: {summary: 'Demo',
+           start: {dateTime: dateTimeStart},
+           end: {dateTime: dateTimeEnd}}
+       }, (err, event) => {
+         err ? reject(err) : resolve(event);
+       }
+       );
+     }
+   });
+ });
+}
 
-    if (response['status'] == 200 && response['statusText'] === 'OK') {
-        return 1;
-    } else {
-        return 0;
-    }
-};
+// A helper function that receives Dialogflow's 'date' and 'time' parameters and creates a Date instance.
+function convertParametersDate(date, time){
+ return new Date(Date.parse(date.split('T')[0] + 'T' + time.split('T')[1].split('-')[0] + timeZoneOffset));
+}
 
-const getEvents = async (dateTimeStart, dateTimeEnd, timeZone) => {
+// A helper function that adds the integer value of 'hoursToAdd' to the Date instance 'dateObj' and returns a new Data instance.
+function addHours(dateObj, hoursToAdd){
+ return new Date(new Date(dateObj).setHours(dateObj.getHours() + hoursToAdd));
+}
 
-    let response = await calendar.events.list({
-        auth: auth,
-        calendarId: calendarId,
-        timeMin: dateTimeStart,
-        timeMax: dateTimeEnd,
-        timeZone: timeZone
-    });
+// A helper function that converts the Date instance 'dateObj' into a string that represents this time in English.
+function getLocaleTimeString(dateObj){
+ return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, timeZone: timeZone });
+}
 
-    let len = response['data']['items'].length;
-
-    return len;
-};
-const dateTimeToString = (date, time) => {
-
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
-    return event.toLocaleDateString('en-US', options);
-};
-
-// Get date-time string for calender
-const dateTimeForCalander = (date, time) => {
-
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-
-    let hour = time.split('T')[1].split(':')[0];
-    let minute = time.split('T')[1].split(':')[1];
-
-    let newDateTime = `${year}-${month}-${day}T${hour}:${minute}:00.000${TIMEOFFSET}`;
-
-    let event = new Date(Date.parse(newDateTime));
-
-    let startDate = event;
-    let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
-
-    return {
-        'start': startDate,
-        'end': endDate
-    }
-};
-async function calender( message, senderId, date, time ){
-let intentData = await detectIntent(message, senderId);
-
-            // Check for Schedule a call
-            if (intentData.intentName === 'User Provides Time') {
-                let fields = intentData.outputContexts[0].parameters.fields;
-
-                let date = fields.date.stringValue;
-                let time = fields.time.stringValue;
-
-                // Check the event is there or not
-                let dtc = dateTimeForCalander(date, time);
-                console.log(dtc);
-                let dts = dateTimeToString(date, time);
-                let eventsLength = await getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
-
-                if (eventsLength == 0) {
-                    let event = {
-                        'summary': `Demo appointment.`,
-                        'description': `Sample description.`,
-                        'start': {
-                            'dateTime': dtc.start,
-                            'timeZone': 'Asia/Kolkata'
-                        },
-                        'end': {
-                            'dateTime': dtc.end,
-                            'timeZone': 'Asia/Kolkata'
-                        }
-                    };
-                    await insertEvent(event);
-                    await sendMessage(`Appointment is set on ${dts}`, senderId);
-                    res.status(200).send('EVENT_RECEIVED');
-                } else {
-                    await sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-                    res.status(200).send('EVENT_RECEIVED');
-                }
-            } else {
-                await sendMessage(intentData.text, senderId);
-                res.status(200).send('EVENT_RECEIVED');
-            }
-        }
-
+// A helper function that converts the Date instance 'dateObj' into a string that represents this date in English.
+function getLocaleDateString(dateObj){
+ return dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: timeZone });
+}
 
 
 function sendTextMessage(recipientId, text) {
