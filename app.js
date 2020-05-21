@@ -594,10 +594,10 @@ let intentData = await detectIntent(message, senderId);
                 let time = fields.time.stringValue;
 
                 // Check the event is there or not
-                let dtc = DT.dateTimeForCalander(date, time);
+                let dtc = dateTimeForCalander(date, time);
                 console.log(dtc);
-                let dts = DT.dateTimeToString(date, time);
-                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+                let dts = dateTimeToString(date, time);
+                let eventsLength = await getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
 
                 if (eventsLength == 0) {
                     let event = {
