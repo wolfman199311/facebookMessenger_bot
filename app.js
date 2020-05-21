@@ -537,6 +537,7 @@ function makeAppointment (agent) {
  agent.handleRequest(intentMap);
 
 
+
 function createCalendarEvent (dateTimeStart, dateTimeEnd) {
  return new Promise((resolve, reject) => {
    calendar.events.list({  // List all events in the specified time period
@@ -562,28 +563,30 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
      }
    });
  });
-}
+};
 
 
 
 // A helper function that receives Dialogflow's 'date' and 'time' parameters and creates a Date instance.
 function convertParametersDate(date, time){
  return new Date(Date.parse(date.split('T')[0] + 'T' + time.split('T')[1].split('-')[0] + timeZoneOffset));
-}
+};
 
 // A helper function that adds the integer value of 'hoursToAdd' to the Date instance 'dateObj' and returns a new Data instance.
 function addHours(dateObj, hoursToAdd){
  return new Date(new Date(dateObj).setHours(dateObj.getHours() + hoursToAdd));
-}
+};
 
 // A helper function that converts the Date instance 'dateObj' into a string that represents this time in English.
 function getLocaleTimeString(dateObj){
  return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, timeZone: timeZone });
-}
+};
 
 // A helper function that converts the Date instance 'dateObj' into a string that represents this date in English.
 function getLocaleDateString(dateObj){
  return dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: timeZone });
+};
+});
 
 
 
