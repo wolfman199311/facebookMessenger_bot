@@ -8,6 +8,7 @@ const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
 const {google} = require('googleapis');
+const functions = require('firebase-functions');
 const TIMEOFFSET = '±00:00';
 
 var app = express();
