@@ -513,21 +513,16 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient.detectIntent(request);
+        const responses = await sessionClient.detectIntent({ session, queryInput});
 
-        const result = responses[0].queryResult;
-        handleDialogFlowResponse(sender, result);
+            const result = responses[0].queryResult;
+
+            response.send(result);
     } catch (e) {
         console.log('error');
         console.log(e);
     }
-
-}
-const responses = await sessionClient.detectIntent({ session, queryInput});
-
-    const result = responses[0].queryResult;
-
-    response.send(result);
+  }
 
 async function detectIntentKnowledge(
   projectId,
