@@ -595,7 +595,8 @@ function sendTextMessage(recipientId, text) {
         }
     }
     callSendAPI(messageData);
-}
+};
+
 
 /*
  * Send an image using the Send API.
