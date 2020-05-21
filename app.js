@@ -564,6 +564,8 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
  });
 }
 
+
+
 // A helper function that receives Dialogflow's 'date' and 'time' parameters and creates a Date instance.
 function convertParametersDate(date, time){
  return new Date(Date.parse(date.split('T')[0] + 'T' + time.split('T')[1].split('-')[0] + timeZoneOffset));
@@ -582,7 +584,7 @@ function getLocaleTimeString(dateObj){
 // A helper function that converts the Date instance 'dateObj' into a string that represents this date in English.
 function getLocaleDateString(dateObj){
  return dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: timeZone });
-}
+
 
 
 function sendTextMessage(recipientId, text) {
