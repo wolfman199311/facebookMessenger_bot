@@ -346,7 +346,13 @@ function handleEcho(messageId, appId, metadata) {
     // Just logging message echoes to console
     console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
 }
-
+function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
+    switch (action) {
+        default:
+            //unhandled action, just send back the text
+            handleMessages(messages, sender);
+    }
+}
 function handleDialogFlowResponse(sender, response) {
     let responseText = response.fulfillmentMessages.fulfillmentText;
 
