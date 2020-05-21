@@ -565,6 +565,26 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
    });
  });
 };
+exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
+  const agent = new WebhookClient({ request, response });
+
+  function makeAppointment (agent) {
+    // Calculate appointment start and end datetimes (end = +1hr from start)
+    const dateTimeStart = convertParametersDate(agent.parameters.date, agent.parameters.time);
+    const dateTimeEnd = addHours(dateTimeStart, 1);
+    const appointmentTimeString = getLocaleTimeString(dateTimeStart);
+    const appointmentDateString = getLocaleDateString(dateTimeStart);
+    // Check the availability of the time, and make an appointment if there is time on the calendar
+    return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
+      agent.add(`Got it. I have your appointment scheduled on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
+    }).catch(() => {
+      agent.add(`Sorry, we're booked on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
+    });
+  }
+  let intentMap = new Map();
+  intentMap.set('Make Appointment', makeAppointment);
+  agent.handleRequest(intentMap);
+});
 
 
 
