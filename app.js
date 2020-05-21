@@ -583,7 +583,7 @@ const dateTimeForCalander = (date, time) => {
         'end': endDate
     }
 };
-
+async function calender( message, senderId, date, time ){
 let intentData = await detectIntent(message, senderId);
 
             // Check for Schedule a call
@@ -627,7 +627,7 @@ let intentData = await detectIntent(message, senderId);
     } else {
         res.sendStatus(404);
     }
-});
+}});
 
 function sendTextMessage(recipientId, text) {
     var messageData = {
