@@ -625,7 +625,7 @@ let intentData = await detectIntent(message, senderId);
             }
         }
 
-});
+
 
 function sendTextMessage(recipientId, text) {
     var messageData = {
