@@ -513,6 +513,9 @@ if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
   });
 }
 }
+const { WebhookClient } = require('dialogflow-fulfillment');
+exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
+  const agent = new WebhookClient({ request, response });
 
 function makeAppointment (agent) {
    // Use the Dialogflow's date and time parameters to create Javascript Date instances, 'dateTimeStart' and 'dateTimeEnd',
