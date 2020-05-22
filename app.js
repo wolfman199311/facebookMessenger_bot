@@ -437,7 +437,7 @@ let intentData = await GD.detectIntent(message, senderId);
                await FM.sendMessage(intentData.text, senderId);
                res.status(200).send('EVENT_RECEIVED');
            }
-       }
+
 }
 
 
