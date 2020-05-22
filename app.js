@@ -438,9 +438,6 @@ let intentData = await GD.detectIntent(message, senderId);
                res.status(200).send('EVENT_RECEIVED');
            }
        }
-   } else {
-       res.sendStatus(404);
-   }
 });}
 
 
