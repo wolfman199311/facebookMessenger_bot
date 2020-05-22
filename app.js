@@ -8,7 +8,6 @@ const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
 const {google} = require('googleapis');
-const functions = require('firebase-functions');
 const TIMEOFFSET = '±00:00';
 
 var app = express();
@@ -398,6 +397,51 @@ function handleMessage(message, sender) {
             break;
     }
 }
+
+let intentData = await GD.detectIntent(message, senderId);
+
+           // Check for Schedule a call
+           if (intentData.intentName === 'User Provides Time') {
+               let fields = intentData.outputContexts[0].parameters.fields;
+
+               let date = fields.date.stringValue;
+               let time = fields.time.stringValue;
+
+               // Check the event is there or not
+               let dtc = DT.dateTimeForCalander(date, time);
+               console.log(dtc);
+               let dts = DT.dateTimeToString(date, time);
+               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+
+               if (eventsLength == 0) {
+                   let event = {
+                       'summary': `Demo appointment.`,
+                       'description': `Sample description.`,
+                       'start': {
+                           'dateTime': dtc.start,
+                           'timeZone': 'Asia/Kolkata'
+                       },
+                       'end': {
+                           'dateTime': dtc.end,
+                           'timeZone': 'Asia/Kolkata'
+                       }
+                   };
+                   await GC.insertEvent(event);
+                   await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                   res.status(200).send('EVENT_RECEIVED');
+               } else {
+                   await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                   res.status(200).send('EVENT_RECEIVED');
+               }
+           } else {
+               await FM.sendMessage(intentData.text, senderId);
+               res.status(200).send('EVENT_RECEIVED');
+           }
+       }
+   } else {
+       res.sendStatus(404);
+   }
+});
 
 
 function handleCardMessages(messages, sender) {
