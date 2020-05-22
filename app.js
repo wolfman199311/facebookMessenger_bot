@@ -427,11 +427,11 @@ function handleMessage(message, sender) {
                    await GC.insertEvent(event);
                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
-               } else {
+               } else if {
                    await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
-               }
-           } else {
+
+            } else {
                await fbService.sendTextMessage(text, senderID);
                res.status(200).send('EVENT_RECEIVED');
            }
