@@ -398,7 +398,7 @@ function handleMessage(message, sender) {
     }
 }
  async function calendarChatbotEvent(message, senderId, date, time){
-let intentData = await dialogflowService.detectIntent(message, senderId);
+let intentData = await GD.detectIntent(message, senderId);
 
            // Check for Schedule a call
            if (intentData.intentName === 'User Provides Time') {
