@@ -438,7 +438,7 @@ let intentData = await GD.detectIntent(message, senderId);
                res.status(200).send('EVENT_RECEIVED');
            }
 
-}
+};
 
 
 function handleCardMessages(messages, sender) {
@@ -555,10 +555,6 @@ if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
   });
 }
 }
-const { WebhookClient } = require('dialogflow-fulfillment');
-exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
-  const agent = new WebhookClient({ request, response });
-
 
 
 
