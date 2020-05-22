@@ -416,7 +416,7 @@ function handleMessage(message, sender) {
                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
                if (eventsLength == 0) {
-                   let event1 = {
+                   let event = {
                        'summary': `Demo appointment.`,
                        'description': `Sample description.`,
                        'start': {
@@ -428,7 +428,7 @@ function handleMessage(message, sender) {
                            'timeZone': 'Europe/London'
                        }
                    };
-                   await GC.insertEvent(event1);
+                   await GC.insertEvent(event);
                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
                } else {

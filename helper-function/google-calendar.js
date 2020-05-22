@@ -29,12 +29,12 @@ const auth = new google.auth.JWT(
 //     }
 // };
 
-const insertEvent = async (event1) => {
+const insertEvent = async (event) => {
 
     let response = await calendar.events.insert({
         auth: auth,
         calendarId: calendarId,
-        resource: event1
+        resource: event
     });
 
     if (response['status'] == 200 && response['statusText'] === 'OK') {
