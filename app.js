@@ -401,7 +401,7 @@ function handleMessage(message, sender) {
 
              const responseText = await sessionClient.detectIntent(' User Privdes Time');
 
-             const field = responseText[0].queryResult;
+             let field = responseText[0].queryResult;
                let date = fields.date.stringValue;
                let time = fields.time.stringValue;
 
