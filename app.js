@@ -427,14 +427,14 @@ let intentData = await GD.detectIntent(message, senderId);
                        }
                    };
                    await GC.insertEvent(event);
-                   await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                   await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderId);
                    res.status(200).send('EVENT_RECEIVED');
                } else {
-                   await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                   await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderId);
                    res.status(200).send('EVENT_RECEIVED');
                }
            } else {
-               await FM.sendMessage(intentData.text, senderId);
+               await fbService.sendTextMessage(intentData.text, senderId);
                res.status(200).send('EVENT_RECEIVED');
            }
 
