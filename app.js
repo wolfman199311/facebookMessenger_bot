@@ -397,22 +397,14 @@ function handleMessage(message, sender) {
             break;
     }
 }
-let incomingData = req.body.entry[0].messaging[0];
 
-            let senderId = incomingData.sender.id;
-            let message = incomingData.message.text;
 
-            console.log(`Incoming message --> ${message}`);
-            console.log(`Incoming sender id --> ${senderId}`);
-
-          
 
  async function calendarChatbotEvent(message, senderId, date, time){
-let intentData = await GD.detectIntent(message, senderId);
 
            // Check for Schedule a call
-           if (intentData.intentName === 'User Provides Time') {
-               let fields = intentData.outputContexts[0].parameters.fields;
+           if (queryResult === 'User Provides Time') {
+               let fields = queryResult.outputContexts[0].parameters.fields;
 
                let date = fields.date.stringValue;
                let time = fields.time.stringValue;
@@ -444,7 +436,7 @@ let intentData = await GD.detectIntent(message, senderId);
                    res.status(200).send('EVENT_RECEIVED');
                }
            } else {
-               await fbService.sendTextMessage(intentData.text, senderID);
+               await fbService.sendTextMessage(queryResult, senderID);
                res.status(200).send('EVENT_RECEIVED');
            }
 
