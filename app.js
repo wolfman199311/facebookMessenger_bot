@@ -411,7 +411,7 @@ let intentData = await GD.detectIntent(message, senderId);
                let dtc = DT.dateTimeForCalander(date, time);
                console.log(dtc);
                let dts = DT.dateTimeToString(date, time);
-               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
                if (eventsLength == 0) {
                    let event = {
@@ -419,11 +419,11 @@ let intentData = await GD.detectIntent(message, senderId);
                        'description': `Sample description.`,
                        'start': {
                            'dateTime': dtc.start,
-                           'timeZone': 'Asia/Kolkata'
+                           'timeZone': 'Europe/London'
                        },
                        'end': {
                            'dateTime': dtc.end,
-                           'timeZone': 'Asia/Kolkata'
+                           'timeZone': 'Europe/London'
                        }
                    };
                    await GC.insertEvent(event);

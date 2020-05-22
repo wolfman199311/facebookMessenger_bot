@@ -1,4 +1,4 @@
-onst TIMEOFFSET = '+05:30';
+const TIMEOFFSET = '±00:00';
 
 // Converts the date and time from Dialogflow into
 // January 18, 9:30 AM
