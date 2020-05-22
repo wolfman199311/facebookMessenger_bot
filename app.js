@@ -402,13 +402,13 @@ function handleMessage(message, sender) {
              const responseText = await sessionClient.detectIntent(' User Privdes Time');
 
              let field = responseText[0].queryResult;
-               let date = fields.date.stringValue;
-               let time = fields.time.stringValue;
+               let date1 = fields.date.stringValue;
+               let time1 = fields.time.stringValue;
 
                // Check the event is there or not
-               let dtc = DT.dateTimeForCalander(date, time);
+               let dtc = DT.dateTimeForCalander(date1, time1);
                console.log(dtc);
-               let dts = DT.dateTimeToString(date, time);
+               let dts = DT.dateTimeToString(date1, time1);
                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
                if (eventsLength == 0) {
