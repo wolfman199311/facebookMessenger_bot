@@ -34,7 +34,7 @@ const insertEvent = async (event1) => {
     let response = await calendar.events.insert({
         auth: auth,
         calendarId: calendarId,
-        resource: event
+        resource: event1
     });
 
     if (response['status'] == 200 && response['statusText'] === 'OK') {
