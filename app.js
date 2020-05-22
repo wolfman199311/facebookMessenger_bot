@@ -403,7 +403,7 @@ function handleMessage(message, sender) {
  async function calendarChatbotEvent(){
 
            // Check for Schedule a call
-           if (queryResult === 'User Provides Time') {
+           if (responseText === 'User Provides Time') {
                let fields = queryResult.outputContexts[0].parameters.fields;
 
                let date = fields.date.stringValue;
