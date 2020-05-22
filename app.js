@@ -431,13 +431,6 @@ function handleMessage(message, sender) {
                    await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
 
-            } else {
-               await fbService.sendTextMessage(text, senderID);
-               res.status(200).send('EVENT_RECEIVED');
-           }
-
-};
-
 
 function handleCardMessages(messages, sender) {
 
