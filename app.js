@@ -395,12 +395,13 @@ function handleMessage(message, sender) {
 
 
 
- async function calendarChatbotEvent(){
+ async function calendarChatbotEvent(sender, response, date, time){
 
            // Check for Schedule a call
-           if (responseText === 'User Provides Time') {
-               let fields = response.outputContexts[0].parameters.fields;
 
+             const responseText = await sessionClient.detectIntent(' User Privdes Time');
+
+             const field = responseText[0].queryResult;
                let date = fields.date.stringValue;
                let time = fields.time.stringValue;
 
