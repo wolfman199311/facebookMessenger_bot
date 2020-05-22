@@ -400,7 +400,7 @@ function handleMessage(message, sender) {
 
 
 
- async function calendarChatbotEvent(message, senderId, date, time){
+ async function calendarChatbotEvent(){
 
            // Check for Schedule a call
            if (queryResult === 'User Provides Time') {
@@ -416,7 +416,7 @@ function handleMessage(message, sender) {
                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
                if (eventsLength == 0) {
-                   let event = {
+                   let event1 = {
                        'summary': `Demo appointment.`,
                        'description': `Sample description.`,
                        'start': {
@@ -428,7 +428,7 @@ function handleMessage(message, sender) {
                            'timeZone': 'Europe/London'
                        }
                    };
-                   await GC.insertEvent(event);
+                   await GC.insertEvent(event1);
                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
                } else {
@@ -436,7 +436,7 @@ function handleMessage(message, sender) {
                    res.status(200).send('EVENT_RECEIVED');
                }
            } else {
-               await fbService.sendTextMessage(queryResult, senderID);
+               await fbService.sendTextMessage(responseText, senderID);
                res.status(200).send('EVENT_RECEIVED');
            }
 

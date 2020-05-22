@@ -29,7 +29,7 @@ const auth = new google.auth.JWT(
 //     }
 // };
 
-const insertEvent = async (event) => {
+const insertEvent = async (event1) => {
 
     let response = await calendar.events.insert({
         auth: auth,
