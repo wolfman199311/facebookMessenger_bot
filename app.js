@@ -397,8 +397,8 @@ function handleMessage(message, sender) {
             break;
     }
 }
-
-var intentData = await GD.detectIntent(message, senderId);
+ async function calendar(message, senderId, date, time){
+let intentData = await GD.detectIntent(message, senderId);
 
            // Check for Schedule a call
            if (intentData.intentName === 'User Provides Time') {
@@ -441,7 +441,7 @@ var intentData = await GD.detectIntent(message, senderId);
    } else {
        res.sendStatus(404);
    }
-});
+});}
 
 
 function handleCardMessages(messages, sender) {
