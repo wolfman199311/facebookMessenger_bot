@@ -1,3 +1,4 @@
+'use strict';
 const TIMEOFFSET = '±00:00';
 
 // Converts the date and time from Dialogflow into

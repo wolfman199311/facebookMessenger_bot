@@ -1,5 +1,7 @@
+'use strict';
 const dialogflow = require('dialogflow').v2beta1;
 const config = require('../config');
+const structjson = require('../structjson.js');
 
 // Your google dialogflow project-id
 const projectId = config.GOOGLE_PROJECT_ID;
