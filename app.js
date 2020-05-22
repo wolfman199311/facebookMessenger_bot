@@ -398,7 +398,7 @@ function handleMessage(message, sender) {
     }
 }
  async function calendarChatbotEvent(message, senderId, date, time){
-let intentData = await GD.detectIntent(message, senderId);
+let intentData = await dialogflowService.detectIntent(message, senderId);
 
            // Check for Schedule a call
            if (intentData.intentName === 'User Provides Time') {
@@ -427,14 +427,14 @@ let intentData = await GD.detectIntent(message, senderId);
                        }
                    };
                    await GC.insertEvent(event);
-                   await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderId);
+                   await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
                } else {
-                   await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderId);
+                   await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
                }
            } else {
-               await fbService.sendTextMessage(intentData.text, senderId);
+               await fbService.sendTextMessage(intentData.text, senderID);
                res.status(200).send('EVENT_RECEIVED');
            }
 

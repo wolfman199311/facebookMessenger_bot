@@ -1,4 +1,4 @@
-onst dialogflow = require('dialogflow').v2beta1;
+const dialogflow = require('dialogflow').v2beta1;
 const config = require('../config');
 
 // Your google dialogflow project-id
