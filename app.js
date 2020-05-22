@@ -423,7 +423,8 @@ function handleMessage(message, sender) {
                            'dateTime': dtc.end,
                            'timeZone': 'Europe/London'
                        }
-                   };
+                     }
+                   ;
                    await GC.insertEvent(event);
                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
                    res.status(200).send('EVENT_RECEIVED');
