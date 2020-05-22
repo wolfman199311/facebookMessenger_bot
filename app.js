@@ -438,7 +438,7 @@ let intentData = await GD.detectIntent(message, senderId);
                res.status(200).send('EVENT_RECEIVED');
            }
        }
-);}
+}
 
 
 function handleCardMessages(messages, sender) {
