@@ -397,7 +397,7 @@ function handleMessage(message, sender) {
             break;
     }
 }
- async function calendar(message, senderId, date, time){
+ async function calendarChatbotEvent(message, senderId, date, time){
 let intentData = await GD.detectIntent(message, senderId);
 
            // Check for Schedule a call
