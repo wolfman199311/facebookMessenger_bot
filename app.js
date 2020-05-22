@@ -14,13 +14,8 @@ var app = express();
 const uuid = require('uuid');
 
 
-const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: false,
-});
 
 
-client.connect();
 const userService = require('./user');
 const customer_lifetime = require('./customer_lifetime');
 
@@ -404,7 +399,7 @@ function handleMessage(message, sender) {
 
            // Check for Schedule a call
            if (responseText === 'User Provides Time') {
-               let fields = queryResult.outputContexts[0].parameters.fields;
+               let fields = response.outputContexts[0].parameters.fields;
 
                let date = fields.date.stringValue;
                let time = fields.time.stringValue;
@@ -436,7 +431,7 @@ function handleMessage(message, sender) {
                    res.status(200).send('EVENT_RECEIVED');
                }
            } else {
-               await fbService.sendTextMessage(responseText, senderID);
+               await fbService.sendTextMessage(text, senderID);
                res.status(200).send('EVENT_RECEIVED');
            }
 
