@@ -397,6 +397,16 @@ function handleMessage(message, sender) {
             break;
     }
 }
+let incomingData = req.body.entry[0].messaging[0];
+
+            let senderId = incomingData.sender.id;
+            let message = incomingData.message.text;
+
+            console.log(`Incoming message --> ${message}`);
+            console.log(`Incoming sender id --> ${senderId}`);
+
+            let intentData = await GD.detectIntent(message, senderId);
+
  async function calendarChatbotEvent(message, senderId, date, time){
 let intentData = await GD.detectIntent(message, senderId);
 
