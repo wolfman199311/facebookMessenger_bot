@@ -929,10 +929,13 @@ async function greetUserText(userId) {
 }
 
  async function bookCalendar() {
+   let incomingData = req.body.entry[0].messaging[0];
 
-   var senderID = event.sender.id;
-   var recipientID = event.recipient.id;
-   var messageText = event.messageText;
+           let senderId = incomingData.sender.id;
+           let message = incomingData.message.text;
+
+           console.log(`Incoming message --> ${message}`);
+           console.log(`Incoming sender id --> ${senderId}`);
 
 
  let intentData = await GD.detectIntent(messageText, senderID);
