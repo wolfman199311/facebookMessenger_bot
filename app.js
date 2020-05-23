@@ -137,7 +137,7 @@ app.get('/webhook/', function (req, res) {
  * https://developers.facebook.com/docs/messenger-platform/product-overview/setup#subscribe_app
  *
  */
- app.post('/webhook/', async(req, res) {
+app.post('/webhook/', async (req, res) => {
 
 
 
@@ -178,7 +178,7 @@ app.get('/webhook/', function (req, res) {
                    let dtc = DT.dateTimeForCalander(date, time);
                    console.log(dtc);
                    let dts = DT.dateTimeToString(date, time);
-                   let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+                   let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
                    if (eventsLength == 0) {
                        let event = {
@@ -186,18 +186,18 @@ app.get('/webhook/', function (req, res) {
                            'description': `Sample description.`,
                            'start': {
                                'dateTime': dtc.start,
-                               'timeZone': 'Asia/Kolkata'
+                               'timeZone': 'Europe/London'
                            },
                            'end': {
                                'dateTime': dtc.end,
-                               'timeZone': 'Asia/Kolkata'
+                               'timeZone': 'Europe/London'
                            }
                        };
                        await GC.insertEvent(event);
-                       await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                       await sendTextMessage(`Appointment is set on ${dts}`, senderId);
                        res.status(200).send('EVENT_RECEIVED');
                    } else {
-                       await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                       await sendTextMessage(`Sorry, we are not available on ${dts}`, senderId);
                        res.status(200).send('EVENT_RECEIVED');
                    }
                } else {
