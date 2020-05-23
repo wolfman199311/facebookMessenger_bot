@@ -964,15 +964,13 @@ async function greetUserText(userId) {
                 } else {
                     await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, sender);
                     res.status(200).send('EVENT_RECEIVED');
-                }
-            } else {
+                } else {
                 await fbService.sendTextMessage(messages, sender);
                 res.status(200).send('EVENT_RECEIVED');
             }
         }
-    } else {
-        res.sendStatus(404);
-    }
+      }
+
 
 
 
