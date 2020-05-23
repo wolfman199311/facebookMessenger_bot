@@ -131,10 +131,7 @@ app.get('/webhook/', function (req, res) {
     }
 })
 
-let url = `https://graph.facebook.com/v2.6/me/messages?access_token=${TOKEN}`;
-let headers = {
-    'Content-Type': 'application/json'
-}
+
 
 let fields = {
     messaging_type: "RESPONSE",
