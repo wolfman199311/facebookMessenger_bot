@@ -153,7 +153,7 @@ app.post('/webhook/', async (req, res) => {
                res.sendStatus(200);
            } else if (messagingEvent.hasOwnProperty('postback')) {
                receivedPostback(messagingEvent);
-               else if (messagingEvent.hasOwnProperty('message')) {
+             } else if (messagingEvent.hasOwnProperty('message')) {
                    receivedMessage(messagingEvent);
                res.sendStatus(200);
            } else {
