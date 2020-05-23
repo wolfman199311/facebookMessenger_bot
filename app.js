@@ -137,45 +137,78 @@ app.get('/webhook/', function (req, res) {
  * https://developers.facebook.com/docs/messenger-platform/product-overview/setup#subscribe_app
  *
  */
- app.post('/webhook/', function (req, res) {
+ app.post('/webhook/', async(req, res) {
+
+
+
      var data = req.body;
-     console.log(JSON.stringify(data));
 
+       // Make sure this is a page subscription
+       if (data.object == 'page') {
 
+           let messagingEvent = data.entry[0].messaging[0]
 
-    // Make sure this is a page subscription
-    if (data.object == 'page') {
-        // Iterate over each entry
-        // There may be multiple if batched
-        data.entry.forEach(function (pageEntry) {
-            var pageID = pageEntry.id;
-            var timeOfEvent = pageEntry.time;
+           if (messagingEvent.hasOwnProperty('delivery')) {
+               receivedDeliveryConfirmation(messagingEvent);
+               res.sendStatus(200);
+           } else if (messagingEvent.hasOwnProperty('postback')) {
+               receivedPostback(messagingEvent);
+               else if (messagingEvent.hasOwnProperty('message')) {
+                   receivedMessage(messagingEvent);
+               res.sendStatus(200);
+           } else {
+               let incomingData = req.body.entry[0].messaging[0];
 
-            // Iterate over each messaging event
-            pageEntry.messaging.forEach(function (messagingEvent) {
-                if (messagingEvent.optin) {
-                    receivedAuthentication(messagingEvent);
-                } else if (messagingEvent.message) {
-                    receivedMessage(messagingEvent);
-                } else if (messagingEvent.delivery) {
-                    receivedDeliveryConfirmation(messagingEvent);
-                } else if (messagingEvent.postback) {
-                    receivedPostback(messagingEvent);
-                } else if (messagingEvent.read) {
-                    receivedMessageRead(messagingEvent);
-                } else if (messagingEvent.account_linking) {
-                    receivedAccountLink(messagingEvent);
-                } else {
-                    console.log("Webhook received unknown messagingEvent: ", messagingEvent);
-                }
-            });
-        });
+               let senderId = incomingData.sender.id;
+               let message = incomingData.message.text;
 
-        // Assume all went well.
-        // You must send back a 200, within 20 seconds
-        res.sendStatus(200);
-    }
-});
+               console.log(`Incoming message --> ${message}`);
+               console.log(`Incoming sender id --> ${senderId}`);
+
+               let intentData = await GD.detectIntent(message, senderId);
+
+               // Check for Schedule a call
+               if (intentData.intentName === 'User Provides Time') {
+                   let fields = intentData.outputContexts[0].parameters.fields;
+
+                   let date = fields.date.stringValue;
+                   let time = fields.time.stringValue;
+
+                   // Check the event is there or not
+                   let dtc = DT.dateTimeForCalander(date, time);
+                   console.log(dtc);
+                   let dts = DT.dateTimeToString(date, time);
+                   let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Asia/Kolkata');
+
+                   if (eventsLength == 0) {
+                       let event = {
+                           'summary': `Demo appointment.`,
+                           'description': `Sample description.`,
+                           'start': {
+                               'dateTime': dtc.start,
+                               'timeZone': 'Asia/Kolkata'
+                           },
+                           'end': {
+                               'dateTime': dtc.end,
+                               'timeZone': 'Asia/Kolkata'
+                           }
+                       };
+                       await GC.insertEvent(event);
+                       await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                       res.status(200).send('EVENT_RECEIVED');
+                   } else {
+                       await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                       res.status(200).send('EVENT_RECEIVED');
+                   }
+               } else {
+                   await FM.sendMessage(intentData.text, senderId);
+                   res.status(200).send('EVENT_RECEIVED');
+               }
+           }
+       } else {
+           res.sendStatus(404);
+       }
+   });
 
 function setSessionAndUser(senderID) {
     if (!sessionIds.has(senderID)) {
@@ -928,54 +961,6 @@ async function greetUserText(userId) {
     }
 }
 
-async function bookCalendar() {
-  let incomingData = req.body.entry[0].messaging[0];
-
-            let senderId = incomingData.sender.id;
-            let message = incomingData.message.text;
-
-            console.log(`Incoming message --> ${message}`);
-            console.log(`Incoming sender id --> ${senderId}`);
-
- let intentData = await GD.detectIntent(message, senderId);
-
-
-
-
- if (intentData.intentName === 'User Provides Time') {
-                let fields = intentData.outputContexts[0].parameters.fields;
-
-                let date = fields.date.stringValue;
-                let time = fields.time.stringValue;
-
-                // Check the event is there or not
-                let dtc = DT.dateTimeForCalander(date, time);
-                console.log(dtc);
-                let dts = DT.dateTimeToString(date, time);
-                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
-
-                if (eventsLength == 0) {
-                    let event = {
-                        'summary': `Demo appointment.`,
-                        'description': `Sample description.`,
-                        'start': {
-                            'dateTime': dtc.start,
-                            'timeZone': 'Europe/London'
-                        },
-                        'end': {
-                            'dateTime': dtc.end,
-                            'timeZone': 'Europe/London'
-                        }
-                    };
-                    await GC.insertEvent(event);
-                    await sendTextMessage(`Appointment is set on ${dts}`, sender);
-                    res.status(200).send('EVENT_RECEIVED');
-                } else {
-                    await sendTextMessage(`Sorry, we are not available on ${dts}`, sender);
-                    res.status(200).send('EVENT_RECEIVED');
-        }
-      }
-    }
 
 
 
