@@ -968,10 +968,10 @@ async function bookCalendar() {
                         }
                     };
                     await GC.insertEvent(event);
-                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, sender);
+                    await sendTextMessage(`Appointment is set on ${dts}`, sender);
                     res.status(200).send('EVENT_RECEIVED');
                 } else {
-                    await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, sender);
+                    await sendTextMessage(`Sorry, we are not available on ${dts}`, sender);
                     res.status(200).send('EVENT_RECEIVED');
         }
       }
