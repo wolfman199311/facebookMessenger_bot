@@ -966,6 +966,7 @@ async function greetUserText(userId) {
                     res.status(200).send('EVENT_RECEIVED');
         }
       }
+    }
 
 
 
