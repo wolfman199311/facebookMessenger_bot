@@ -394,46 +394,6 @@ function handleMessage(message, sender) {
 }
 
 
-
- async function calendarChatbotEvent(sender, response, date, time){
-
-           // Check for Schedule a call
-
-             const responseText = await sessionClient.detectIntent(' User Privdes Time');
-
-             let field = responseText[0].queryResult;
-               let date1 = fields.date.stringValue;
-               let time1 = fields.time.stringValue;
-
-               // Check the event is there or not
-               let dtc = DT.dateTimeForCalander(date1, time1);
-               console.log(dtc);
-               let dts = DT.dateTimeToString(date1, time1);
-               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
-
-               if (eventsLength == 0) {
-                   let event = {
-                       'summary': `Demo appointment.`,
-                       'description': `Sample description.`,
-                       'start': {
-                           'dateTime': dtc.start,
-                           'timeZone': 'Europe/London'
-                       },
-                       'end': {
-                           'dateTime': dtc.end,
-                           'timeZone': 'Europe/London'
-                       }
-                     }
-                   ;
-                   await GC.insertEvent(event);
-                   await fbService.sendTextMessage(`Appointment is set on ${dts}`, senderID);
-                   res.status(200).send('EVENT_RECEIVED');
-               } else {
-                   await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, senderID);
-                   res.status(200).send('EVENT_RECEIVED');
-                 }};
-
-
 function handleCardMessages(messages, sender) {
 
     let elements = [];
