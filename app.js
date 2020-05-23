@@ -35,6 +35,10 @@ let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxO
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
+const GD = require('./helper-function/google-dialogflow');
+const GC = require('./helper-function/google-calendar');
+const DT = require('./helper-function/date-time-function');
+
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
