@@ -1,7 +1,7 @@
-'use strict';
+
 const {google} = require('googleapis');
 const config = require('../config');
-const structjson = require('../structjson.js');
+
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
