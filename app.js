@@ -160,7 +160,8 @@ app.post('/webhook/', async (req, res) => {
                let incomingData = req.body.entry[0].messaging[0];
 
                let senderId = incomingData.sender.id;
-               let message = incomingData.message.text;
+                setSessionAndUser(senderID);
+               let message = message.text;
 
                console.log(`Incoming message --> ${message}`);
                console.log(`Incoming sender id --> ${senderId}`);
