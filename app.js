@@ -858,7 +858,7 @@ function sendBizNewsSubscribe(userId) {
     fbService.sendQuickReply(userId, responseText, replies);
 }
 
-
+async function makeAppointement()
 // This route is to get the message
 
 
@@ -924,6 +924,56 @@ async function greetUserText(userId) {
     }
 }
 
+ async function bookCalendar(sender, response) {
+    let responseText = response.fulfillmentMessages.fulfillmentText;
+
+    let messages = response.fulfillmentMessages;
+    let action = response.action;
+    let contexts = response.outputContexts;
+    let parameters = response.parameters;
+
+ let intentData = await GD.detectIntent(Messages, sender);
+
+ if (intentData.intentName === 'User Provides Time') {
+                let fields = intentData.outputContexts[0].parameters.fields;
+
+                let date = fields.date.stringValue;
+                let time = fields.time.stringValue;
+
+                // Check the event is there or not
+                let dtc = DT.dateTimeForCalander(date, time);
+                console.log(dtc);
+                let dts = DT.dateTimeToString(date, time);
+                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
+
+                if (eventsLength == 0) {
+                    let event = {
+                        'summary': `Demo appointment.`,
+                        'description': `Sample description.`,
+                        'start': {
+                            'dateTime': dtc.start,
+                            'timeZone': 'Europe/London'
+                        },
+                        'end': {
+                            'dateTime': dtc.end,
+                            'timeZone': 'Europe/London'
+                        }
+                    };
+                    await GC.insertEvent(event);
+                    await fbService.sendTextMessage(`Appointment is set on ${dts}`, sender);
+                    res.status(200).send('EVENT_RECEIVED');
+                } else {
+                    await fbService.sendTextMessage(`Sorry, we are not available on ${dts}`, sender);
+                    res.status(200).send('EVENT_RECEIVED');
+                }
+            } else {
+                await fbService.sendTextMessage(messages, sender);
+                res.status(200).send('EVENT_RECEIVED');
+            }
+        }
+    } else {
+        res.sendStatus(404);
+    }
 
 
 
