@@ -104,15 +104,8 @@ const sessionClient = new dialogflow.SessionsClient(
         credentials
     }
 );
-const calendarId = config.CALENDAR_ID;
-const calendar = google.calendar({version : "v3"});
 
-const auth = new google.auth.JWT(
-    config.GOOGLE_CLIENT_EMAIL,
-    null,
-    config.GOOGLE_PRIVATE_KEY,
-    SCOPES
-);
+
 const sessionIds = new Map();
 const usersMap = new Map();
 // Index route
@@ -1040,24 +1033,20 @@ function receivedAuthentication(event) {
  * https://developers.facebook.com/docs/graph-api/webhooks#setup
  *
  */
-function verifyRequestSignature(req, res, buf) {
-    var signature = req.headers["x-hub-signature"];
-
-    if (!signature) {
-        throw new Error('Couldn\'t validate the signature.');
-    } else {
-        var elements = signature.split('=');
-        var method = elements[0];
-        var signatureHash = elements[1];
-
-        var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
-            .update(buf)
-            .digest('hex');
-
-        if (signatureHash != expectedHash) {
-            throw new Error("Couldn't validate the request signature.");
-        }
-    }
+ function getSignature(buf) {
+  var hmac = crypto.createHmac("sha1", config.FB_APP_SECRET);
+  hmac.update(buf, "utf-8");
+  return "sha1=" + hmac.digest("hex");
+}
+function verifyRequest(req, res, buf, encoding) {
+  var expected = req.headers['x-hub-signature'];
+  var calculated = getSignature(buf);
+  console.log("X-Hub-Signature:", expected, "Content:", "-" + buf.toString('utf8') + "-");
+  if (expected !== calculated) {
+    throw new Error("Invalid signature.");
+  } else {
+    console.log("Valid signature!");
+  }
 }
 
 function isDefined(obj) {
