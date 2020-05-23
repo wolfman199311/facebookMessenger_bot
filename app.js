@@ -928,17 +928,19 @@ async function greetUserText(userId) {
     }
 }
 
- async function bookCalendar() {
-   let incomingData = req.body.entry[0].messaging[0];
+async function bookCalendar() {
+  et incomingData = req.body.entry[0].messaging[0];
 
-           let senderId = incomingData.sender.id;
-           let message = incomingData.message.text;
+            let senderId = incomingData.sender.id;
+            let message = incomingData.message.text;
 
-           console.log(`Incoming message --> ${message}`);
-           console.log(`Incoming sender id --> ${senderId}`);
+            console.log(`Incoming message --> ${message}`);
+            console.log(`Incoming sender id --> ${senderId}`);
+
+ let intentData = await detectIntent(message, senderId);
 
 
- let intentData = await detectIntent(messageText, senderID);
+
 
  if (intentData.intentName === 'User Provides Time') {
                 let fields = intentData.outputContexts[0].parameters.fields;
