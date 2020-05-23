@@ -929,7 +929,7 @@ async function greetUserText(userId) {
 }
 
 async function bookCalendar() {
-  et incomingData = req.body.entry[0].messaging[0];
+  let incomingData = req.body.entry[0].messaging[0];
 
             let senderId = incomingData.sender.id;
             let message = incomingData.message.text;
