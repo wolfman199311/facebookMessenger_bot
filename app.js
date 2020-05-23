@@ -858,7 +858,7 @@ function sendBizNewsSubscribe(userId) {
     fbService.sendQuickReply(userId, responseText, replies);
 }
 
-async function makeAppointement()
+
 // This route is to get the message
 
 
@@ -924,15 +924,14 @@ async function greetUserText(userId) {
     }
 }
 
- async function bookCalendar(sender, response) {
-    let responseText = response.fulfillmentMessages.fulfillmentText;
+ async function bookCalendar(req, res) {
 
-    let messages = response.fulfillmentMessages;
-    let action = response.action;
-    let contexts = response.outputContexts;
-    let parameters = response.parameters;
+   var senderID = event.sender.id;
+   var recipientID = event.recipient.id;
+   var messageText = event.messageText;
 
- let intentData = await GD.detectIntent(Messages, sender);
+
+ let intentData = await GD.detectIntent(messageText, senderID);
 
  if (intentData.intentName === 'User Provides Time') {
                 let fields = intentData.outputContexts[0].parameters.fields;
