@@ -35,6 +35,8 @@ let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxO
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
+
+const FM = require('./helper-function/facebook-messenger');
 const GD = require('./helper-function/google-dialogflow');
 const GC = require('./helper-function/google-calendar');
 const DT = require('./helper-function/date-time-function');
@@ -158,58 +160,57 @@ app.post('/webhook/', async (req, res) => {
                res.sendStatus(200);
            } else {
                let incomingData = req.body.entry[0].messaging[0];
-
                let senderId = incomingData.sender.id;
-          
-               let message = message.text;
+                    let message = incomingData.message.text;
 
-               console.log(`Incoming message --> ${message}`);
-               console.log(`Incoming sender id --> ${senderId}`);
+                           console.log(`Incoming message --> ${message}`);
+                           console.log(`Incoming sender id --> ${senderId}`);
 
-               let intentData = await GD.detectIntent(message, senderId);
+                           let intentData = await GD.detectIntent(message, senderId);
 
-               // Check for Schedule a call
-               if (intentData.intentName === 'User Provides Time') {
-                   let fields = intentData.outputContexts[0].parameters.fields;
+                           // Check for Schedule a call
+                           if (intentData.intentName === 'User Provides Time') {
+                               let fields = intentData.outputContexts[0].parameters.fields;
 
-                   let date = fields.date.stringValue;
-                   let time = fields.time.stringValue;
+                               let date = fields.date.stringValue;
+                               let time = fields.time.stringValue;
 
-                   // Check the event is there or not
-                   let dtc = DT.dateTimeForCalander(date, time);
-                   console.log(dtc);
-                   let dts = DT.dateTimeToString(date, time);
-                   let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
+                               // Check the event is there or not
+                               let dtc = DT.dateTimeForCalander(date, time);
+                               console.log(dtc);
+                               let dts = DT.dateTimeToString(date, time);
+                               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
-                   if (eventsLength == 0) {
-                       let event = {
-                           'summary': `Demo appointment.`,
-                           'description': `Sample description.`,
-                           'start': {
-                               'dateTime': dtc.start,
-                               'timeZone': 'Europe/London'
-                           },
-                           'end': {
-                               'dateTime': dtc.end,
-                               'timeZone': 'Europe/London'
+                               if (eventsLength == 0) {
+                                   let event = {
+                                       'summary': `Demo appointment.`,
+                                       'description': `Sample description.`,
+                                       'start': {
+                                           'dateTime': dtc.start,
+                                           'timeZone': 'Asia/Kolkata'
+                                       },
+                                       'end': {
+                                           'dateTime': dtc.end,
+                                           'timeZone': 'Europe/London'
+                                       }
+                                   };
+                                   await GC.insertEvent(event);
+                                   await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                                   res.status(200).send('EVENT_RECEIVED');
+                               } else {
+                                   await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                                   res.status(200).send('EVENT_RECEIVED');
+                               }
+                           } else {
+                               await FM.sendMessage(intentData.text, senderId);
+                               res.status(200).send('EVENT_RECEIVED');
                            }
-                       };
-                       await GC.insertEvent(event);
-                       await sendTextMessage(`Appointment is set on ${dts}`, senderId);
-                       res.status(200).send('EVENT_RECEIVED');
+                       }
                    } else {
-                       await sendTextMessage(`Sorry, we are not available on ${dts}`, senderId);
-                       res.status(200).send('EVENT_RECEIVED');
+                       res.sendStatus(404);
                    }
-               } else {
-                   await FM.sendMessage(intentData.text, senderId);
-                   res.status(200).send('EVENT_RECEIVED');
-               }
-           }
-       } else {
-           res.sendStatus(404);
-       }
-   });
+               });
+
 
 function setSessionAndUser(senderID) {
     if (!sessionIds.has(senderID)) {
