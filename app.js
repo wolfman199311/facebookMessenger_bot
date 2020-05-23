@@ -937,7 +937,7 @@ async function bookCalendar() {
             console.log(`Incoming message --> ${message}`);
             console.log(`Incoming sender id --> ${senderId}`);
 
- let intentData = await detectIntent(message, senderId);
+ let intentData = await GD.detectIntent(message, senderId);
 
 
 
