@@ -938,7 +938,7 @@ async function greetUserText(userId) {
            console.log(`Incoming sender id --> ${senderId}`);
 
 
- let intentData = await GD.detectIntent(messageText, senderID);
+ let intentData = await detectIntent(messageText, senderID);
 
  if (intentData.intentName === 'User Provides Time') {
                 let fields = intentData.outputContexts[0].parameters.fields;
