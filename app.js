@@ -924,7 +924,7 @@ async function greetUserText(userId) {
     }
 }
 
- async function bookCalendar(req, res) {
+ async function bookCalendar() {
 
    var senderID = event.sender.id;
    var recipientID = event.recipient.id;
