@@ -348,6 +348,8 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
     }
 }
 function handleDialogFlowResponse(sender, response) {
+    console.log(response);
+
     let responseText = response.fulfillmentMessages.fulfillmentText;
     console.log('fulfillmentMessages');
     console.log(responseText);
