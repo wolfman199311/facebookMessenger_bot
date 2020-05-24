@@ -143,9 +143,9 @@ app.get('/webhook/', function (req, res) {
  */
 app.post('/webhook/', async (req, res) => {
 
-    
+
+
     var data = req.body;
-    console.log(JSON.stringify(data));
 
     // Make sure this is a page subscription
     if (data.object == 'page') {
@@ -158,14 +158,14 @@ app.post('/webhook/', async (req, res) => {
         } else if (messagingEvent.hasOwnProperty('postback')) {
             receivedPostback(messagingEvent);
             res.status(200).send('EVENT_RECEIVED');
+
         } else if (messagingEvent.hasOwnProperty('message')) {
             receivedMessage(messagingEvent);
-            res.sendStatus(200);
-        } else {
+            res.status(200).send('EVENT_RECEIVED');
+        }
+        else {
             let incomingData = req.body.entry[0].messaging[0];
             let senderId = incomingData.sender.id;
-            console.log('incomingData');
-            console.log(incomingData);
             let message = incomingData.message.text;
 
             console.log(`Incoming message --> ${message}`);
@@ -231,6 +231,8 @@ function setSessionAndUser(senderID) {
 
 
 function receivedMessage(event) {
+
+    console.log("aaaaa");
 
     var senderID = event.sender.id;
     var recipientID = event.recipient.id;
@@ -347,7 +349,8 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
 }
 function handleDialogFlowResponse(sender, response) {
     let responseText = response.fulfillmentMessages.fulfillmentText;
-
+    console.log('fulfillmentMessages');
+    console.log(responseText);
     let messages = response.fulfillmentMessages;
     let action = response.action;
     let contexts = response.outputContexts;
@@ -370,6 +373,8 @@ function handleDialogFlowResponse(sender, response) {
 async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
+    console.log('textstring');
+    console.log(textString);
 
     try {
         const sessionPath = sessionClient.sessionPath(

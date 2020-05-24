@@ -55,7 +55,6 @@ module.exports = {
                         if (err) throw err;
                         console.log("Successfully saved XLSX file.");
                         const result = await self.saveData.bind(null, tablename, userId);
-                        console.log("Write to bezkoder_postgresql_fs.csv successfully!");
                         var command = '././' + xlsxfilename;
                         var comport = 6;
 
