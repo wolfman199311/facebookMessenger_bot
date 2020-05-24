@@ -232,8 +232,6 @@ function setSessionAndUser(senderID) {
 
 function receivedMessage(event) {
 
-    console.log("aaaaa");
-
     var senderID = event.sender.id;
     var recipientID = event.recipient.id;
     var timeOfMessage = event.timestamp;
@@ -351,8 +349,6 @@ function handleDialogFlowResponse(sender, response) {
     console.log(JSON.stringify(response));
 
     let responseText = response.fulfillmentText;
-    console.log('fulfillmentMessages');
-    console.log(responseText);
     let messages = response.fulfillmentMessages;
     let action = response.action;
     let contexts = response.outputContexts;
@@ -375,9 +371,7 @@ function handleDialogFlowResponse(sender, response) {
 async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
-    console.log('textstring');
-    console.log(textString);
-
+   
     try {
         const sessionPath = sessionClient.sessionPath(
             config.GOOGLE_PROJECT_ID,
@@ -403,7 +397,6 @@ async function sendToDialogFlow(sender, textString, params) {
         const result = responses[0].queryResult;
         handleDialogFlowResponse(sender, result);
     } catch (e) {
-        console.log('error');
         console.log(e);
     }
 
