@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const request = require('request');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
 const TIMEOFFSET = '±00:00';
 
 var app = express();
@@ -27,11 +27,11 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const broadcast = require('./routes/broadcast');
-let one= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
-let two= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
-let three= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
-let four= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
-let five= 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
+let one = 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg';
+let two = 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTM2OTA2NTQ3OTUxNTk4MzA1Mjg';
+let three = 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/NDI0Mjk0NzIwMTg2NjY2MTg4OA';
+let four = 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/OTA3ODk2ODc3NjczMjQ0MjYyNA';
+let five = 'projects/businessgrowthmentor-lgxlwf/knowledgeBases/MTgzMTkyMjkzMTIxODk4NTc3OTI';
 
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
 
@@ -143,75 +143,78 @@ app.get('/webhook/', function (req, res) {
  */
 app.post('/webhook/', async (req, res) => {
 
+    
+    var data = req.body;
+    console.log(JSON.stringify(data));
 
+    // Make sure this is a page subscription
+    if (data.object == 'page') {
 
-     var data = req.body;
+        let messagingEvent = data.entry[0].messaging[0]
 
-       // Make sure this is a page subscription
-       if (data.object == 'page') {
+        if (messagingEvent.hasOwnProperty('delivery')) {
+            receivedDeliveryConfirmation(messagingEvent);
+            res.sendStatus(200);
+        } else if (messagingEvent.hasOwnProperty('postback')) {
+            receivedPostback(messagingEvent);
+            res.status(200).send('EVENT_RECEIVED');
+        } else if (messagingEvent.hasOwnProperty('message')) {
+            receivedMessage(messagingEvent);
+            res.sendStatus(200);
+        } else {
+            let incomingData = req.body.entry[0].messaging[0];
+            let senderId = incomingData.sender.id;
+            console.log('incomingData');
+            console.log(incomingData);
+            let message = incomingData.message.text;
 
-           let messagingEvent = data.entry[0].messaging[0]
+            console.log(`Incoming message --> ${message}`);
+            console.log(`Incoming sender id --> ${senderId}`);
 
-           if (messagingEvent.hasOwnProperty('delivery')) {
-               receivedDeliveryConfirmation(messagingEvent);
-               res.sendStatus(200);
-           } else if (messagingEvent.hasOwnProperty('postback')) {
-               receivedPostback(messagingEvent);
-             } else if (messagingEvent.hasOwnProperty('message')) {
-                   receivedMessage(messagingEvent);
-               res.sendStatus(200);
-           } else {
-               let incomingData = req.body.entry[0].messaging[0];
-               let senderId = incomingData.sender.id;
-                    let message = incomingData.message.text;
+            let intentData = await GD.detectIntent(message, senderId);
 
-                           console.log(`Incoming message --> ${message}`);
-                           console.log(`Incoming sender id --> ${senderId}`);
+            // Check for Schedule a call
+            if (intentData.intentName === 'User Provides Time') {
+                let fields = intentData.outputContexts[0].parameters.fields;
 
-                           let intentData = await GD.detectIntent(message, senderId);
+                let date = fields.date.stringValue;
+                let time = fields.time.stringValue;
 
-                           // Check for Schedule a call
-                           if (intentData.intentName === 'User Provides Time') {
-                               let fields = intentData.outputContexts[0].parameters.fields;
+                // Check the event is there or not
+                let dtc = DT.dateTimeForCalander(date, time);
+                console.log(dtc);
+                let dts = DT.dateTimeToString(date, time);
+                let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
 
-                               let date = fields.date.stringValue;
-                               let time = fields.time.stringValue;
-
-                               // Check the event is there or not
-                               let dtc = DT.dateTimeForCalander(date, time);
-                               console.log(dtc);
-                               let dts = DT.dateTimeToString(date, time);
-                               let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/London');
-
-                               if (eventsLength == 0) {
-                                   let event = {
-                                       'summary': `Demo appointment.`,
-                                       'description': `Sample description.`,
-                                       'start': {
-                                           'dateTime': dtc.start,
-                                           'timeZone': 'Asia/Kolkata'
-                                       },
-                                       'end': {
-                                           'dateTime': dtc.end,
-                                           'timeZone': 'Europe/London'
-                                       }
-                                   };
-                                   await GC.insertEvent(event);
-                                   await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
-                                   res.status(200).send('EVENT_RECEIVED');
-                               } else {
-                                   await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-                                   res.status(200).send('EVENT_RECEIVED');
-                               }
-                           } else {
-                               await FM.sendMessage(intentData.text, senderId);
-                               res.status(200).send('EVENT_RECEIVED');
-                           }
-                       }
-                   } else {
-                       res.sendStatus(404);
-                   }
-               });
+                if (eventsLength == 0) {
+                    let event = {
+                        'summary': `Demo appointment.`,
+                        'description': `Sample description.`,
+                        'start': {
+                            'dateTime': dtc.start,
+                            'timeZone': 'Asia/Kolkata'
+                        },
+                        'end': {
+                            'dateTime': dtc.end,
+                            'timeZone': 'Europe/London'
+                        }
+                    };
+                    await GC.insertEvent(event);
+                    await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+                    res.status(200).send('EVENT_RECEIVED');
+                } else {
+                    await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
+                    res.status(200).send('EVENT_RECEIVED');
+                }
+            } else {
+                await FM.sendMessage(intentData.text, senderId);
+                res.status(200).send('EVENT_RECEIVED');
+            }
+        }
+    } else {
+        res.sendStatus(404);
+    }
+});
 
 
 function setSessionAndUser(senderID) {
@@ -467,25 +470,25 @@ function handleCardMessages(messages, sender) {
 
 function handleMessages(messages, sender) {
     let timeoutInterval = 1100;
-    let previousType ;
+    let previousType;
     let cardTypes = [];
     let timeout = 0;
     for (var i = 0; i < messages.length; i++) {
 
-        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+        if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-        } else if ( messages[i].message == "card" && i == messages.length - 1) {
+        } else if (messages[i].message == "card" && i == messages.length - 1) {
             cardTypes.push(messages[i]);
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
-        } else if ( messages[i].message == "card") {
+        } else if (messages[i].message == "card") {
             cardTypes.push(messages[i]);
-        } else  {
+        } else {
 
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
@@ -500,47 +503,47 @@ function handleMessages(messages, sender) {
 
 
 async function detectIntentKnowledge(
-  projectId,
-  sessionId,
-  languageCode,
-  knowledgeBaseId,
-  query
+    projectId,
+    sessionId,
+    languageCode,
+    knowledgeBaseId,
+    query
 ) {
-const sessionPath = sessionClient.projectAgentSessionPath(
-  projectId,
-  sessionId
-);
+    const sessionPath = sessionClient.projectAgentSessionPath(
+        projectId,
+        sessionId
+    );
 
 
-// The audio query request
-const request1 = {
-  session: sessionPath,
-  queryInput: {
-    text: {
-      text: query,
-      languageCode: languageCode,
-    },
-  },
-  queryParams: {
-    knowledgeBaseNames: [one, two, three, four, five],
-  },
-};
+    // The audio query request
+    const request1 = {
+        session: sessionPath,
+        queryInput: {
+            text: {
+                text: query,
+                languageCode: languageCode,
+            },
+        },
+        queryParams: {
+            knowledgeBaseNames: [one, two, three, four, five],
+        },
+    };
 
-const responses = await sessionClient.detectIntent(request1);
-const result = responses[0].queryResult;
-console.log(`Query text: ${result.queryText}`);
-console.log(`Detected Intent: ${result.intent.displayName}`);
-console.log(`Confidence: ${result.intentDetectionConfidence}`);
-console.log(`Query Result: ${result.fulfillmentText}`);
-if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-  const answers = result.knowledgeAnswers.answers;
-  console.log(`There are ${answers.length} answer(s);`);
-  answers.forEach(a => {
-    console.log(`   answer: ${a.answer}`);
-    console.log(`   confidence: ${a.matchConfidence}`);
-    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-  });
-}
+    const responses = await sessionClient.detectIntent(request1);
+    const result = responses[0].queryResult;
+    console.log(`Query text: ${result.queryText}`);
+    console.log(`Detected Intent: ${result.intent.displayName}`);
+    console.log(`Confidence: ${result.intentDetectionConfidence}`);
+    console.log(`Query Result: ${result.fulfillmentText}`);
+    if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+        const answers = result.knowledgeAnswers.answers;
+        console.log(`There are ${answers.length} answer(s);`);
+        answers.forEach(a => {
+            console.log(`   answer: ${a.answer}`);
+            console.log(`   confidence: ${a.matchConfidence}`);
+            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
+        });
+    }
 }
 
 
