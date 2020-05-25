@@ -399,12 +399,11 @@ async function sendToDialogFlow(sender, textString, params) {
             const answers = result.knowledgeAnswers.answers;
           } else {
         handleDialogFlowResponse(sender, result);
-    } catch (e) {
-        console.log(e);
-    }
+  }
+}
+};
 
-}
-}
+
 
 function handleMessage(message, sender) {
     switch (message.message) {
