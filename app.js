@@ -372,9 +372,13 @@ async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
 
-    let sessionPath = sessionClient.sessionPath(projectId, sessionId);
+    try {
+            const sessionPath = sessionClient.sessionPath(
+                config.GOOGLE_PROJECT_ID,
+                sessionIds.get(sender)
+            );
 
-    let request = {
+    const request = {
         session: sessionPath,
         queryInput: {
             text: {
@@ -388,9 +392,9 @@ async function sendToDialogFlow(sender, textString, params) {
     };
 
     try {
-        let responses = await sessionClient.detectIntent(request);
-        let result = responses[0].queryResult;
-        let intentName = result.intent.displayName;
+        const responses = await sessionClient.detectIntent(request);
+        const result = responses[0].queryResult;
+        const intentName = result.intent.displayName;
         if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
             let answers = result.knowledgeAnswers.answers;
             return {
@@ -400,7 +404,7 @@ async function sendToDialogFlow(sender, textString, params) {
         } else {
             return {
                 status: 200,
-                text: result.fulfillmentMessages[0].text.text[0],
+                text: result.fulfillmentMessages[0].fulfillmentText[0],
                 intentName: intentName,
                 outputContexts: outputContexts
             }
