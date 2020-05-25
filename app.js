@@ -406,6 +406,7 @@ async function sendToDialogFlow(sender, textString, params) {
             });
         }
     }
+  }
     } catch (e) {
         console.log(e);
     }
