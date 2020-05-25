@@ -371,7 +371,7 @@ function handleDialogFlowResponse(sender, response) {
 async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
-   
+
     try {
         const sessionPath = sessionClient.sessionPath(
             config.GOOGLE_PROJECT_ID,
@@ -392,14 +392,17 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient.detectIntent(request);
-
-        const result = responses[0].queryResult;
-        handleDialogFlowResponse(sender, result);
-    } catch (e) {
-        console.log(e);
-    }
-
+        // Send request and log result
+  const responses = await sessionClient.detectIntent(request);
+  console.log('Detected intent');
+  const result = responses[0].queryResult;
+  console.log(`  Query: ${result.queryText}`);
+  console.log(`  Response: ${result.fulfillmentText}`);
+  if (result.intent) {
+    console.log(`  Intent: ${result.intent.displayName}`);
+  } else {
+    console.log(`  No intent matched.`);
+  }
 }
 
 function handleMessage(message, sender) {
