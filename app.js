@@ -410,7 +410,7 @@ async function sendToDialogFlow(sender, textString, params) {
             });
         }
       }
-    }
+    };
 function handleMessage(message, sender) {
     switch (message.message) {
         case "text": //text
