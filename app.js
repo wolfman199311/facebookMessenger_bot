@@ -372,36 +372,45 @@ async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
 
-    try {
-        const sessionPath = sessionClient.sessionPath(
-            config.GOOGLE_PROJECT_ID,
-            sessionIds.get(sender)
-        );
+    let sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
-        const request = {
-            session: sessionPath,
-            queryInput: {
-                text: {
-                    text: textString,
-                    languageCode: config.DF_LANGUAGE_CODE,
-                },
-            },
-            queryParams: {
-                payload: {
-                      knowledgeBaseNames: [one, two, three, four, five]
-                }
+    let request = {
+        session: sessionPath,
+        queryInput: {
+            text: {
+                text: queryText,
+                languageCode: 'en-US',
             }
-        };
-        const responses = await sessionClient.detectIntent(request);
+        },
+        queryParams: {
+            knowledgeBaseNames: [one, two, three, four, five]
+        }
+    };
 
-        const result = responses[0].queryResult;
+    try {
+        let responses = await sessionClient.detectIntent(request);
+        let result = responses[0].queryResult;
+        let intentName = result.intent.displayName;
         if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-            const answers = result.knowledgeAnswers.answers;
-          } else {
-        handleDialogFlowResponse(sender, result);
-  }
+            let answers = result.knowledgeAnswers.answers;
+            return {
+                status: 200,
+                text: answers[0].answer
+            }
+        } else {
+            return {
+                status: 200,
+                text: result.fulfillmentMessages[0].text.text[0],
+                intentName: intentName,
+                outputContexts: outputContexts
+            }
+        }
+    } catch (error) {
+        return {
+            status: 401
+        };
+    }
 };
-}
 
 
 
@@ -505,50 +514,6 @@ function handleMessages(messages, sender) {
 
 
 
-
-async function detectIntentKnowledge(
-    projectId,
-    sessionId,
-    languageCode,
-    knowledgeBaseId,
-    query
-) {
-    const sessionPath = sessionClient.projectAgentSessionPath(
-        projectId,
-        sessionId
-    );
-
-
-    // The audio query request
-    const request1 = {
-        session: sessionPath,
-        queryInput: {
-            text: {
-                text: query,
-                languageCode: languageCode,
-            },
-        },
-        queryParams: {
-            knowledgeBaseNames: [one, two, three, four, five],
-        },
-    };
-
-    const responses = await sessionClient.detectIntent(request1);
-    const result = responses[0].queryResult;
-    console.log(`Query text: ${result.queryText}`);
-    console.log(`Detected Intent: ${result.intent.displayName}`);
-    console.log(`Confidence: ${result.intentDetectionConfidence}`);
-    console.log(`Query Result: ${result.fulfillmentText}`);
-    if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-        const answers = result.knowledgeAnswers.answers;
-        console.log(`There are ${answers.length} answer(s);`);
-        answers.forEach(a => {
-            console.log(`   answer: ${a.answer}`);
-            console.log(`   confidence: ${a.matchConfidence}`);
-            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-        });
-    }
-}
 
 
 
