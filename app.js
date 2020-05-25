@@ -416,7 +416,9 @@ async function sendToDialogFlow(sender, textString, params) {
                 status: 401
             };
         }
+      }
     };
+
 function handleMessage(message, sender) {
     switch (message.message) {
         case "text": //text
