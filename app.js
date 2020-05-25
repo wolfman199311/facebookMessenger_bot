@@ -397,8 +397,6 @@ async function sendToDialogFlow(sender, textString, params) {
         try {
             let responses = await sessionClient.detectIntent(request);
             let result = responses[0].queryResult;
-            let outputContexts = result.outputContexts;
-            let intentName = result.intent.displayName;
             if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
                 let answers = result.knowledgeAnswers.answers;
                 return {
