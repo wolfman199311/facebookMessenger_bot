@@ -388,7 +388,7 @@ async function sendToDialogFlow(sender, textString, params) {
             },
             queryParams: {
                 payload: {
-                    data: params
+                      knowledgeBaseNames: [one, two, three, four, five]
                 }
             }
         };
@@ -401,7 +401,8 @@ async function sendToDialogFlow(sender, textString, params) {
         handleDialogFlowResponse(sender, result);
   }
 }
-};
+}
+
 
 
 
