@@ -406,7 +406,7 @@ async function sendToDialogFlow(sender, textString, params) {
             } else {
                 return {
                     status: 200,
-                    text: result.fulfillmentMessages[0].text.text[0],
+                    text: result.fulfillmentMessages[0].fulfillmentText[0],
                     intentName: intentName,
                     outputContexts: outputContexts
                 }
