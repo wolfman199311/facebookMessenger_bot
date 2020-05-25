@@ -407,11 +407,11 @@ async function sendToDialogFlow(sender, textString, params) {
         }
     }
   }
-    } catch (e) {
+     catch (e) {
         console.log(e);
     }
 
-}
+
 
 function handleMessage(message, sender) {
     switch (message.message) {
