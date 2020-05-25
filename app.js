@@ -410,6 +410,7 @@ async function sendToDialogFlow(sender, textString, params) {
             });
         }
       }
+    }
 function handleMessage(message, sender) {
     switch (message.message) {
         case "text": //text
@@ -552,7 +553,7 @@ function handleMessages(messages, sender) {
         //    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
       //  });
     //}
-//} 
+//}
 
 
 
