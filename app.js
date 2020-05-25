@@ -348,7 +348,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
 function handleDialogFlowResponse(sender, response) {
     console.log(JSON.stringify(response));
 
-    let responseText = response.fulfillmentText.fulfillmentText;
+    let responseText = response.fulfillmentText;
     let messages = response.fulfillmentMessages;
     let action = response.action;
     let contexts = response.outputContexts;
@@ -388,36 +388,19 @@ async function sendToDialogFlow(sender, textString, params) {
             },
             queryParams: {
                 payload: {
-                    knowledgeBaseNames: [one, two, three, four, five],
+                    data: params
                 }
             }
         };
+        const responses = await sessionClient.detectIntent(request);
 
+        const result = responses[0].queryResult;
+        handleDialogFlowResponse(sender, result);
+    } catch (e) {
+        console.log(e);
+    }
 
-        try {
-            let responses = await sessionClient.detectIntent(request);
-            let result = responses[0].queryResult;
-            if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-                let answers = result.knowledgeAnswers.answers;
-                return {
-                    status: 200,
-                    text: answers[0].answer
-                }
-            } else {
-                return {
-                    status: 200,
-                    text: result.fulfillmentMessages[0].fulfillmentText[0],
-                    intentName: intentName,
-                    outputContexts: outputContexts
-                }
-            }
-        } catch (error) {
-            return {
-                status: 401
-            };
-        }
-      }
-    };
+}
 
 function handleMessage(message, sender) {
     switch (message.message) {
@@ -519,49 +502,49 @@ function handleMessages(messages, sender) {
 
 
 
-//async function detectIntentKnowledge(
-  //  projectId,
-  //  sessionId,
-  //  languageCode,
-  //  knowledgeBaseId,
-  //  query
-//) {
-  //  const sessionPath = sessionClient.projectAgentSessionPath(
-  //      projectId,
-    //    sessionId
-//    );
+async function detectIntentKnowledge(
+    projectId,
+    sessionId,
+    languageCode,
+    knowledgeBaseId,
+    query
+) {
+    const sessionPath = sessionClient.projectAgentSessionPath(
+        projectId,
+        sessionId
+    );
 
 
     // The audio query request
-  //  const request1 = {
-      //  session: sessionPath,
-      //  queryInput: {
-        //    text: {
-              //  text: query,
-            //   languageCode: languageCode,
-          //  },
-      //  },
-      //  queryParams: {
-          //  knowledgeBaseNames: [one, two, three, four, five],
-      //  },
-  //  };
+    const request1 = {
+        session: sessionPath,
+        queryInput: {
+            text: {
+                text: query,
+                languageCode: languageCode,
+            },
+        },
+        queryParams: {
+            knowledgeBaseNames: [one, two, three, four, five],
+        },
+    };
 
-  //  const responses = await sessionClient.detectIntent(request1);
-  //  const result = responses[0].queryResult;
-  //  console.log(`Query text: ${result.queryText}`);
-  //  console.log(`Detected Intent: ${result.intent.displayName}`);
-  //  console.log(`Confidence: ${result.intentDetectionConfidence}`);
-  //  console.log(`Query Result: ${result.fulfillmentText}`);
-  //  if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-    //    const answers = result.knowledgeAnswers.answers;
-      //  console.log(`There are ${answers.length} answer(s);`);
-      //  answers.forEach(a => {
-        //    console.log(`   answer: ${a.answer}`);
-        //    console.log(`   confidence: ${a.matchConfidence}`);
-        //    console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-      //  });
-    //}
-//}
+    const responses = await sessionClient.detectIntent(request1);
+    const result = responses[0].queryResult;
+    console.log(`Query text: ${result.queryText}`);
+    console.log(`Detected Intent: ${result.intent.displayName}`);
+    console.log(`Confidence: ${result.intentDetectionConfidence}`);
+    console.log(`Query Result: ${result.fulfillmentText}`);
+    if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+        const answers = result.knowledgeAnswers.answers;
+        console.log(`There are ${answers.length} answer(s);`);
+        answers.forEach(a => {
+            console.log(`   answer: ${a.answer}`);
+            console.log(`   confidence: ${a.matchConfidence}`);
+            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
+        });
+    }
+}
 
 
 
