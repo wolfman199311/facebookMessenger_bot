@@ -348,7 +348,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
 function handleDialogFlowResponse(sender, response) {
     console.log(JSON.stringify(response));
 
-    let responseText = response.fulfillmentMessages;
+    let responseText = response.fulfillmentText;
     let messages = response.fulfillmentMessages;
     let action = response.action;
     let contexts = response.outputContexts;
