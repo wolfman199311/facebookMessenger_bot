@@ -404,6 +404,8 @@ async function sendToDialogFlow(sender, textString, params) {
     console.log(`  No intent matched.`);
   }
 }
+}
+
 
 function handleMessage(message, sender) {
     switch (message.message) {
