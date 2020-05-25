@@ -395,11 +395,15 @@ async function sendToDialogFlow(sender, textString, params) {
         const responses = await sessionClient.detectIntent(request);
 
         const result = responses[0].queryResult;
+        if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+            const answers = result.knowledgeAnswers.answers;
+          } else {
         handleDialogFlowResponse(sender, result);
     } catch (e) {
         console.log(e);
     }
 
+}
 }
 
 function handleMessage(message, sender) {
