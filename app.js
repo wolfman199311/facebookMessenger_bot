@@ -400,7 +400,7 @@ async function sendToDialogFlow(sender, textString, params) {
           } else {
         handleDialogFlowResponse(sender, result);
   }
-}
+};
 }
 
 
