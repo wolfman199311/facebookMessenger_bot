@@ -392,24 +392,32 @@ async function sendToDialogFlow(sender, textString, params) {
                 }
             }
         };
-        const responses = await sessionClient.detectIntent(request);
 
 
-        const result = responses[0].queryResult;
-        console.log(`Query text: ${result.queryText}`);
-        console.log(`Detected Intent: ${result.intent.displayName}`);
-        console.log(`Confidence: ${result.intentDetectionConfidence}`);
-        console.log(`Query Result: ${result.fulfillmentText}`);
-        if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-            const answers = result.knowledgeAnswers.answers;
-            console.log(`There are ${answers.length} answer(s);`);
-            answers.forEach(a => {
-                console.log(`   answer: ${a.answer}`);
-                console.log(`   confidence: ${a.matchConfidence}`);
-                console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-            });
+        try {
+            let responses = await sessionClient.detectIntent(request);
+            let result = responses[0].queryResult;
+            let outputContexts = result.outputContexts;
+            let intentName = result.intent.displayName;
+            if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
+                let answers = result.knowledgeAnswers.answers;
+                return {
+                    status: 200,
+                    text: answers[0].answer
+                }
+            } else {
+                return {
+                    status: 200,
+                    text: result.fulfillmentMessages[0].text.text[0],
+                    intentName: intentName,
+                    outputContexts: outputContexts
+                }
+            }
+        } catch (error) {
+            return {
+                status: 401
+            };
         }
-      }
     };
 function handleMessage(message, sender) {
     switch (message.message) {
