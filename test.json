@@ -231,3 +231,79 @@ time one of their ads is clicked. Search engine advertising is the most popular 
     ]
   }
 }
+
+
+
+
+
+{
+  "fulfillmentMessages": [
+    {
+      "platform": "FACEBOOK",
+      "text": {
+        "text": [
+          "Okay, Please provide a day to schedule the call."
+        ]
+      },
+      "message": "text"
+    },
+    {
+      "platform": "PLATFORM_UNSPECIFIED",
+      "text": {
+        "text": [
+          ""
+        ]
+      },
+      "message": "text"
+    }
+  ],
+  "outputContexts": [
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/93802710-a1ea-11ea-8cb7-a5a997184456/contexts/await-call-day",
+      "lifespanCount": 5,
+      "parameters": null
+    },
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/93802710-a1ea-11ea-8cb7-a5a997184456/contexts/call-vars",
+      "lifespanCount": 10,
+      "parameters": null
+    }
+  ],
+  "queryText": "Book an appointment",
+  "speechRecognitionConfidence": 0,
+  "action": "schedulecall",
+  "parameters": {
+    "fields": {}
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "",
+  "webhookSource": "",
+  "webhookPayload": null,
+  "intent": {
+    "inputContextNames": [],
+    "events": [],
+    "trainingPhrases": [],
+    "outputContexts": [],
+    "parameters": [],
+    "messages": [],
+    "defaultResponsePlatforms": [],
+    "followupIntentInfo": [],
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9c18d456-476c-4dff-b612-f7242b61574c",
+    "displayName": "Schedule-a-call",
+    "priority": 0,
+    "isFallback": false,
+    "mlEnabled": false,
+    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+    "action": "",
+    "resetContexts": false,
+    "rootFollowupIntentName": "",
+    "parentFollowupIntentName": "",
+    "mlDisabled": false,
+    "endInteraction": false
+  },
+  "intentDetectionConfidence": 1,
+  "diagnosticInfo": null,
+  "languageCode": "en",
+  "sentimentAnalysisResult": null,
+  "knowledgeAnswers": null
+}
