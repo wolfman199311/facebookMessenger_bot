@@ -164,7 +164,7 @@ app.post('/webhook/', async (req, res) => {
             res.status(200).send('EVENT_RECEIVED');
         }
         else {
-        } else {
+      
           let incomingData = req.body.entry[0].messaging[0];
 
           let senderId = incomingData.sender.id;
