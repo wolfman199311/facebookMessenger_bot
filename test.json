@@ -1,19 +1,79 @@
 {
   "fulfillmentMessages": [
     {
-      "platform": "FACEBOOK",
+      "platform": "PLATFORM_UNSPECIFIED",
       "text": {
         "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
+          "I missed what you said. What was that?"
         ]
       },
       "message": "text"
-    },
+    }
+  ],
+  "outputContexts": [
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/2b124ce0-a1df-11ea-b9a3-81669a4b387a/contexts/__system_counters__",
+      "lifespanCount": 1,
+      "parameters": {
+        "fields": {
+          "no-input": {
+            "numberValue": 0,
+            "kind": "numberValue"
+          },
+          "no-match": {
+            "numberValue": 1,
+            "kind": "numberValue"
+          }
+        }
+      }
+    }
+  ],
+  "queryText": "kuguyfg",
+  "speechRecognitionConfidence": 0,
+  "action": "input.unknown",
+  "parameters": {
+    "fields": {}
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "I missed what you said. What was that?",
+  "webhookSource": "",
+  "webhookPayload": null,
+  "intent": {
+    "inputContextNames": [],
+    "events": [],
+    "trainingPhrases": [],
+    "outputContexts": [],
+    "parameters": [],
+    "messages": [],
+    "defaultResponsePlatforms": [],
+    "followupIntentInfo": [],
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/e66d1c82-3774-47d1-900e-972b706f0f74",
+    "displayName": "Default Fallback Intent",
+    "priority": 0,
+    "isFallback": true,
+    "mlEnabled": false,
+    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+    "action": "",
+    "resetContexts": false,
+    "rootFollowupIntentName": "",
+    "parentFollowupIntentName": "",
+    "mlDisabled": false,
+    "endInteraction": false
+  },
+  "intentDetectionConfidence": 1,
+  "diagnosticInfo": null,
+  "languageCode": "en",
+  "sentimentAnalysisResult": null,
+  "knowledgeAnswers": null
+}
+
+{
+  "fulfillmentMessages": [
     {
       "platform": "FACEBOOK",
       "text": {
         "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
+          "Hey! Please choose an option from the menu to get started"
         ]
       },
       "message": "text"
@@ -22,34 +82,34 @@
       "platform": "PLATFORM_UNSPECIFIED",
       "text": {
         "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
+          "Hey! Please choose an option from the menu to get started"
         ]
       },
       "message": "text"
     }
   ],
   "outputContexts": [],
-  "queryText": "ppc",
+  "queryText": "hello",
   "speechRecognitionConfidence": 0,
-  "action": "",
+  "action": "input.welcome",
   "parameters": {
     "fields": {}
   },
   "allRequiredParamsPresent": true,
-  "fulfillmentText": "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)",
+  "fulfillmentText": "Hey! Please choose an option from the menu to get started",
   "webhookSource": "",
   "webhookPayload": null,
   "intent": {
-    "inputContextNames": '[]',
+    "inputContextNames": [],
     "events": [],
-    "trainingPhrases": '[]',
-    "outputContexts": '[]',
+    "trainingPhrases": [],
+    "outputContexts": [],
     "parameters": [],
     "messages": [],
     "defaultResponsePlatforms": [],
     "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/15177056-6eac-4f22-9109-a1668d4527bb",
-    "displayName": "Knowledge.KnowledgeBase.ODcyNjU2MjEwNTg5MDcwMTMxMg",
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/1520bcfe-4bda-4e08-84ea-7229709cb8f2",
+    "displayName": "Default Welcome Intent",
     "priority": 0,
     "isFallback": false,
     "mlEnabled": false,
@@ -61,26 +121,16 @@
     "mlDisabled": false,
     "endInteraction": false
   },
-  "intentDetectionConfidence": 0.6885653734207153,
+  "intentDetectionConfidence": 1,
   "diagnosticInfo": {
     "fields": {
       "webhook_latency_ms": {
-        "numberValue": 92,
+        "numberValue": 3026,
         "kind": "numberValue"
       }
     }
   },
   "languageCode": "en",
   "sentimentAnalysisResult": null,
-  "knowledgeAnswers": {
-    "answers": [
-      {
-        "source": "projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg/documents/MTUyMzMwMzY1MTI0NjQ0NzAwMTY",
-        "faqQuestion": "What is PPC?",
-        "answer": "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)",
-        "matchConfidenceLevel": "MEDIUM",
-        "matchConfidence": 0.6885653734207153
-      }
-    ]
-  }
+  "knowledgeAnswers": null
 }
