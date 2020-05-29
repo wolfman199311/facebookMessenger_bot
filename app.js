@@ -164,7 +164,7 @@ app.post('/webhook/', async (req, res) => {
             res.status(200).send('EVENT_RECEIVED');
         }
         else {
-      
+
           let incomingData = req.body.entry[0].messaging[0];
 
           let senderId = incomingData.sender.id;
@@ -425,96 +425,94 @@ function handleCardMessages(messages, sender) {
 
 
 function handleMessages(messages, sender) {
-  let timeoutInterval = 1100;
-  let previousType;
-  let cardTypes = [];
-  let timeout = 0;
-  for (var i = 0; i < messages.length; i++) {
+    let timeoutInterval = 1100;
+    let previousType ;
+    let cardTypes = [];
+    let timeout = 0;
+    for (var i = 0; i < messages.length; i++) {
 
-      if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
-          timeout = (i - 1) * timeoutInterval;
-          setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
-          cardTypes = [];
-          timeout = i * timeoutInterval;
-          setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-      } else if (messages[i].message == "card" && i == messages.length - 1) {
-          cardTypes.push(messages[i]);
-          timeout = (i - 1) * timeoutInterval;
-          setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
-          cardTypes = [];
-      } else if (messages[i].message == "card") {
-          cardTypes.push(messages[i]);
-      } else {
+        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+            timeout = (i - 1) * timeoutInterval;
+            setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
+            cardTypes = [];
+            timeout = i * timeoutInterval;
+            setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
+        } else if ( messages[i].message == "card" && i == messages.length - 1) {
+            cardTypes.push(messages[i]);
+            timeout = (i - 1) * timeoutInterval;
+            setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
+            cardTypes = [];
+        } else if ( messages[i].message == "card") {
+            cardTypes.push(messages[i]);
+        } else  {
 
-          timeout = i * timeoutInterval;
-          setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-      }
+            timeout = i * timeoutInterval;
+            setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
+        }
 
-      previousType = messages[i].message;
+        previousType = messages[i].message;
 
-  }
+    }
 }
 
 function handleDialogFlowResponse(sender, response) {
-  let responseText = response.fulfillmentMessages.fulfillmentText;
+    let responseText = response.fulfillmentMessages.fulfillmentText;
 
-  let messages = response.fulfillmentMessages;
-  let action = response.action;
-  let contexts = response.outputContexts;
-  let parameters = response.parameters;
+    let messages = response.fulfillmentMessages;
+    let action = response.action;
+    let contexts = response.outputContexts;
+    let parameters = response.parameters;
 
-  sendTypingOff(sender);
+    sendTypingOff(sender);
 
-  if (isDefined(action) && !action.includes('unknown')) {
-      console.log("response Action");
-      handleDialogFlowAction(sender, action, messages, contexts, parameters);
-  } else if (isDefined(messages)) {
-      console.log("response Message");
-      handleMessages(messages, sender);
-  } else if (responseText == '' && !isDefined(action)) {
-      //dialogflow could not evaluate input.
-      console.log("response Default");
-      sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
-  } else if (isDefined(responseText)) {
-      console.log("response Text");
-      sendTextMessage(sender, responseText);
-  }
+    if (isDefined(action)) {
+        handleDialogFlowAction(sender, action, messages, contexts, parameters);
+    } else if (isDefined(messages)) {
+        handleMessages(messages, sender);
+    } else if (responseText == '' && !isDefined(action)) {
+        //dialogflow could not evaluate input.
+        sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
+    } else if (isDefined(responseText)) {
+        sendTextMessage(sender, responseText);
+    }
 }
 
 async function sendToDialogFlow(sender, textString, params) {
 
-  sendTypingOn(sender);
+    sendTypingOn(sender);
 
-  try {
-      const sessionPath = sessionClient.sessionPath(
-          config.GOOGLE_PROJECT_ID,
-          sessionIds.get(sender)
-      );
+    try {
+        const sessionPath = sessionClient.sessionPath(
+            config.GOOGLE_PROJECT_ID,
+            sessionIds.get(sender)
+        );
 
-      const request = {
-          session: sessionPath,
-          queryInput: {
-              text: {
-                  text: textString,
-                  languageCode: config.DF_LANGUAGE_CODE,
-              },
-          },
-          queryParams: {
-              payload: {
-                  data: params
-              }
-          }
-      };
-      const responses = await sessionClient.detectIntent(request);
+        const request = {
+            session: sessionPath,
+            queryInput: {
+                text: {
+                    text: textString,
+                    languageCode: config.DF_LANGUAGE_CODE,
+                },
+            },
+            queryParams: {
+                payload: {
+                    data: params
+                }
+            }
+        };
+        const responses = await sessionClient.detectIntent(request);
 
-      const result = responses[0].queryResult;
-      handleDialogFlowResponse(sender, result);
-  } catch (e) {
-      console.log('error');
-      console.log(e);
-  }
+        const result = responses[0].queryResult;
+        handleDialogFlowResponse(sender, result);
+    } catch (e) {
+        console.log('error');
+        console.log(e);
+    }
 
 }
+
+
 
 async function detectIntentKnowledge(
   projectId,
