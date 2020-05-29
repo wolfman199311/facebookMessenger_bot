@@ -307,3 +307,126 @@ time one of their ads is clicked. Search engine advertising is the most popular 
   "sentimentAnalysisResult": null,
   "knowledgeAnswers": null
 }
+
+
+
+{
+  "fulfillmentMessages": [
+    {
+      "platform": "PLATFORM_UNSPECIFIED",
+      "text": {
+        "text": [
+          ""
+        ]
+      },
+      "message": "text"
+    }
+  ],
+  "outputContexts": [],
+  "queryText": "unsubscribe",
+  "speechRecognitionConfidence": 0,
+  "action": "unsubscribe",
+  "parameters": {
+    "fields": {}
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "",
+  "webhookSource": "",
+  "webhookPayload": null,
+  "intent": {
+    "inputContextNames": [],
+    "events": [],
+    "trainingPhrases": [],
+    "outputContexts": [],
+    "parameters": [],
+    "messages": [],
+    "defaultResponsePlatforms": [],
+    "followupIntentInfo": [],
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/a272fd48-8f7a-46f5-9a7e-f716f85ef474",
+    "displayName": "unsubscribe-newsletter",
+    "priority": 0,
+    "isFallback": false,
+    "mlEnabled": false,
+    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+    "action": "",
+    "resetContexts": false,
+    "rootFollowupIntentName": "",
+    "parentFollowupIntentName": "",
+    "mlDisabled": false,
+    "endInteraction": false
+  },
+  "intentDetectionConfidence": 1,
+  "diagnosticInfo": {
+    "fields": {
+      "webhook_latency_ms": {
+        "numberValue": 2411,
+        "kind": "numberValue"
+      }
+    }
+  },
+  "languageCode": "en",
+  "sentimentAnalysisResult": null,
+  "knowledgeAnswers": null
+}
+
+
+
+
+{
+  "fulfillmentMessages": [
+    {
+      "platform": "PLATFORM_UNSPECIFIED",
+      "text": {
+        "text": [
+          ""
+        ]
+      },
+      "message": "text"
+    }
+  ],
+  "outputContexts": [],
+  "queryText": "unsubscribe",
+  "speechRecognitionConfidence": 0,
+  "action": "unsubscribe",
+  "parameters": {
+    "fields": {}
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "",
+  "webhookSource": "",
+  "webhookPayload": null,
+  "intent": {
+    "inputContextNames": [],
+    "events": [],
+    "trainingPhrases": [],
+    "outputContexts": [],
+    "parameters": [],
+    "messages": [],
+    "defaultResponsePlatforms": [],
+    "followupIntentInfo": [],
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/a272fd48-8f7a-46f5-9a7e-f716f85ef474",
+    "displayName": "unsubscribe-newsletter",
+    "priority": 0,
+    "isFallback": false,
+    "mlEnabled": false,
+    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+    "action": "",
+    "resetContexts": false,
+    "rootFollowupIntentName": "",
+    "parentFollowupIntentName": "",
+    "mlDisabled": false,
+    "endInteraction": false
+  },
+  "intentDetectionConfidence": 1,
+  "diagnosticInfo": {
+    "fields": {
+      "webhook_latency_ms": {
+        "numberValue": 2431,
+        "kind": "numberValue"
+      }
+    }
+  },
+  "languageCode": "en",
+  "sentimentAnalysisResult": null,
+  "knowledgeAnswers": null
+}
