@@ -464,7 +464,7 @@ function handleMessages(messages, sender) {
 }
 
 function handleDialogFlowResponse(sender, response) {
-    let responseText = response.fulfillmentMessages[0].text.text;
+    let responseText = response.fulfillmentMessages[0].text.text[0];
     console.log(JSON.stringify(response));
     let messages = response.fulfillmentMessages;
     let action = response.action;
