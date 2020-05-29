@@ -473,7 +473,7 @@ function handleDialogFlowResponse(sender, response) {
 
     sendTypingOff(sender);
     if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
-        let text = response.knowledgeAnswers.answers.answer;
+        let text = response.knowledgeAnswers.answers[0].answer;
         sendTextMessage(sender, text);
     }
     else if (isDefined(action)) {
