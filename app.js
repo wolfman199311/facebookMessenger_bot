@@ -465,24 +465,24 @@ function handleMessages(messages, sender) {
 }
 
 function handleDialogFlowResponse(sender, response) {
-    let responseText = response.fulfillmentMessages[0].text.text[0];
-    console.log(JSON.stringify(response));
-    let messages = response.fulfillmentMessages;
-    let action = response.action;
-    let contexts = response.outputContexts;
-    let parameters = response.parameters;
+    // let responseText = response.fulfillmentMessages[0].text.text[0];
+    // console.log(JSON.stringify(response));
+    // let messages = response.fulfillmentMessages;
+    // let action = response.action;
+    // let contexts = response.outputContexts;
+    // let parameters = response.parameters;
 
-    sendTypingOff(sender);
-    if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
-        let text = response.knowledgeAnswers.answers[0].answer;
-        sendTextMessage(sender, text);
-    } else if (isDefined(messages)) {
-        handleMessages(messages, sender);
-    } else if (isDefined(responseText)) {
-        sendTextMessage(sender, responseText);
-    } else if (isDefined(action)) {
-        handleDialogFlowAction(sender, action, messages, contexts, parameters);
-    }
+    // sendTypingOff(sender);
+    // if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
+    //     let text = response.knowledgeAnswers.answers[0].answer;
+    //     sendTextMessage(sender, text);
+    // } else if (isDefined(messages)) {
+    //     handleMessages(messages, sender);
+    // } else if (isDefined(responseText)) {
+    //     sendTextMessage(sender, responseText);
+    // } else if (isDefined(action)) {
+    //     handleDialogFlowAction(sender, action, messages, contexts, parameters);
+    // }
 }
 
 async function sendToDialogFlow(sender, textString, params) {
