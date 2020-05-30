@@ -461,7 +461,7 @@ async function sendToDialogFlow(sender, textString, params) {
     } else if (intentData.intentName == "User Provides Time"){
         receivedTimeintent(intentData);
     } else if (intentData.intentName == "unsubscribe-newsletter"){
-
+        console.log(intentData.actionName);
     }
 
     
@@ -949,55 +949,41 @@ function receivedPostback(event) {
 
 }
 
-async function receivedTimeintent(incomingData){
+async function receivedTimeintent(intentData){
 
-    console.log(`receivedTimeintent: ${JSON.stringify(incomingData)}`);
+    
+    let fields = intentData.outputContexts[0].parameters.fields;
 
-    let senderId = incomingData.sender.id;
-    let message = incomingData.message.text;
+    let date = fields.date.stringValue;
+    let time = fields.time.stringValue;
 
-    console.log(`Incoming message --> ${message}`);
-    console.log(`Incoming sender id --> ${senderId}`);
+    // Check the event is there or not
+    let dtc = DT.dateTimeForCalander(date, time);
+    console.log(dtc);
+    let dts = DT.dateTimeToString(date, time);
+    let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/Londom');
 
-    let intentData = await GD.detectIntent(message, senderId);
-
-    // Check for Schedule a call
-    if (intentData.intentName === 'User Provides Time') {
-        let fields = intentData.outputContexts[0].parameters.fields;
-
-        let date = fields.date.stringValue;
-        let time = fields.time.stringValue;
-
-        // Check the event is there or not
-        let dtc = DT.dateTimeForCalander(date, time);
-        console.log(dtc);
-        let dts = DT.dateTimeToString(date, time);
-        let eventsLength = await GC.getEvents(dtc.start, dtc.end, 'Europe/Londom');
-
-        if (eventsLength == 0) {
-            let event = {
-                'summary': `Demo appointment.`,
-                'description': `Sample description.`,
-                'start': {
-                    'dateTime': dtc.start,
-                    'timeZone': 'Europe/London'
-                },
-                'end': {
-                    'dateTime': dtc.end,
-                    'timeZone': 'Europe/London'
-                }
-            };
-            await GC.insertEvent(event);
-            await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
-            res.status(200).send('EVENT_RECEIVED');
-        } else {
-            await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-            res.status(200).send('EVENT_RECEIVED');
-        }
+    if (eventsLength == 0) {
+        let event = {
+            'summary': `Demo appointment.`,
+            'description': `Sample description.`,
+            'start': {
+                'dateTime': dtc.start,
+                'timeZone': 'Europe/London'
+            },
+            'end': {
+                'dateTime': dtc.end,
+                'timeZone': 'Europe/London'
+            }
+        };
+        await GC.insertEvent(event);
+        await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
+        res.status(200).send('EVENT_RECEIVED');
     } else {
-        await FM.sendMessage(intentData.text, senderId);
+        await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
         res.status(200).send('EVENT_RECEIVED');
     }
+
 }
 async function greetUserText(userId) {
     let user = usersMap.get(userId);
