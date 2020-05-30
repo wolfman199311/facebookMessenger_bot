@@ -277,14 +277,6 @@
     "sentimentAnalysisResult": null,
     "knowledgeAnswers": null
   },
-
-
-
-
-
-
-
-  
   {
     "fulfillmentMessages": [
       {
@@ -413,6 +405,152 @@
       "fields": {
         "webhook_latency_ms": {
           "numberValue": 219,
+          "kind": "numberValue"
+        }
+      }
+    },
+    "languageCode": "en",
+    "sentimentAnalysisResult": null,
+    "knowledgeAnswers": null
+  },
+
+
+
+
+
+
+
+
+
+  
+  {
+    "fulfillmentMessages": [
+      {
+        "platform": "PLATFORM_UNSPECIFIED",
+        "text": {
+          "text": [
+            ""
+          ]
+        },
+        "message": "text"
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/await-call-day",
+        "lifespanCount": 3,
+        "parameters": {
+          "fields": {
+            "time.original": {
+              "stringValue": "11 AM",
+              "kind": "stringValue"
+            },
+            "date": {
+              "stringValue": "2020-05-30T12:00:00+02:00",
+              "kind": "stringValue"
+            },
+            "date.original": {
+              "stringValue": "Saturday",
+              "kind": "stringValue"
+            },
+            "time": {
+              "stringValue": "2020-05-31T11:00:00+02:00",
+              "kind": "stringValue"
+            }
+          }
+        }
+      },
+      {
+        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/await-call-time",
+        "lifespanCount": 4,
+        "parameters": {
+          "fields": {
+            "date.original": {
+              "stringValue": "Saturday",
+              "kind": "stringValue"
+            },
+            "date": {
+              "stringValue": "2020-05-30T12:00:00+02:00",
+              "kind": "stringValue"
+            },
+            "time": {
+              "stringValue": "2020-05-31T11:00:00+02:00",
+              "kind": "stringValue"
+            },
+            "time.original": {
+              "stringValue": "11 AM",
+              "kind": "stringValue"
+            }
+          }
+        }
+      },
+      {
+        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/call-vars",
+        "lifespanCount": 8,
+        "parameters": {
+          "fields": {
+            "date": {
+              "stringValue": "2020-05-30T12:00:00+02:00",
+              "kind": "stringValue"
+            },
+            "time.original": {
+              "stringValue": "11 AM",
+              "kind": "stringValue"
+            },
+            "date.original": {
+              "stringValue": "Saturday",
+              "kind": "stringValue"
+            },
+            "time": {
+              "stringValue": "2020-05-31T11:00:00+02:00",
+              "kind": "stringValue"
+            }
+          }
+        }
+      }
+    ],
+    "queryText": "11 AM",
+    "speechRecognitionConfidence": 0,
+    "action": "",
+    "parameters": {
+      "fields": {
+        "time": {
+          "stringValue": "2020-05-31T11:00:00+02:00",
+          "kind": "stringValue"
+        }
+      }
+    },
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "",
+    "webhookSource": "",
+    "webhookPayload": null,
+    "intent": {
+      "inputContextNames": [],
+      "events": [],
+      "trainingPhrases": [],
+      "outputContexts": [],
+      "parameters": [],
+      "messages": [],
+      "defaultResponsePlatforms": [],
+      "followupIntentInfo": [],
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9ae19baf-a7c7-4e7e-b1c6-2a3ea6ff4b1b",
+      "displayName": "User Provides Time",
+      "priority": 0,
+      "isFallback": false,
+      "mlEnabled": false,
+      "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+      "action": "",
+      "resetContexts": false,
+      "rootFollowupIntentName": "",
+      "parentFollowupIntentName": "",
+      "mlDisabled": false,
+      "endInteraction": false
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {
+      "fields": {
+        "webhook_latency_ms": {
+          "numberValue": 40,
           "kind": "numberValue"
         }
       }

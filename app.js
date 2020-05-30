@@ -166,7 +166,8 @@ app.post('/webhook/', async (req, res) => {
         }
         else {
 
-            receivedTimeintent(messagingEvent);
+            // receivedTimeintent(messagingEvent);
+            res.status(200).send('EVENT_RECEIVED');
         }
     } else {
         res.sendStatus(404);
@@ -446,34 +447,47 @@ async function sendToDialogFlow(sender, textString, params) {
 
     sendTypingOn(sender);
 
-    try {
-        const sessionPath = sessionClient.sessionPath(
-            config.GOOGLE_PROJECT_ID,
-            sessionIds.get(sender)
-        );
+    let intentData = await GD.detectIntent(textString, sender);
+    console.log(`response Text: ${intentData.text}`);
+    console.log(`response intentName: ${intentData.intentName}`);
 
-        const request = {
-            session: sessionPath,
-            queryInput: {
-                text: {
-                    text: textString,
-                    languageCode: config.DF_LANGUAGE_CODE,
-                },
-            },
-            queryParams: {
-                payload: {
-                    data: params
-                }
-            }
-        };
-        const responses = await sessionClient.detectIntent(request);
+    console.log(`response outputContexts: ${intentData.outputContexts}`);
+    console.log(`response status: ${intentData.status}`);
 
-        const result = responses[0].queryResult;
-        handleDialogFlowResponse(sender, result);
-    } catch (e) {
-        console.log('error');
-        console.log(e);
-    }
+    // console.log(intentData.intentName);
+    // console.log(intentData.outputContexts);
+    // console.log(intentData.status);
+
+
+
+    // try {
+    //     const sessionPath = sessionClient.sessionPath(
+    //         config.GOOGLE_PROJECT_ID,
+    //         sessionIds.get(sender)
+    //     );
+
+    //     const request = {
+    //         session: sessionPath,
+    //         queryInput: {
+    //             text: {
+    //                 text: textString,
+    //                 languageCode: config.DF_LANGUAGE_CODE,
+    //             },
+    //         },
+    //         queryParams: {
+    //             payload: {
+    //                 data: params
+    //             }
+    //         }
+    //     };
+    //     const responses = await sessionClient.detectIntent(request);
+
+    //     const result = responses[0].queryResult;
+    //     handleDialogFlowResponse(sender, result);
+    // } catch (e) {
+    //     console.log('error');
+    //     console.log(e);
+    // }
 
 }
 
