@@ -413,16 +413,6 @@
     "sentimentAnalysisResult": null,
     "knowledgeAnswers": null
   },
-
-
-
-
-
-
-
-
-
-  
   {
     "fulfillmentMessages": [
       {
@@ -558,5 +548,79 @@
     "languageCode": "en",
     "sentimentAnalysisResult": null,
     "knowledgeAnswers": null
-  }
+  },
+  [
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-day",
+      "lifespanCount": 1,
+      "parameters": {
+        "fields": {
+          "date": {
+            "stringValue": "2020-06-05T12:00:00+02:00",
+            "kind": "stringValue"
+          },
+          "date.original": {
+            "stringValue": "Friday",
+            "kind": "stringValue"
+          },
+          "time.original": {
+            "stringValue": "5PM",
+            "kind": "stringValue"
+          },
+          "time": {
+            "stringValue": "2020-05-31T17:00:00+02:00",
+            "kind": "stringValue"
+          }
+        }
+      }
+    },
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-time",
+      "lifespanCount": 2,
+      "parameters": {
+        "fields": {
+          "time": {
+            "stringValue": "2020-05-31T17:00:00+02:00",
+            "kind": "stringValue"
+          },
+          "time.original": {
+            "stringValue": "5PM",
+            "kind": "stringValue"
+          },
+          "date": {
+            "stringValue": "2020-06-05T12:00:00+02:00",
+            "kind": "stringValue"
+          },
+          "date.original": {
+            "stringValue": "Friday",
+            "kind": "stringValue"
+          }
+        }
+      }
+    },
+    {
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/call-vars",
+      "lifespanCount": 6,
+      "parameters": {
+        "fields": {
+          "date.original": {
+            "stringValue": "Friday",
+            "kind": "stringValue"
+          },
+          "time.original": {
+            "stringValue": "5PM",
+            "kind": "stringValue"
+          },
+          "date": {
+            "stringValue": "2020-06-05T12:00:00+02:00",
+            "kind": "stringValue"
+          },
+          "time": {
+            "stringValue": "2020-05-31T17:00:00+02:00",
+            "kind": "stringValue"
+          }
+        }
+      }
+    }
+  ]
 ]

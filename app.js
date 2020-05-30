@@ -448,16 +448,23 @@ async function sendToDialogFlow(sender, textString, params) {
     sendTypingOn(sender);
 
     let intentData = await GD.detectIntent(textString, sender);
+
+    sendTypingOff(sender);
     console.log(`response Text: ${intentData.text}`);
     console.log(`response intentName: ${intentData.intentName}`);
-
+    console.log(`response actionName: ${intentData.actionName}`);
     console.log(`response outputContexts: ${JSON.stringify(intentData.outputContexts)}`);
     console.log(`response status: ${intentData.status}`);
+    if (intentData.text){
+        let text = intentData.text;
+        sendTextMessage(sender, text);
+    } else if (intentData.intentName == "User Provides Time"){
+        receivedTimeintent(intentData);
+    } else if (intentData.intentName == "unsubscribe-newsletter"){
 
-    // console.log(intentData.intentName);
-    // console.log(intentData.outputContexts);
-    // console.log(intentData.status);
+    }
 
+    
 
 
     // try {
