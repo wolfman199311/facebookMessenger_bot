@@ -390,7 +390,7 @@ function handleCardMessages(messages, sender) {
 
 
 function handleMessages(messages, sender) {
-    console.log(`messages: ${messages}`);
+    console.log(`messages: ${JSON.stringify(messages)}`);
     let timeoutInterval = 1100;
     let previousType;
     let cardTypes = [];
@@ -930,7 +930,7 @@ function receivedPostback(event) {
 
 async function receivedTimeintent(incomingData){
 
-    console.log(`receivedTimeintent: ${incomingData}`);
+    console.log(`receivedTimeintent: ${JSON.stringify(incomingData)}`);
 
     let senderId = incomingData.sender.id;
     let message = incomingData.message.text;
