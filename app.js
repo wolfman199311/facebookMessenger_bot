@@ -928,7 +928,7 @@ function receivedPostback(event) {
 
 }
 
-function receivedTimeintent(incomingData){
+async function receivedTimeintent(incomingData){
 
     console.log(`receivedTimeintent: ${incomingData}`);
 
