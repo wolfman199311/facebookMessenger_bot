@@ -32,11 +32,14 @@ const dateTimeForCalander = (date, time) => {
     let minute = time.split('T')[1].split(':')[1];
 
     let newDateTime = `${year}-${month}-${day}T${hour}:${minute}:00.000${TIMEOFFSET}`;
-
+    console.log(newDateTime);
     let event = new Date(Date.parse(newDateTime));
 
     let startDate = event;
     let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
+    console.log(event);
+    console.log(endDate);
+
 
     return {
         'start': startDate,

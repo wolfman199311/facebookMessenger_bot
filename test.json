@@ -1,626 +1,74 @@
 [
   {
-    "fulfillmentMessages": [
-      {
-        "platform": "FACEBOOK",
-        "text": {
-          "text": [
-            "Okay, Please provide a day to schedule the call."
-          ]
-        },
-        "message": "text"
-      },
-      {
-        "platform": "PLATFORM_UNSPECIFIED",
-        "text": {
-          "text": [
-            ""
-          ]
-        },
-        "message": "text"
-      }
-    ],
-    "outputContexts": [
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-day",
-        "lifespanCount": 5,
-        "parameters": {
-          "fields": {
-            "date.original": {
-              "stringValue": "Tomorrow",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/call-vars",
-        "lifespanCount": 10,
-        "parameters": {
-          "fields": {
-            "date.original": {
-              "stringValue": "Tomorrow",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-time",
-        "lifespanCount": 1,
-        "parameters": {
-          "fields": {
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Tomorrow",
-              "kind": "stringValue"
-            }
-          }
-        }
-      }
-    ],
-    "queryText": "Book an appointment",
-    "speechRecognitionConfidence": 0,
-    "action": "schedulecall",
-    "parameters": {
-      "fields": {}
-    },
-    "allRequiredParamsPresent": true,
-    "fulfillmentText": "",
-    "webhookSource": "",
-    "webhookPayload": null,
-    "intent": {
-      "inputContextNames": [],
-      "events": [],
-      "trainingPhrases": [],
-      "outputContexts": [],
-      "parameters": [],
-      "messages": [],
-      "defaultResponsePlatforms": [],
-      "followupIntentInfo": [],
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9c18d456-476c-4dff-b612-f7242b61574c",
-      "displayName": "Schedule-a-call",
-      "priority": 0,
-      "isFallback": false,
-      "mlEnabled": false,
-      "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-      "action": "",
-      "resetContexts": false,
-      "rootFollowupIntentName": "",
-      "parentFollowupIntentName": "",
-      "mlDisabled": false,
-      "endInteraction": false
-    },
-    "intentDetectionConfidence": 1,
-    "diagnosticInfo": null,
-    "languageCode": "en",
-    "sentimentAnalysisResult": null,
-    "knowledgeAnswers": null
-  },
-  {
-    "fulfillmentMessages": [
-      {
-        "platform": "FACEBOOK",
-        "text": {
-          "text": [
-            "fine, I got it, what time is suitable to you?\nFor example --> 2 PM."
-          ]
-        },
-        "message": "text"
-      },
-      {
-        "platform": "PLATFORM_UNSPECIFIED",
-        "text": {
-          "text": [
-            ""
-          ]
-        },
-        "message": "text"
-      }
-    ],
-    "outputContexts": [
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-time",
-        "lifespanCount": 5,
-        "parameters": {
-          "fields": {
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Sunday",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-day",
-        "lifespanCount": 4,
-        "parameters": {
-          "fields": {
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Sunday",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/call-vars",
-        "lifespanCount": 9,
-        "parameters": {
-          "fields": {
-            "date.original": {
-              "stringValue": "Sunday",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T15:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "3 PM",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-31T12:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      }
-    ],
-    "queryText": "Sunday",
-    "speechRecognitionConfidence": 0,
-    "action": "",
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-day",
+    "lifespanCount": 3,
     "parameters": {
       "fields": {
+        "time": {
+          "stringValue": "2020-05-31T17:00:00+02:00",
+          "kind": "stringValue"
+        },
         "date": {
-          "stringValue": "2020-05-31T12:00:00+02:00",
+          "stringValue": "2020-06-05T12:00:00+02:00",
           "kind": "stringValue"
-        }
-      }
-    },
-    "allRequiredParamsPresent": true,
-    "fulfillmentText": "",
-    "webhookSource": "",
-    "webhookPayload": null,
-    "intent": {
-      "inputContextNames": [],
-      "events": [],
-      "trainingPhrases": [],
-      "outputContexts": [],
-      "parameters": [],
-      "messages": [],
-      "defaultResponsePlatforms": [],
-      "followupIntentInfo": [],
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/a009ba7c-9779-4f01-b305-57df934083f4",
-      "displayName": "User Provides Day",
-      "priority": 0,
-      "isFallback": false,
-      "mlEnabled": false,
-      "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-      "action": "",
-      "resetContexts": false,
-      "rootFollowupIntentName": "",
-      "parentFollowupIntentName": "",
-      "mlDisabled": false,
-      "endInteraction": false
-    },
-    "intentDetectionConfidence": 1,
-    "diagnosticInfo": {
-      "fields": {
-        "webhook_latency_ms": {
-          "numberValue": 222,
-          "kind": "numberValue"
-        }
-      }
-    },
-    "languageCode": "en",
-    "sentimentAnalysisResult": null,
-    "knowledgeAnswers": null
-  },
-  {
-    "fulfillmentMessages": [
-      {
-        "platform": "PLATFORM_UNSPECIFIED",
-        "text": {
-          "text": [
-            ""
-          ]
         },
-        "message": "text"
-      }
-    ],
-    "outputContexts": [
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-day",
-        "lifespanCount": 3,
-        "parameters": {
-          "fields": {
-            "date.original": {
-              "stringValue": "Friday",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "4 PM",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-06-05T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T16:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/await-call-time",
-        "lifespanCount": 4,
-        "parameters": {
-          "fields": {
-            "time": {
-              "stringValue": "2020-05-31T16:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-06-05T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "4 PM",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Friday",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/d4db6290-a28c-11ea-baf6-f7a878c1eed2/contexts/call-vars",
-        "lifespanCount": 8,
-        "parameters": {
-          "fields": {
-            "time.original": {
-              "stringValue": "4 PM",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T16:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Friday",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-06-05T12:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      }
-    ],
-    "queryText": "4 PM",
-    "speechRecognitionConfidence": 0,
-    "action": "",
-    "parameters": {
-      "fields": {
-        "time": {
-          "stringValue": "2020-05-31T16:00:00+02:00",
+        "date.original": {
+          "stringValue": "Friday",
           "kind": "stringValue"
-        }
-      }
-    },
-    "allRequiredParamsPresent": true,
-    "fulfillmentText": "",
-    "webhookSource": "",
-    "webhookPayload": null,
-    "intent": {
-      "inputContextNames": [],
-      "events": [],
-      "trainingPhrases": [],
-      "outputContexts": [],
-      "parameters": [],
-      "messages": [],
-      "defaultResponsePlatforms": [],
-      "followupIntentInfo": [],
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9ae19baf-a7c7-4e7e-b1c6-2a3ea6ff4b1b",
-      "displayName": "User Provides Time",
-      "priority": 0,
-      "isFallback": false,
-      "mlEnabled": false,
-      "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-      "action": "",
-      "resetContexts": false,
-      "rootFollowupIntentName": "",
-      "parentFollowupIntentName": "",
-      "mlDisabled": false,
-      "endInteraction": false
-    },
-    "intentDetectionConfidence": 1,
-    "diagnosticInfo": {
-      "fields": {
-        "webhook_latency_ms": {
-          "numberValue": 219,
-          "kind": "numberValue"
-        }
-      }
-    },
-    "languageCode": "en",
-    "sentimentAnalysisResult": null,
-    "knowledgeAnswers": null
-  },
-  {
-    "fulfillmentMessages": [
-      {
-        "platform": "PLATFORM_UNSPECIFIED",
-        "text": {
-          "text": [
-            ""
-          ]
         },
-        "message": "text"
-      }
-    ],
-    "outputContexts": [
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/await-call-day",
-        "lifespanCount": 3,
-        "parameters": {
-          "fields": {
-            "time.original": {
-              "stringValue": "11 AM",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-30T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Saturday",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T11:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/await-call-time",
-        "lifespanCount": 4,
-        "parameters": {
-          "fields": {
-            "date.original": {
-              "stringValue": "Saturday",
-              "kind": "stringValue"
-            },
-            "date": {
-              "stringValue": "2020-05-30T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T11:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "11 AM",
-              "kind": "stringValue"
-            }
-          }
-        }
-      },
-      {
-        "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/98ac0aa0-a295-11ea-b451-5334c91ebfc6/contexts/call-vars",
-        "lifespanCount": 8,
-        "parameters": {
-          "fields": {
-            "date": {
-              "stringValue": "2020-05-30T12:00:00+02:00",
-              "kind": "stringValue"
-            },
-            "time.original": {
-              "stringValue": "11 AM",
-              "kind": "stringValue"
-            },
-            "date.original": {
-              "stringValue": "Saturday",
-              "kind": "stringValue"
-            },
-            "time": {
-              "stringValue": "2020-05-31T11:00:00+02:00",
-              "kind": "stringValue"
-            }
-          }
-        }
-      }
-    ],
-    "queryText": "11 AM",
-    "speechRecognitionConfidence": 0,
-    "action": "",
-    "parameters": {
-      "fields": {
-        "time": {
-          "stringValue": "2020-05-31T11:00:00+02:00",
+        "time.original": {
+          "stringValue": "5PM",
           "kind": "stringValue"
-        }
-      }
-    },
-    "allRequiredParamsPresent": true,
-    "fulfillmentText": "",
-    "webhookSource": "",
-    "webhookPayload": null,
-    "intent": {
-      "inputContextNames": [],
-      "events": [],
-      "trainingPhrases": [],
-      "outputContexts": [],
-      "parameters": [],
-      "messages": [],
-      "defaultResponsePlatforms": [],
-      "followupIntentInfo": [],
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9ae19baf-a7c7-4e7e-b1c6-2a3ea6ff4b1b",
-      "displayName": "User Provides Time",
-      "priority": 0,
-      "isFallback": false,
-      "mlEnabled": false,
-      "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-      "action": "",
-      "resetContexts": false,
-      "rootFollowupIntentName": "",
-      "parentFollowupIntentName": "",
-      "mlDisabled": false,
-      "endInteraction": false
-    },
-    "intentDetectionConfidence": 1,
-    "diagnosticInfo": {
-      "fields": {
-        "webhook_latency_ms": {
-          "numberValue": 40,
-          "kind": "numberValue"
-        }
-      }
-    },
-    "languageCode": "en",
-    "sentimentAnalysisResult": null,
-    "knowledgeAnswers": null
-  },
-  [
-    {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-day",
-      "lifespanCount": 1,
-      "parameters": {
-        "fields": {
-          "date": {
-            "stringValue": "2020-06-05T12:00:00+02:00",
-            "kind": "stringValue"
-          },
-          "date.original": {
-            "stringValue": "Friday",
-            "kind": "stringValue"
-          },
-          "time.original": {
-            "stringValue": "5PM",
-            "kind": "stringValue"
-          },
-          "time": {
-            "stringValue": "2020-05-31T17:00:00+02:00",
-            "kind": "stringValue"
-          }
-        }
-      }
-    },
-    {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-time",
-      "lifespanCount": 2,
-      "parameters": {
-        "fields": {
-          "time": {
-            "stringValue": "2020-05-31T17:00:00+02:00",
-            "kind": "stringValue"
-          },
-          "time.original": {
-            "stringValue": "5PM",
-            "kind": "stringValue"
-          },
-          "date": {
-            "stringValue": "2020-06-05T12:00:00+02:00",
-            "kind": "stringValue"
-          },
-          "date.original": {
-            "stringValue": "Friday",
-            "kind": "stringValue"
-          }
-        }
-      }
-    },
-    {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/call-vars",
-      "lifespanCount": 6,
-      "parameters": {
-        "fields": {
-          "date.original": {
-            "stringValue": "Friday",
-            "kind": "stringValue"
-          },
-          "time.original": {
-            "stringValue": "5PM",
-            "kind": "stringValue"
-          },
-          "date": {
-            "stringValue": "2020-06-05T12:00:00+02:00",
-            "kind": "stringValue"
-          },
-          "time": {
-            "stringValue": "2020-05-31T17:00:00+02:00",
-            "kind": "stringValue"
-          }
         }
       }
     }
-  ]
+  },
+  {
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/await-call-time",
+    "lifespanCount": 4,
+    "parameters": {
+      "fields": {
+        "time": {
+          "stringValue": "2020-05-31T17:00:00+02:00",
+          "kind": "stringValue"
+        },
+        "date": {
+          "stringValue": "2020-06-05T12:00:00+02:00",
+          "kind": "stringValue"
+        },
+        "date.original": {
+          "stringValue": "Friday",
+          "kind": "stringValue"
+        },
+        "time.original": {
+          "stringValue": "5PM",
+          "kind": "stringValue"
+        }
+      }
+    }
+  },
+  {
+    "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/4112861168731555/contexts/call-vars",
+    "lifespanCount": 8,
+    "parameters": {
+      "fields": {
+        "time.original": {
+          "stringValue": "5PM",
+          "kind": "stringValue"
+        },
+        "date": {
+          "stringValue": "2020-06-05T12:00:00+02:00",
+          "kind": "stringValue"
+        },
+        "time": {
+          "stringValue": "2020-05-31T17:00:00+02:00",
+          "kind": "stringValue"
+        },
+        "date.original": {
+          "stringValue": "Friday",
+          "kind": "stringValue"
+        }
+      }
+    }
+  }
 ]

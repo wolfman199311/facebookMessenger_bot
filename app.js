@@ -164,11 +164,7 @@ app.post('/webhook/', async (req, res) => {
             receivedMessage(messagingEvent);
             res.status(200).send('EVENT_RECEIVED');
         }
-        else {
 
-            // receivedTimeintent(messagingEvent);
-            res.status(200).send('EVENT_RECEIVED');
-        }
     } else {
         res.sendStatus(404);
     }
@@ -295,7 +291,7 @@ function handleEcho(messageId, appId, metadata) {
     console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
 }
 
-function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
+function handleDialogFlowAction(sender, action) {
     console.log(`handleDialogflowAction: ${action}`)
     switch (action) {
         default:
@@ -309,14 +305,6 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
                 }
             }, 0, sender);
             break;
-        case "input.welcome":
-            fbService.sendTextMessage(sender, "Hey! Please choose an option from the menu to get started");
-            break;
-        case "input.unknown":
-            console.log("action");
-            sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
-            break;
-
         //unhandled action, just send back the text
         //   handleMessages(messages, sender);
     }
@@ -455,16 +443,18 @@ async function sendToDialogFlow(sender, textString, params) {
     console.log(`response actionName: ${intentData.actionName}`);
     console.log(`response outputContexts: ${JSON.stringify(intentData.outputContexts)}`);
     console.log(`response status: ${intentData.status}`);
-    if (intentData.text){
+    if (intentData.text) {
         let text = intentData.text;
         sendTextMessage(sender, text);
-    } else if (intentData.intentName == "User Provides Time"){
+    } else if (intentData.intentName == "User Provides Time") {
         receivedTimeintent(intentData);
-    } else if (intentData.intentName == "unsubscribe-newsletter"){
+    } else if (intentData.actionName == "unsubscribe") {
         console.log(intentData.actionName);
+        let action = intentData.actionName;
+        handleDialogFlowAction(sender, action)
     }
 
-    
+
 
 
     // try {
@@ -949,9 +939,9 @@ function receivedPostback(event) {
 
 }
 
-async function receivedTimeintent(intentData){
+async function receivedTimeintent(intentData) {
 
-    
+
     let fields = intentData.outputContexts[0].parameters.fields;
 
     let date = fields.date.stringValue;
