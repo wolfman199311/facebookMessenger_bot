@@ -146,6 +146,7 @@ app.post('/webhook/', async (req, res) => {
 
 
     var data = req.body;
+    console.log(JSON.stringify(data));
 
     // Make sure this is a page subscription
     if (data.object == 'page') {

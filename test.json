@@ -4,7 +4,7 @@
       "platform": "PLATFORM_UNSPECIFIED",
       "text": {
         "text": [
-          "I missed what you said. What was that?"
+          "Sorry, could you say that again?"
         ]
       },
       "message": "text"
@@ -12,30 +12,30 @@
   ],
   "outputContexts": [
     {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/2b124ce0-a1df-11ea-b9a3-81669a4b387a/contexts/__system_counters__",
+      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/52c47880-a25c-11ea-8105-9d29ec0df735/contexts/__system_counters__",
       "lifespanCount": 1,
       "parameters": {
         "fields": {
-          "no-input": {
-            "numberValue": 0,
-            "kind": "numberValue"
-          },
           "no-match": {
             "numberValue": 1,
+            "kind": "numberValue"
+          },
+          "no-input": {
+            "numberValue": 0,
             "kind": "numberValue"
           }
         }
       }
     }
   ],
-  "queryText": "kuguyfg",
+  "queryText": "Friday",
   "speechRecognitionConfidence": 0,
   "action": "input.unknown",
   "parameters": {
     "fields": {}
   },
   "allRequiredParamsPresent": true,
-  "fulfillmentText": "I missed what you said. What was that?",
+  "fulfillmentText": "Sorry, could you say that again?",
   "webhookSource": "",
   "webhookPayload": null,
   "intent": {
@@ -62,370 +62,6 @@
   },
   "intentDetectionConfidence": 1,
   "diagnosticInfo": null,
-  "languageCode": "en",
-  "sentimentAnalysisResult": null,
-  "knowledgeAnswers": null
-}
-
-{
-  "fulfillmentMessages": [
-    {
-      "platform": "FACEBOOK",
-      "text": {
-        "text": [
-          "Hey! Please choose an option from the menu to get started"
-        ]
-      },
-      "message": "text"
-    },
-    {
-      "platform": "PLATFORM_UNSPECIFIED",
-      "text": {
-        "text": [
-          "Hey! Please choose an option from the menu to get started"
-        ]
-      },
-      "message": "text"
-    }
-  ],
-  "outputContexts": [],
-  "queryText": "hello",
-  "speechRecognitionConfidence": 0,
-  "action": "input.welcome",
-  "parameters": {
-    "fields": {}
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "Hey! Please choose an option from the menu to get started",
-  "webhookSource": "",
-  "webhookPayload": null,
-  "intent": {
-    "inputContextNames": [],
-    "events": [],
-    "trainingPhrases": [],
-    "outputContexts": [],
-    "parameters": [],
-    "messages": [],
-    "defaultResponsePlatforms": [],
-    "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/1520bcfe-4bda-4e08-84ea-7229709cb8f2",
-    "displayName": "Default Welcome Intent",
-    "priority": 0,
-    "isFallback": false,
-    "mlEnabled": false,
-    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-    "action": "",
-    "resetContexts": false,
-    "rootFollowupIntentName": "",
-    "parentFollowupIntentName": "",
-    "mlDisabled": false,
-    "endInteraction": false
-  },
-  "intentDetectionConfidence": 1,
-  "diagnosticInfo": {
-    "fields": {
-      "webhook_latency_ms": {
-        "numberValue": 3026,
-        "kind": "numberValue"
-      }
-    }
-  },
-  "languageCode": "en",
-  "sentimentAnalysisResult": null,
-  "knowledgeAnswers": null
-}
-
-
-
-
-
-
-
-
-
-
- {
-  "fulfillmentMessages": [
-    {
-      "platform": "FACEBOOK",
-      "text": {
-        "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
-        ]
-      },
-      "message": "text"
-    },
-    {
-      "platform": "FACEBOOK",
-      "text": {
-        "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
-        ]
-      },
-      "message": "text"
-    },
-    {
-      "platform": "PLATFORM_UNSPECIFIED",
-      "text": {
-        "text": [
-          "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)"
-        ]
-      },
-      "message": "text"
-    }
-  ],
-  "outputContexts": [],
-  "queryText": "ppc",
-  "speechRecognitionConfidence": 0,
-  "action": "",
-  "parameters": {
-    "fields": {}
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)",
-  "webhookSource": "",
-  "webhookPayload": null,
-  "intent": {
-    "inputContextNames": [],
-    "events": [],
-    "trainingPhrases": [],
-    "outputContexts": [],
-    "parameters": [],
-    "messages": [],
-    "defaultResponsePlatforms": [],
-    "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/15177056-6eac-4f22-9109-a1668d4527bb",
-    "displayName": "Knowledge.KnowledgeBase.ODcyNjU2MjEwNTg5MDcwMTMxMg",
-    "priority": 0,
-    "isFallback": false,
-    "mlEnabled": false,
-    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-    "action": "",
-    "resetContexts": false,
-    "rootFollowupIntentName": "",
-    "parentFollowupIntentName": "",
-    "mlDisabled": false,
-    "endInteraction": false
-  },
-  "intentDetectionConfidence": 0.6885653734207153,
-  "diagnosticInfo": {
-    "fields": {
-      "webhook_latency_ms": {
-        "numberValue": 2701,
-        "kind": "numberValue"
-      }
-    }
-  },
-  "languageCode": "en",
-  "sentimentAnalysisResult": null,
-  "knowledgeAnswers": {
-    "answers": [
-      {
-        "source": "projects/businessgrowthmentor-lgxlwf/knowledgeBases/ODcyNjU2MjEwNTg5MDcwMTMxMg/documents/MTUyMzMwMzY1MTI0NjQ0NzAwMTY",
-        "faqQuestion": "What is PPC?",
-        "answer":"PPC stands for pay-per-click. Essentially, it’s a way of buying web traffic. Advertisers pay a fee each 
-time one of their ads is clicked. Search engine advertising is the most popular form of PPC, however numerous channels including Facebook now offer PPC ad models. > Guide to Understanding Google Ads (formerly called AdWords)",
-"matchConfidenceLevel": "MEDIUM",
-        "matchConfidence": 0.6885653734207153
-      }
-    ]
-  }
-}
-
-
-
-
-
-{
-  "fulfillmentMessages": [
-    {
-      "platform": "FACEBOOK",
-      "text": {
-        "text": [
-          "Okay, Please provide a day to schedule the call."
-        ]
-      },
-      "message": "text"
-    },
-    {
-      "platform": "PLATFORM_UNSPECIFIED",
-      "text": {
-        "text": [
-          ""
-        ]
-      },
-      "message": "text"
-    }
-  ],
-  "outputContexts": [
-    {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/93802710-a1ea-11ea-8cb7-a5a997184456/contexts/await-call-day",
-      "lifespanCount": 5,
-      "parameters": null
-    },
-    {
-      "name": "projects/businessgrowthmentor-lgxlwf/agent/sessions/93802710-a1ea-11ea-8cb7-a5a997184456/contexts/call-vars",
-      "lifespanCount": 10,
-      "parameters": null
-    }
-  ],
-  "queryText": "Book an appointment",
-  "speechRecognitionConfidence": 0,
-  "action": "schedulecall",
-  "parameters": {
-    "fields": {}
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "",
-  "webhookSource": "",
-  "webhookPayload": null,
-  "intent": {
-    "inputContextNames": [],
-    "events": [],
-    "trainingPhrases": [],
-    "outputContexts": [],
-    "parameters": [],
-    "messages": [],
-    "defaultResponsePlatforms": [],
-    "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/9c18d456-476c-4dff-b612-f7242b61574c",
-    "displayName": "Schedule-a-call",
-    "priority": 0,
-    "isFallback": false,
-    "mlEnabled": false,
-    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-    "action": "",
-    "resetContexts": false,
-    "rootFollowupIntentName": "",
-    "parentFollowupIntentName": "",
-    "mlDisabled": false,
-    "endInteraction": false
-  },
-  "intentDetectionConfidence": 1,
-  "diagnosticInfo": null,
-  "languageCode": "en",
-  "sentimentAnalysisResult": null,
-  "knowledgeAnswers": null
-}
-
-
-
-{
-  "fulfillmentMessages": [
-    {
-      "platform": "PLATFORM_UNSPECIFIED",
-      "text": {
-        "text": [
-          ""
-        ]
-      },
-      "message": "text"
-    }
-  ],
-  "outputContexts": [],
-  "queryText": "unsubscribe",
-  "speechRecognitionConfidence": 0,
-  "action": "unsubscribe",
-  "parameters": {
-    "fields": {}
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "",
-  "webhookSource": "",
-  "webhookPayload": null,
-  "intent": {
-    "inputContextNames": [],
-    "events": [],
-    "trainingPhrases": [],
-    "outputContexts": [],
-    "parameters": [],
-    "messages": [],
-    "defaultResponsePlatforms": [],
-    "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/a272fd48-8f7a-46f5-9a7e-f716f85ef474",
-    "displayName": "unsubscribe-newsletter",
-    "priority": 0,
-    "isFallback": false,
-    "mlEnabled": false,
-    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-    "action": "",
-    "resetContexts": false,
-    "rootFollowupIntentName": "",
-    "parentFollowupIntentName": "",
-    "mlDisabled": false,
-    "endInteraction": false
-  },
-  "intentDetectionConfidence": 1,
-  "diagnosticInfo": {
-    "fields": {
-      "webhook_latency_ms": {
-        "numberValue": 2411,
-        "kind": "numberValue"
-      }
-    }
-  },
-  "languageCode": "en",
-  "sentimentAnalysisResult": null,
-  "knowledgeAnswers": null
-}
-
-
-
-
-{
-  "fulfillmentMessages": [
-    {
-      "platform": "PLATFORM_UNSPECIFIED",
-      "text": {
-        "text": [
-          ""
-        ]
-      },
-      "message": "text"
-    }
-  ],
-  "outputContexts": [],
-  "queryText": "unsubscribe",
-  "speechRecognitionConfidence": 0,
-  "action": "unsubscribe",
-  "parameters": {
-    "fields": {}
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "",
-  "webhookSource": "",
-  "webhookPayload": null,
-  "intent": {
-    "inputContextNames": [],
-    "events": [],
-    "trainingPhrases": [],
-    "outputContexts": [],
-    "parameters": [],
-    "messages": [],
-    "defaultResponsePlatforms": [],
-    "followupIntentInfo": [],
-    "name": "projects/businessgrowthmentor-lgxlwf/agent/intents/a272fd48-8f7a-46f5-9a7e-f716f85ef474",
-    "displayName": "unsubscribe-newsletter",
-    "priority": 0,
-    "isFallback": false,
-    "mlEnabled": false,
-    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
-    "action": "",
-    "resetContexts": false,
-    "rootFollowupIntentName": "",
-    "parentFollowupIntentName": "",
-    "mlDisabled": false,
-    "endInteraction": false
-  },
-  "intentDetectionConfidence": 1,
-  "diagnosticInfo": {
-    "fields": {
-      "webhook_latency_ms": {
-        "numberValue": 2431,
-        "kind": "numberValue"
-      }
-    }
-  },
   "languageCode": "en",
   "sentimentAnalysisResult": null,
   "knowledgeAnswers": null
