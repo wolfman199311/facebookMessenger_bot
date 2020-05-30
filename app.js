@@ -341,6 +341,7 @@ function handleEcho(messageId, appId, metadata) {
 }
 
 function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
+    console.log(`handleDialogflowAction: ${action}`)
     switch (action) {
         default:
         case "unsubscribe":
@@ -367,6 +368,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
 }
 
 function handleMessage(message, sender) {
+    console.log(`handle message : ${JSON.stringify(message)}`);
     switch (message.message) {
         case "text": //text
             message.text.text.forEach((text) => {
@@ -434,6 +436,7 @@ function handleCardMessages(messages, sender) {
 
 
 function handleMessages(messages, sender) {
+    console.log(`messages: ${messages}`);
     let timeoutInterval = 1100;
     let previousType;
     let cardTypes = [];
@@ -465,24 +468,24 @@ function handleMessages(messages, sender) {
 }
 
 function handleDialogFlowResponse(sender, response) {
-    // let responseText = response.fulfillmentMessages[0].text.text[0];
-    // console.log(JSON.stringify(response));
-    // let messages = response.fulfillmentMessages;
-    // let action = response.action;
-    // let contexts = response.outputContexts;
-    // let parameters = response.parameters;
+    let responseText = response.fulfillmentMessages[0].text.text[0];
+    console.log(`JSON.stringify(response): ${JSON.stringify(response)}`);
+    let messages = response.fulfillmentMessages;
+    let action = response.action;
+    let contexts = response.outputContexts;
+    let parameters = response.parameters;
 
-    // sendTypingOff(sender);
-    // if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
-    //     let text = response.knowledgeAnswers.answers[0].answer;
-    //     sendTextMessage(sender, text);
-    // } else if (isDefined(messages)) {
-    //     handleMessages(messages, sender);
-    // } else if (isDefined(responseText)) {
-    //     sendTextMessage(sender, responseText);
-    // } else if (isDefined(action)) {
-    //     handleDialogFlowAction(sender, action, messages, contexts, parameters);
-    // }
+    sendTypingOff(sender);
+    if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
+        let text = response.knowledgeAnswers.answers[0].answer;
+        sendTextMessage(sender, text);
+    } else if (isDefined(messages)) {
+        handleMessages(messages, sender);
+    } else if (isDefined(responseText)) {
+        sendTextMessage(sender, responseText);
+    } else if (isDefined(action)) {
+        handleDialogFlowAction(sender, action, messages, contexts, parameters);
+    }
 }
 
 async function sendToDialogFlow(sender, textString, params) {
@@ -567,6 +570,7 @@ async function detectIntentKnowledge(
 }
 
 function sendTextMessage(recipientId, text) {
+    console.log(`sendTextMessage text: ${text}`);
     var messageData = {
         recipient: {
             id: recipientId
