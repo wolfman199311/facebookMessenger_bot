@@ -451,7 +451,7 @@ async function sendToDialogFlow(sender, textString, params) {
     console.log(`response Text: ${intentData.text}`);
     console.log(`response intentName: ${intentData.intentName}`);
 
-    console.log(`response outputContexts: ${intentData.outputContexts}`);
+    console.log(`response outputContexts: ${JSON.stringify(intentData.outputContexts)}`);
     console.log(`response status: ${intentData.status}`);
 
     // console.log(intentData.intentName);
