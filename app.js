@@ -277,7 +277,7 @@ function handleQuickReply(senderID, quickReply, messageId) {
             break;
 
         default:
-            dialogflowService.sendTextQueryToDialogFlow(sessionIds, handleDialogFlowResponse, senderID, quickReplyPayload);
+            sendToDialogFlow(senderID, quickReplyPayload);
             break;
     }
     console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
@@ -305,8 +305,7 @@ function handleDialogFlowAction(sender, action) {
                 }
             }, 0, sender);
             break;
-        //unhandled action, just send back the text
-        //   handleMessages(messages, sender);
+
     }
 }
 
@@ -410,26 +409,7 @@ function handleMessages(messages, sender) {
     }
 }
 
-function handleDialogFlowResponse(sender, response) {
-    let responseText = response.fulfillmentMessages[0].text.text[0];
-    console.log(`JSON.stringify(response): ${JSON.stringify(response)}`);
-    let messages = response.fulfillmentMessages;
-    let action = response.action;
-    let contexts = response.outputContexts;
-    let parameters = response.parameters;
 
-    sendTypingOff(sender);
-    if (response.knowledgeAnswers && response.knowledgeAnswers.answers) {
-        let text = response.knowledgeAnswers.answers[0].answer;
-        sendTextMessage(sender, text);
-    } else if (isDefined(messages)) {
-        handleMessages(messages, sender);
-    } else if (isDefined(responseText)) {
-        sendTextMessage(sender, responseText);
-    } else if (isDefined(action)) {
-        handleDialogFlowAction(sender, action, messages, contexts, parameters);
-    }
-}
 
 async function sendToDialogFlow(sender, textString, params) {
 
@@ -438,99 +418,23 @@ async function sendToDialogFlow(sender, textString, params) {
     let intentData = await GD.detectIntent(textString, sender);
 
     sendTypingOff(sender);
-    console.log(`response Text: ${intentData.text}`);
-    console.log(`response intentName: ${intentData.intentName}`);
-    console.log(`response actionName: ${intentData.actionName}`);
-    console.log(`response outputContexts: ${JSON.stringify(intentData.outputContexts)}`);
-    console.log(`response status: ${intentData.status}`);
+    // console.log(`response Text: ${intentData.text}`);
+    // console.log(`response intentName: ${intentData.intentName}`);
+    // console.log(`response actionName: ${intentData.actionName}`);
+    // console.log(`response outputContexts: ${JSON.stringify(intentData.outputContexts)}`);
+    // console.log(`response status: ${intentData.status}`);
     if (intentData.text) {
         let text = intentData.text;
         sendTextMessage(sender, text);
     } else if (intentData.intentName == "User Provides Time") {
         receivedTimeintent(intentData, sender);
-    } else if (intentData.actionName == "unsubscribe") {
+    } else if (isDefined(intentData.actionName)) {
         console.log(intentData.actionName);
         let action = intentData.actionName;
         handleDialogFlowAction(sender, action)
-    }
-
-
-
-
-    // try {
-    //     const sessionPath = sessionClient.sessionPath(
-    //         config.GOOGLE_PROJECT_ID,
-    //         sessionIds.get(sender)
-    //     );
-
-    //     const request = {
-    //         session: sessionPath,
-    //         queryInput: {
-    //             text: {
-    //                 text: textString,
-    //                 languageCode: config.DF_LANGUAGE_CODE,
-    //             },
-    //         },
-    //         queryParams: {
-    //             payload: {
-    //                 data: params
-    //             }
-    //         }
-    //     };
-    //     const responses = await sessionClient.detectIntent(request);
-
-    //     const result = responses[0].queryResult;
-    //     handleDialogFlowResponse(sender, result);
-    // } catch (e) {
-    //     console.log('error');
-    //     console.log(e);
-    // }
-
-}
-
-
-
-async function detectIntentKnowledge(
-    projectId,
-    sessionId,
-    languageCode,
-    knowledgeBaseId,
-    query
-) {
-    const sessionPath = sessionClient.projectAgentSessionPath(
-        projectId,
-        sessionId
-    );
-
-
-    // The audio query request
-    const request1 = {
-        session: sessionPath,
-        queryInput: {
-            text: {
-                text: query,
-                languageCode: languageCode,
-            },
-        },
-        queryParams: {
-            knowledgeBaseNames: [one, two, three, four, five],
-        },
-    };
-
-    const responses = await sessionClient.detectIntent(request1);
-    const result = responses[0].queryResult;
-    console.log(`Query text: ${result.queryText}`);
-    console.log(`Detected Intent: ${result.intent.displayName}`);
-    console.log(`Confidence: ${result.intentDetectionConfidence}`);
-    console.log(`Query Result: ${result.fulfillmentText}`);
-    if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
-        const answers = result.knowledgeAnswers.answers;
-        console.log(`There are ${answers.length} answer(s);`);
-        answers.forEach(a => {
-            console.log(`   answer: ${a.answer}`);
-            console.log(`   confidence: ${a.matchConfidence}`);
-            console.log(`   match confidence level: ${a.matchConfidenceLevel}`);
-        });
+    } else if (isDefined(intentData.fulfillmentMessages)){
+        messages = intentData.fulfillmentMessages;
+        handleMessages(messages, sender);
     }
 }
 
@@ -968,10 +872,8 @@ async function receivedTimeintent(intentData, senderId) {
         };
         await GC.insertEvent(event);
         await FM.sendMessage(`Appointment is set on ${dts}`, senderId);
-        res.status(200).send('EVENT_RECEIVED');
     } else {
         await FM.sendMessage(`Sorry, we are not available on ${dts}`, senderId);
-        res.status(200).send('EVENT_RECEIVED');
     }
 
 }

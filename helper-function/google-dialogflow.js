@@ -47,6 +47,7 @@ const detectIntent = async (queryText, sessionId) => {
         let result = responses[0].queryResult;
         let outputContexts = result.outputContexts;
         let intentName = result.intent.displayName;
+        let fulfillmentMessages = result.fulfillmentMessages;
         let actionName = result.action;
         if (result.knowledgeAnswers && result.knowledgeAnswers.answers) {
             let answers = result.knowledgeAnswers.answers;
@@ -60,6 +61,7 @@ const detectIntent = async (queryText, sessionId) => {
                 text: result.fulfillmentMessages[0].text.text[0],
                 intentName: intentName,
                 actionName: actionName,
+                fulfillmentMessages: fulfillmentMessages,
                 outputContexts: outputContexts
             }
         }
