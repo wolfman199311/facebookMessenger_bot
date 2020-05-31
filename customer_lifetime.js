@@ -82,7 +82,7 @@ module.exports = {
                                
                                 results.forEach(async (item, index, array) => {
                                     i++;
-                                    await delay(i*150);
+                                    await delay(i*250);
                                     console.log(array.length, item);
                                     fbService.sendTextMessage(userId, item);
                                     
